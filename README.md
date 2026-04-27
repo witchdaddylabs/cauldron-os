@@ -94,6 +94,15 @@ Result: You get a **PRD**, **database schema**, **security posture**, **architec
 ![Design Reference Dropdown](assets/screenshots/02-design-dropdown.png)
 
 
+## Quick Start (Non-Technical)
+
+**Windows:** Double-click `start-cauldron.bat` in the repo folder  
+**macOS / Linux:** Double-click `start-cauldron.ps1` (or run `node server.js`)
+
+Both scripts will check for Node.js, install dependencies if needed, and start the server automatically.
+
+---
+
 ## Installation
 
 ```bash

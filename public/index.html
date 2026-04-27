@@ -328,6 +328,10 @@
             </select>
           </div>
           <div class="grid grid-cols-1 gap-2">
+            <select id="geminiModelSelect" class="px-2 py-2 text-xs bg-obsidian-900/50 border border-obsidian-700">
+              <option value="gemini-3.1-flash-lite">Gemini Flash 3.1 Lite — preferred architecture model</option>
+              <option value="gemini-3.1-pro-preview">Gemini Pro 3.1 Preview — heavier fallback</option>
+            </select>
             <input type="password" id="openaiApiKeyInput"
               class="w-full px-3 py-2 bg-obsidian-900/40 border border-obsidian-700 text-obsidian-200 text-xs placeholder-obsidian-600 focus:border-neon-amber/50 focus:outline-none transition-colors"
               placeholder="OpenAI API key (stored locally in browser)">
@@ -439,6 +443,7 @@
       projectTypeSelect: document.getElementById('projectTypeSelect'),
       designSystemSelect: document.getElementById('designSystemSelect'),
       cloudProviderSelect: document.getElementById('cloudProviderSelect'),
+      geminiModelSelect: document.getElementById('geminiModelSelect'),
       openaiApiKeyInput: document.getElementById('openaiApiKeyInput'),
       googleApiKeyInput: document.getElementById('googleApiKeyInput'),
       cloudCauldronPanel: document.getElementById('cloudCauldronPanel'),
@@ -476,6 +481,7 @@
       projectType: 'cauldron:projectType',
       designSystem: 'cauldron:designSystem',
       cloudProvider: 'cauldron:cloudProvider',
+      geminiModel: 'cauldron:geminiModel',
       openaiApiKey: 'cauldron:openaiApiKey',
       googleApiKey: 'cauldron:googleApiKey',
     };
@@ -486,6 +492,16 @@
 
     function getCloudModel() {
       return DOM.cloudProviderSelect.value;
+    }
+
+    function getCloudModelChoice() {
+      return DOM.cloudProviderSelect.value === 'gemini'
+        ? DOM.geminiModelSelect.value
+        : 'gpt-5.4';
+    }
+
+    function getActiveModelLabel() {
+      return DOM.generationModeSelect.value === 'cloud' ? getCloudModelChoice() : getRoutedModel();
     }
 
     function getActiveModel() {
@@ -540,7 +556,7 @@
         blueprint: currentBlueprint,
         designReference: DOM.designSystemSelect.value,
         generationMode: DOM.generationModeSelect.value,
-        modelUsed: currentModelUsed || getActiveModel(),
+        modelUsed: currentModelUsed || getActiveModelLabel(),
       };
     }
 
@@ -652,7 +668,7 @@
       if (DOM.generationModeSelect.value === 'cloud') {
         const routeLabel = DOM.projectTypeSelect.value === 'site' ? 'static-site' : 'app';
         DOM.routerHelper.textContent = DOM.cloudProviderSelect.value === 'gemini'
-          ? `Cloud Cauldron active. Google AI Studio will be used for the ${routeLabel} blueprint.`
+          ? `Cloud Cauldron active. Google AI Studio uses ${DOM.geminiModelSelect.value} for the ${routeLabel} blueprint.`
           : `Cloud Cauldron active. OpenAI will be used for the ${routeLabel} blueprint.`;
         return;
       }
@@ -664,7 +680,9 @@
 
     function updateCloudPanel() {
       const isCloud = DOM.generationModeSelect.value === 'cloud';
+      const isGemini = DOM.cloudProviderSelect.value === 'gemini';
       DOM.cloudCauldronPanel.classList.toggle('hidden', !isCloud);
+      DOM.geminiModelSelect.classList.toggle('hidden', !isGemini);
       updateRouterHelper();
     }
 
@@ -755,6 +773,7 @@
       localStorage.setItem(STORAGE_KEYS.projectType, DOM.projectTypeSelect.value);
       localStorage.setItem(STORAGE_KEYS.designSystem, DOM.designSystemSelect.value);
       localStorage.setItem(STORAGE_KEYS.cloudProvider, DOM.cloudProviderSelect.value);
+      localStorage.setItem(STORAGE_KEYS.geminiModel, DOM.geminiModelSelect.value);
       localStorage.setItem(STORAGE_KEYS.openaiApiKey, DOM.openaiApiKeyInput.value);
       localStorage.setItem(STORAGE_KEYS.googleApiKey, DOM.googleApiKeyInput.value);
     }
@@ -764,6 +783,7 @@
       DOM.projectTypeSelect.value = localStorage.getItem(STORAGE_KEYS.projectType) || 'app';
       DOM.designSystemSelect.value = localStorage.getItem(STORAGE_KEYS.designSystem) || 'none';
       DOM.cloudProviderSelect.value = localStorage.getItem(STORAGE_KEYS.cloudProvider) || 'openai';
+      DOM.geminiModelSelect.value = localStorage.getItem(STORAGE_KEYS.geminiModel) || 'gemini-3.1-flash-lite';
       DOM.openaiApiKeyInput.value = localStorage.getItem(STORAGE_KEYS.openaiApiKey) || '';
       DOM.googleApiKeyInput.value = localStorage.getItem(STORAGE_KEYS.googleApiKey) || '';
       updateCloudPanel();
@@ -801,6 +821,11 @@
     });
 
     DOM.cloudProviderSelect.addEventListener('change', () => {
+      updateCloudPanel();
+      persistSettings();
+    });
+
+    DOM.geminiModelSelect.addEventListener('change', () => {
       updateRouterHelper();
       persistSettings();
     });
@@ -831,6 +856,7 @@
       const generationMode = DOM.generationModeSelect.value;
       const projectType = DOM.projectTypeSelect.value;
       const model = getActiveModel();
+      const cloudModel = generationMode === 'cloud' ? getCloudModelChoice() : '';
       const apiKey = generationMode === 'cloud' ? getActiveApiKey() : '';
       const designReference = DOM.designSystemSelect.value;
 
@@ -855,7 +881,7 @@
       DOM.generateBtn.textContent = 'Generating…';
       DOM.generateBtn.disabled = true;
       DOM.executeBtn.disabled = true;
-      DOM.modelBadge.textContent = `Generating via ${model}`;
+      DOM.modelBadge.textContent = `Generating via ${cloudModel || model}`;
 
       try {
         const res = await fetch('/api/generate', {
@@ -864,6 +890,7 @@
           body: JSON.stringify({
             prompt,
             model,
+            cloudModel,
             projectType,
             apiKey,
             designReference,

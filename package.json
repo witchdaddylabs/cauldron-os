@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
-    "test": "node tests/smoke.js"
+    "test": "node tests/smoke.js && node tests/cloud-models-smoke.js"
   },
   "keywords": [
     "ai",

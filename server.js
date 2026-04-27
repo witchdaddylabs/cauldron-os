@@ -137,14 +137,29 @@ function getSystemPrompt(projectType = 'app', designReference = '') {
   return base;
 }
 
-function getCloudModelName(provider, projectType = 'app') {
-  if (provider === 'gemini') {
-    return projectType === 'site' ? 'gemini-2.5-flash' : 'gemini-2.5-pro';
-  }
-  if (provider === 'openai') {
-    return 'gpt-5.4';
-  }
-  throw new Error(`Unsupported cloud provider: ${provider}`);
+const CLOUD_MODELS = {
+  gemini: {
+    defaultModel: 'gemini-3.1-flash-lite',
+    models: ['gemini-3.1-flash-lite', 'gemini-3.1-pro-preview'],
+    labels: {
+      'gemini-3.1-flash-lite': 'Gemini Flash 3.1 Lite',
+      'gemini-3.1-pro-preview': 'Gemini Pro 3.1 Preview',
+    },
+  },
+  openai: {
+    defaultModel: 'gpt-5.4',
+    models: ['gpt-5.4'],
+    labels: {
+      'gpt-5.4': 'GPT-5.4',
+    },
+  },
+};
+
+function getCloudModelName(provider, _projectType = 'app', requestedModel = '') {
+  const config = CLOUD_MODELS[provider];
+  if (!config) throw new Error(`Unsupported cloud provider: ${provider}`);
+  if (requestedModel && config.models.includes(requestedModel)) return requestedModel;
+  return config.defaultModel;
 }
 
 // ─── 2. DESIGN REFERENCE FETCHER ────────────────────────────────────────────
@@ -390,6 +405,10 @@ app.get('/api/stats', (req, res) => {
   }
 });
 
+app.get('/api/cloud-models', (req, res) => {
+  res.json({ success: true, providers: CLOUD_MODELS });
+});
+
 // Get available design systems
 app.get('/api/design-systems', (req, res) => {
   const list = Object.entries(DESIGN_SYSTEMS)
@@ -448,7 +467,7 @@ app.post('/api/research-url', (req, res) => {
 // POST /api/generate — Routes to local Ollama or cloud models
 app.post('/api/generate', async (req, res) => {
   try {
-    const { prompt, model, projectType = 'app', apiKey = '', designReference = 'none', researchData = null } = req.body;
+    const { prompt, model, projectType = 'app', apiKey = '', designReference = 'none', researchData = null, cloudModel = '' } = req.body;
     
     let systemPrompt = getSystemPrompt(projectType, designReference);
     
@@ -470,12 +489,14 @@ app.post('/api/generate', async (req, res) => {
         });
       }
       
+      const modelUsed = getCloudModelName(model, projectType, cloudModel);
       const blueprint = await callCloudModel({
         provider: model,
         apiKey,
         prompt,
         systemPrompt,
         projectType,
+        requestedModel: cloudModel,
       });
       
       db.createSession({
@@ -484,10 +505,10 @@ app.post('/api/generate', async (req, res) => {
         urlResearch: researchData || null,
         designReference,
         generationMode: 'cloud',
-        modelUsed: getCloudModelName(model, projectType),
+        modelUsed,
         draftId: null,
       });
-      return res.json({ success: true, blueprint, canHandoff: true, modelUsed: getCloudModelName(model, projectType), providerUsed: model });
+      return res.json({ success: true, blueprint, canHandoff: true, modelUsed, providerUsed: model });
     }
     
     // Local models → Ollama
@@ -558,9 +579,9 @@ app.post('/api/generate', async (req, res) => {
   }
 });
 
-async function callCloudModel({ provider, apiKey, prompt, systemPrompt, projectType }) {
+async function callCloudModel({ provider, apiKey, prompt, systemPrompt, projectType, requestedModel = '' }) {
   const url = provider === 'gemini' ? GEMINI_BASE_URL : OPENAI_BASE_URL;
-  const model = getCloudModelName(provider, projectType);
+  const model = getCloudModelName(provider, projectType, requestedModel);
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), CLOUD_TIMEOUT_MS);
   

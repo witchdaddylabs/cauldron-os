@@ -11,296 +11,229 @@
 
 </div>
 
-> **Local-first, design-aware blueprint generator for builders who code with AI.**
+> **Bring the messy idea. Cauldron brings the structure, taste, and next steps.**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.2-blue.svg)](docs/)
-[![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)]()
+Cauldron OS is a local-first workshop for AI-assisted builders. Drop in a rough app or website idea, choose a model or design reference, and Cauldron turns the mess into a structured product blueprint with architecture notes, schema ideas, exportable docs, and a live HTML preview.
 
----
-
-## TL;DR
-
-Cauldron OS turns vague LLM prompts into structured, implementable blueprints — with **premium design taste**, **brand DNA**, and **site research** built right in. Run it locally, keep your ideas private, and hand off clean specs to OpenCode/Cline/Claude Code.
-
-```bash
-git clone https://github.com/witchdaddylabs/cauldron-os
-cd cauldron-os
-npm install
-node server.js
-# → Open http://localhost:3000
-```
-
----
-
-## Why Cauldron?
-
-Most LLM coding assistants give you *vague* output: "Build a nice dashboard with a clean UI." You get a wall of text with no structure, no design constraints, and no respect for brand consistency.
-
-**Cauldron fixes that by injecting three layers of intelligence before the LLM even sees your prompt:**
-
-1. **Impeccable Taste** — ANTI-PATTERNS + MANDATES stop generic Inter/Roboto, pure #000, nested cards, and blue gradients. Forces high-contrast typography, vertical rhythm, and micro-interactions.
-2. **Design Reference Selector** — Pull brand DNA from the VoltAgent awesome-design-md collection (Cursor, Vercel, Lovable, Raycast) and prepend it to the prompt so the AI thinks in that brand's visual language.
-3. **URL Research Sweep** — Paste any website URL in your brain dump, and Cauldron automatically scrapes its CSS variables, fonts, colors, and layout patterns — injecting those findings so the output feels familiar.
-
-Result: You get a **PRD**, **database schema**, **security posture**, **architecture notes**, **live HTML preview**, **local draft history**, **Markdown/JSON exports**, and a **handoff-ready** project folder — all in a consistent, premium aesthetic.
-
----
-
-
-<div align="center">
-
-<img src="assets/hero-header.png" alt="Cauldron OS Hero" width="100%"/>
-
-</div>
-
-
-## Features
-
-### For Solo Builders
-- Generate complete app blueprints in one keystroke (Cmd+Enter)
-- Save/load drafts locally with a searchable history log
-- Export blueprints as Markdown or JSON without leaving the browser
-- Local LLM via Ollama — no API costs, no data leaves your machine
-- Optional cloud fallback (OpenAI GPT-5.4 / Google Gemini 2.5) with your own API key
-- Automatic project scaffolding + OpenCode/CLI handoff
-
-### For Design-Conscious Teams
-- Design Reference dropdown applies brand DNA from popular design systems
-- URL research mode lets you clone the feel of existing sites
-- Consistent spacing, typography, component states across all outputs
-
-### For Open Source Contributors
-- Clean, well-commented codebase (~500 lines server, ~650 lines frontend)
-- Skill-based architecture — each "Master Brain" upgrade is a reusable module
-- Easy to extend with new design systems, research scrapers, or prompt injections
-
----
-
-## Screenshots
-
-> _Screenshots go here — dark UI with neon accents, three-panel layout (Brain Dump | Blueprint | Live Preview)_
+It is built for hobbyists, indie builders, designers, enthusiasts, and developers who want better AI output than “make me a nice dashboard”.
 
 ---
 
 ## Quick Start
 
-### Prerequisites
-- Node.js 18+ (native fetch support)
-- Ollama (for local models) **or** OpenAI/Google API keys (for cloud)
-- Optional: OpenCode CLI for handoff (`npm i -g opencode`)
+```bash
+git clone https://github.com/witchdaddylabs/cauldron-os.git
+cd cauldron-os
+npm install
+npm start
+# → Open http://localhost:3000
+```
 
-#
-## Screenshots
+### Non-technical start
 
-**Full three-panel interface** — Brain Dump, Blueprint Output, Live Preview  
-![Main UI](assets/screenshots/01-main-ui.png)
+**Windows:** double-click `start-cauldron.bat` or run `start-cauldron.ps1` in PowerShell.<br>
+**macOS / Linux:** open Terminal in the repo folder, then run `npm install` and `npm start`.
 
-**Design Reference selector** — fuse brand DNA from Cursor, Vercel, Lovable, or Raycast  
-![Design Reference Dropdown](assets/screenshots/02-design-dropdown.png)
-
-
-## Quick Start (Non-Technical)
-
-**Windows:** Double-click `start-cauldron.bat` in the repo folder  
-**macOS / Linux:** Double-click `start-cauldron.ps1` (or run `node server.js`)
-
-Both scripts will check for Node.js, install dependencies if needed, and start the server automatically.
+You will need Node.js 18+. For local AI generation, install Ollama and pull at least one model. You can also use OpenAI or Google AI Studio with your own API key.
 
 ---
 
-## Installation
+## What Cauldron does
 
-```bash
-# Clone
-git clone https://github.com/witchdaddylabs/cauldron-os.git
-cd cauldron-os
+1. **You brain-dump the idea**<br>
+   Write naturally. Messy is fine. Paste reference URLs if you have them.
 
-# Install dependencies (Express + sql.js)
-npm install
+2. **Cauldron adds taste and context**<br>
+   It injects design rules, optional brand/design references, and URL research before the model sees your prompt.
 
-# Start the server
-npm start
-# or
-node server.js
-```
+3. **The model creates a blueprint**<br>
+   You get product notes, architecture direction, schema ideas, security considerations, and implementation guidance.
 
-Open http://localhost:3000 — you're in.
+4. **You get a live preview**<br>
+   Cauldron asks the model for an HTML preview so you can see the shape of the idea, not just read about it.
 
-### First Blueprint
+5. **You save, export, or hand it off**<br>
+   Drafts and history are stored locally. You can export Markdown/JSON or hand the blueprint to a coding agent such as OpenCode.
 
-1. Enter an idea: "A todo app with drag-and-drop reordering"
-2. Select model: `gemma4:e4b` (fast) or `qwen3.5:9b` (detailed)
-3. (Optional) Choose a Design Reference from the dropdown
-4. (Optional) Paste a reference URL like `https://raycast.com` in your text
-5. Press **Cmd+Enter** or click *Generate Blueprint*
-6. Review the generated PRD, schema, architecture, and live HTML preview
-7. Click *Execute & Hand-off* to spawn OpenCode and start building
+---
+
+## Screenshots
+
+**Full three-panel interface** — Brain Dump, Blueprint Output, Live Preview<br>
+![Main UI](assets/screenshots/01-main-ui.png)
+
+**Design Reference selector** — fuse brand DNA from Cursor, Vercel, Lovable, or Raycast<br>
+![Design Reference Dropdown](assets/screenshots/02-design-dropdown.png)
+
+---
+
+## Features
+
+### For hobbyists and solo builders
+
+- Turn rough ideas into structured build blueprints
+- Run locally with Ollama — no API costs and no data leaving your machine
+- Optional cloud fallback using your own OpenAI or Google AI Studio API key
+- Save/load drafts locally with searchable history
+- Export blueprints as Markdown or JSON
+- Generate a live HTML preview alongside the written blueprint
+- Create project folders and hand off to OpenCode/CLI agents
+
+### For design-conscious builders
+
+- Design Reference dropdown for Cursor, Vercel, Lovable, and Raycast-style visual direction
+- URL research mode that extracts CSS variables, fonts, colours, and layout hints from reference sites
+- Taste guardrails that avoid generic AI UI sludge: default Inter/Roboto, pure black, nested cards, and tired blue gradients
+- Prompts for stronger spacing, typography, component states, and micro-interactions
+
+### For contributors
+
+- Small Express backend and vanilla frontend
+- Public-safe local records layer using `sql.js`
+- Clear extension points for prompts, design systems, URL research, templates, and exporters
+- MIT licensed and intentionally local-first
+
+---
+
+## First Blueprint
+
+1. Enter an idea, for example: `A tiny CRM for freelance designers who hate spreadsheets`.
+2. Pick **Local Router** or **Cloud Cauldron**.
+3. Choose **App** or **Static Site**.
+4. Optionally choose a design reference.
+5. Optionally paste a URL like `https://raycast.com` to trigger research mode.
+6. Click **Generate Blueprint** or press **Cmd/Ctrl + Enter**.
+7. Review the blueprint and live preview.
+8. Save, export, or click **Execute & Hand-off** if you want a coding agent to start building.
+
+---
+
+## Model Routing
+
+### Local models
+
+By default, Cauldron routes local generation to Ollama models:
+
+| Project Type | Default Local Model | Best For |
+|--------------|---------------------|----------|
+| App / product blueprint | `qwen3.5:9b` | Architecture, state, schema, full-stack planning |
+| Static site / landing page | `gemma4:e4b` | Layout, visual hierarchy, static markup |
+
+You can change the selected model in the UI.
+
+### Cloud models
+
+Cloud Cauldron supports user-provided API keys stored in your browser localStorage.
+
+| Provider | Default / Available Models |
+|----------|----------------------------|
+| OpenAI | `gpt-5.4` |
+| Google AI Studio | `gemini-3.1-flash-lite`, `gemini-3.1-pro-preview` |
+
+Google routing now follows the currently available 3.1 choices. Flash Lite is the preferred lightweight architecture model; Pro Preview is available as the heavier fallback.
+
+---
+
+## The Master Brain layer
+
+Cauldron’s prompt builder adds three design-aware upgrades before generation:
+
+| Module | What it does |
+|--------|--------------|
+| Impeccable Taste | Adds design anti-patterns and premium UI mandates |
+| Design Reference Selector | Pulls brand DNA from `awesome-design-md` style references |
+| URL Research Sweep | Scrapes reference URLs for CSS variables, fonts, colours, and layout patterns |
+
+This means the model gets more than “build me an app”. It gets taste, constraints, references, and context.
 
 ---
 
 ## Project Structure
 
-```
+```text
 cauldron-os/
-├── server.js              # Express backend (API + Ollama proxy + research scraper)
-├── package.json           # Dependencies (express)
+├── server.js               # Express backend, model proxy, prompt builder, research scraper
+├── db/                     # Local sql.js records backend
 ├── public/
-│   └── index.html         # Frontend (vanilla JS, Tailwind CDN)
-├── projects/              # Generated blueprints live here (gitignored)
-├── docs/
-│   ├── ARCHITECTURE.md    # How the Master Brain upgrades fit together
-│   ├── DESIGN_REFERENCE.md # How to contribute new brand DNA
-│   └── UPGRADES_2.1.md    # Full spec for the 2.1 upgrades
-├── examples/
-│   ├── sample-blueprint.md
-│   └── DESIGN.md          # Example brand DNA file (Cursor)
-├── scripts/
-│   └── validate-json.js   # Blueprint schema linting (future)
-├── design-systems/        # Brand DNA cache (populated on first run)
-│   ├── cursor/
-│   ├── vercel/
-│   ├── lovable/
-│   └── raycast/
-├── LICENSE                # MIT License
-└── README.md              # You are here
+│   └── index.html          # Frontend cockpit
+├── projects/               # Generated handoff projects (gitignored)
+├── data/                   # Local runtime DB/drafts (gitignored)
+├── docs/                   # Architecture, install, contributing, and upgrade notes
+├── examples/               # Example blueprints/design references
+├── scripts/                # Validation/support scripts
+├── assets/                 # Branding and screenshots
+├── start-cauldron.bat      # Windows launcher
+├── start-cauldron.ps1      # PowerShell launcher
+├── LICENSE                 # MIT License
+└── README.md
 ```
-
----
-
-## Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Frontend (index.html) — Brain Dump | Blueprint | Preview  │
-└───────────────┬─────────────────────────────────┬───────────┘
-                │ POST /api/generate             │
-                ▼                                 │
-┌─────────────────────────────┐                   │
-│  Server (server.js)          │                   │
-│  ┌─────────────────────────┐ │                   │
-│  │ Prompt Builder          │◄┘                   │
-│  │ • DESIGN_GUIDE          │                      │
-│  │ • Design Reference      │                      │
-│  │ • URL Research Findings │                      │
-│  └───────────┬─────────────┘                      │
-│              │ POST to Ollama                      │
-│              ▼                                     │
-│    ┌─────────────────────┐                        │
-│    │ Ollama (local)      │                        │
-│    │ or Cloud (OpenAI/   │                        │
-│    │ Gemini)             │                        │
-│    └──────────┬──────────┘                        │
-│               │                                    │
-│               ▼                                    │
-│  ┌─────────────────────┐                          │
-│  │ Blueprint Response  │                          │
-│  └──────────┬──────────┘                          │
-│             │                                      │
-│             ▼                                      │
-│  ┌─────────────────────┐                          │
-│  │ POST /api/handoff   │───► OpenCode (PID)      │
-│  └─────────────────────┘       project/blueprint/ │
-└─────────────────────────────────────────────────────┘
-```
-
-### The "Master Brain" Layer
-
-The Master Brain upgrades (2.1) are three independent modules:
-
-| Module | What it does | Files touched |
-|--------|--------------|---------------|
-| `impeccable-taste` | Injects DESIGN_GUIDE into system prompt | server.js (APP/SITE_SYSTEM_PROMPT) |
-| `design-reference-selector` | Fetches + caches DESIGN.md, prepends to prompt | server.js (design cache, endpoints) + index.html (dropdown) |
-| `url-research-sweep` | Scrapes URLs, extracts signals, formats for prompt | server.js (scrape/analyse) + index.html (detect/trigger) |
-
-Each is a **skill** you can load independently in agent workflows. See `skills/` for docs.
 
 ---
 
 ## Configuration
 
-### Environment Variables
-
-None required. Secrets are stored in browser localStorage for cloud models.
-
 ### Port
 
-Default: `3000`. Change by setting `PORT` env var.
+Default: `3000`.
 
-### Ollama URL
+```bash
+PORT=4000 npm start
+```
 
-Default: `http://127.0.0.1:11434/api/generate`. Change `OLLAMA_URL` in server.js if needed.
+### Local data
 
-### Model Routing
+Drafts, sessions, and local runtime data are stored under `data/` and are gitignored by default.
 
-| Project Type | Local Model | Fallback |
-|--------------|-------------|----------|
-| App (complex) | `qwen3.5:9b` | OpenAI GPT-5.4 |
-| Site (static) | `gemma4:e4b` | Google Gemini 2.5 Flash |
+### API keys
 
-You can override in the UI.
+Cloud API keys are entered in the browser and stored locally in browser localStorage. They are not committed to the repo.
 
 ---
 
 ## Contributing
 
-We welcome PRs! Please read [CONTRIBUTING.md](docs/CONTRIBUTING.md) first.
+Pull requests are welcome. Useful areas:
 
-Areas where you can help:
-- Add new design systems to `design-systems/` (Cursor, Linear, Arc browser, etc.)
-- Improve URL research scraper (handle SPAs, more CSS properties)
-- Add Docker support + docker-compose with Ollama
-- Write additional prompt templates (mobile app, CLI tool, game)
-- Accessibility audit of generated blueprints
-- Testing suite (Jest + Supertest)
+- Add new design references
+- Improve URL research, especially for SPAs
+- Add template/scaffold options such as HTML + AlpineJS, React + Vite, Next.js, FastAPI, or SwiftUI
+- Improve exports and blueprint diffing
+- Improve accessibility
+- Add tests and docs
+- Clean up install paths for different operating systems
+
+Please read [CONTRIBUTING.md](docs/CONTRIBUTING.md) before opening a PR.
 
 ---
 
-## License
+## Roadmap ideas
 
-**MIT License** — see [LICENSE](LICENSE) file.
+Near-term public roadmap candidates:
 
-You are free to:
-- Use commercially
-- Modify
-- Distribute
-- Sublicense
+- One-click export panel
+- Templates library
+- HTML + AlpineJS lightweight prototype template
+- Local Ollama model switcher
+- Blueprint diffing
+- Blueprint gallery
+- Basic scaffold generator
 
-Under the condition: keep the license notice in all copies.
-
-**Attribution:** While not required by the MIT license, we appreciate a link back to https://github.com/witch-daddy-labs/cauldron-os if you found this tool helpful.
+The private Witch Daddy Labs build has more experimental automation, build-status, and coding-agent orchestration. Public Cauldron will get the stable, broadly useful pieces as they mature.
 
 ---
 
 ## Acknowledgments & Inspirations
 
-This project stands on the shoulders of giants:
-
-- **[impeccable.style](https://impeccable.style)** — the original design taste manifesto that sparked the idea
-- **[taste-skill](https://github.com/Leonxlnx/taste-skill)** by Leonxlnx — high-agency frontend tasteBud for AI; inspired the ANTI-PATTERNS/MANDATES format
-- **[ai-website-cloner-template](https://github.com/JCodesMore/ai-website-cloner-template)** by JCodesMore — reconnaissance approach adapted for URL Research Sweep
-- **[VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md)** — DESIGN.md specification and brand DNA collection
-
-Additionally: Witch Daddy Labs minions (Marion, et al.) for iterative testing and quality feedback.
+- [impeccable.style](https://impeccable.style) — design taste manifesto inspiration
+- [taste-skill](https://github.com/Leonxlnx/taste-skill) by Leonxlnx — high-agency frontend taste patterns
+- [ai-website-cloner-template](https://github.com/JCodesMore/ai-website-cloner-template) by JCodesMore — reconnaissance inspiration for URL research
+- [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) — DESIGN.md concept and design-system references
 
 ---
 
-## Community
+## License
 
-- **Discord** (coming soon): Witch Daddy Labs community
-- **Issues**: https://github.com/witch-daddy-labs/cauldron-os/issues
-- **Showcase**: Tag @witchdaddylabs on Twitter/X if you build something with Cauldron
-
----
-
-> *"Good design is obvious. Great design is transparent."*  
-> — Ancient code cave proverb, probably
-
----
-
-**Happy cooking. 🔥**
-
+MIT License — see [LICENSE](LICENSE).
 
 ---
 
@@ -308,6 +241,6 @@ Additionally: Witch Daddy Labs minions (Marion, et al.) for iterative testing an
 
 **Built with 💜 by [Witch Daddy Labs](https://witchdaddylabs.com)**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+**Happy cooking. 🔥**
 
 </div>

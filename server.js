@@ -14,9 +14,10 @@ const fs = require('fs');
 const { spawn } = require('child_process');
 const https = require('https');
 const http = require('http');
+const db = require('./db');
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT || 3000);
 const OLLAMA_URL = 'http://127.0.0.1:11434/api/generate';
 const OLLAMA_TIMEOUT_MS = 600000;
 const CLOUD_TIMEOUT_MS = 300000;
@@ -269,6 +270,126 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', service: 'Cauldron 2.1' });
 });
 
+
+function normaliseLimitOffset(query) {
+  return {
+    limit: Math.min(Math.max(Number(query.limit) || 50, 1), 200),
+    offset: Math.max(Number(query.offset) || 0, 0),
+  };
+}
+
+function sendMarkdownDownload(res, filename, markdown) {
+  res.setHeader('Content-Type', 'text/markdown; charset=utf-8');
+  res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+  res.send(markdown);
+}
+
+// Drafts API — local-first public feature. Runtime files live in ./data.
+app.get('/api/drafts', (req, res) => {
+  try {
+    const { limit, offset } = normaliseLimitOffset(req.query);
+    const drafts = db.getAllDrafts(limit, offset, req.query.q || '');
+    res.json({ success: true, drafts, total: db.countDrafts() });
+  } catch (err) {
+    console.error('[Cauldron] Draft list error:', err);
+    res.status(500).json({ success: false, error: 'Failed to fetch drafts', details: err.message });
+  }
+});
+
+app.post('/api/drafts', (req, res) => {
+  try {
+    const { projectName, brainDump = '', blueprint, designReference = 'none', generationMode = 'local', modelUsed = null } = req.body;
+    if (!projectName || !blueprint) {
+      return res.status(400).json({ success: false, error: 'projectName and blueprint are required' });
+    }
+
+    const result = db.createDraft({ projectName, brainDump, blueprint, designReference, generationMode, modelUsed });
+    db.createSession({
+      sessionId: req.headers['x-session-id'] || db.generateSessionId(),
+      brainDump,
+      designReference,
+      generationMode,
+      modelUsed,
+      draftId: result.id,
+    });
+
+    res.json({ success: true, draftId: result.id, filename: result.filename });
+  } catch (err) {
+    console.error('[Cauldron] Save draft error:', err);
+    res.status(500).json({ success: false, error: 'Failed to save draft', details: err.message });
+  }
+});
+
+app.get('/api/drafts/:id', (req, res) => {
+  try {
+    const draft = db.getDraftById(req.params.id);
+    if (!draft) return res.status(404).json({ success: false, error: 'Draft not found' });
+    res.json({ success: true, draft });
+  } catch (err) {
+    console.error('[Cauldron] Draft fetch error:', err);
+    res.status(500).json({ success: false, error: 'Failed to fetch draft', details: err.message });
+  }
+});
+
+app.get('/api/drafts/:id/export.md', (req, res) => {
+  try {
+    const draft = db.getDraftById(req.params.id);
+    if (!draft) return res.status(404).json({ success: false, error: 'Draft not found' });
+    const safeName = String(draft.project_name || 'cauldron-draft').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'cauldron-draft';
+    sendMarkdownDownload(res, `${safeName}.md`, draft.blueprint || '');
+  } catch (err) {
+    console.error('[Cauldron] Draft export error:', err);
+    res.status(500).json({ success: false, error: 'Failed to export draft', details: err.message });
+  }
+});
+
+app.delete('/api/drafts/:id', (req, res) => {
+  try {
+    const ok = db.deleteDraft(req.params.id);
+    if (!ok) return res.status(404).json({ success: false, error: 'Draft not found' });
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[Cauldron] Delete draft error:', err);
+    res.status(500).json({ success: false, error: 'Failed to delete draft', details: err.message });
+  }
+});
+
+app.get('/api/history', (req, res) => {
+  try {
+    const { limit, offset } = normaliseLimitOffset(req.query);
+    res.json({ success: true, sessions: db.getSessions(limit, offset), total: db.countSessions() });
+  } catch (err) {
+    console.error('[Cauldron] History error:', err);
+    res.status(500).json({ success: false, error: 'Failed to fetch history', details: err.message });
+  }
+});
+
+app.post('/api/history/cleanup', (req, res) => {
+  try {
+    const days = Number(req.body.days || 90);
+    res.json({ success: true, purged: db.purgeOldDays(days) });
+  } catch (err) {
+    console.error('[Cauldron] History cleanup error:', err);
+    res.status(500).json({ success: false, error: 'Cleanup failed', details: err.message });
+  }
+});
+
+app.get('/api/stats', (req, res) => {
+  try {
+    res.json({
+      success: true,
+      stats: {
+        totalDrafts: db.countDrafts(),
+        totalSessions: db.countSessions(),
+        recentActivity: db.getSessions(10, 0).length,
+      },
+    });
+  } catch (err) {
+    console.error('[Cauldron] Stats error:', err);
+    res.status(500).json({ success: false, error: 'Failed to fetch stats', details: err.message });
+  }
+});
+
 // Get available design systems
 app.get('/api/design-systems', (req, res) => {
   const list = Object.entries(DESIGN_SYSTEMS)
@@ -357,6 +478,15 @@ app.post('/api/generate', async (req, res) => {
         projectType,
       });
       
+      db.createSession({
+        sessionId: req.headers['x-session-id'] || db.generateSessionId(),
+        brainDump: prompt,
+        urlResearch: researchData || null,
+        designReference,
+        generationMode: 'cloud',
+        modelUsed: getCloudModelName(model, projectType),
+        draftId: null,
+      });
       return res.json({ success: true, blueprint, canHandoff: true, modelUsed: getCloudModelName(model, projectType), providerUsed: model });
     }
     
@@ -401,6 +531,15 @@ app.post('/api/generate', async (req, res) => {
     }
     const blueprint = data.response || data.message || '';
     
+    db.createSession({
+      sessionId: req.headers['x-session-id'] || db.generateSessionId(),
+      brainDump: prompt,
+      urlResearch: researchData || null,
+      designReference,
+      generationMode: 'local',
+      modelUsed: ollamaModel,
+      draftId: null,
+    });
     res.json({ success: true, blueprint, canHandoff: true, modelUsed: ollamaModel, providerUsed: 'ollama' });
     
   } catch (err) {
@@ -541,11 +680,17 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`\n🔥 Cauldron OS 2.1.0 — Witch Daddy Labs (open source)`);
-  console.log(`   Master Brain upgrades loaded:`);
-  console.log(`   • Impeccable Taste (Grendel)`);
-  console.log(`   • Design Reference Selector (Camilo & Grendel)`);
-  console.log(`   • URL Research Sweep (Grendel)`);
-  console.log(`   Server running at http://localhost:${PORT}\n`);
-});
+(async () => {
+  await db.init();
+
+  app.listen(PORT, () => {
+    console.log(`\n🔥 Cauldron OS 2.2.0 — Witch Daddy Labs (open source)`);
+    console.log(`   Master Brain upgrades loaded:`);
+    console.log(`   • Impeccable Taste (Grendel)`);
+    console.log(`   • Design Reference Selector (Camilo & Grendel)`);
+    console.log(`   • URL Research Sweep (Grendel)`);
+    console.log(`   • Local Drafts, History & Markdown Export`);
+    console.log(`   Server running at http://localhost:${PORT}`);
+    console.log(`   Data directory: ${db.paths.DATA_DIR}\n`);
+  });
+})();

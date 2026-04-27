@@ -28,6 +28,10 @@ design-systems/*/
 !design-systems/.gitkeep
 cauldron-os.code-workspace
 
+# Local runtime data (never publish user drafts/history)
+data/
+*.db
+
 # Backups (local only)
 *.backup
 

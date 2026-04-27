@@ -1,18 +1,25 @@
 {
-  "name": "cauldron",
-  "version": "2.1.0",
+  "name": "cauldron-os",
+  "version": "2.2.0",
   "description": "Local-first, design-aware blueprint generator for AI-assisted development",
   "main": "server.js",
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node tests/smoke.js"
   },
-  "keywords": [],
+  "keywords": [
+    "ai",
+    "ollama",
+    "blueprint",
+    "design-system",
+    "local-first"
+  ],
   "author": "Witch Daddy Labs <hello@witchdaddylabs.com>",
-  "license": "ISC",
+  "license": "MIT",
   "type": "commonjs",
   "dependencies": {
-    "express": "5.2.1"
+    "express": "5.2.1",
+    "sql.js": "^1.14.1"
   }
 }

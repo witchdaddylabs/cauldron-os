@@ -9,14 +9,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [2.2.0] — 2026-04-27
+
 ### Added
-- Initial open-source release
-- Master Brain upgrades (Impeccable Taste, Design Reference Selector, URL Research Sweep)
-- Three-panel UI (Brain Dump → Blueprint → Live Preview)
-- Ollama local model routing (qwen3.5:9b for apps, gemma4:e4b for sites)
-- Cloud fallback with OpenAI GPT-5.4 and Google Gemini 2.5
-- OpenCode/CLI handoff with detached background spawning
-- Skill-based architecture (impeccable-taste, design-reference-selector, url-research-sweep)
+- Local draft saving/loading backed by `sql.js`
+- Searchable saved draft list and session history UI
+- Markdown and JSON export actions
+- Public-safe `data/` runtime storage ignored by Git
+- Smoke test coverage for draft/history/export endpoints
+- Accessibility improvements: action nav, dialogs, focus-visible states, reduced-motion support
+
+### Fixed
+- Broken local draft retrieval route from the prototype implementation
+- Duplicate/invalid frontend menu and script injection
+- Package metadata restored to MIT license and `cauldron-os` package name
 
 ---
 

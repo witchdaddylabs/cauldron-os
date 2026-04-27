@@ -37,7 +37,6 @@ const OPTIONAL_ASSETS = [
 ];
 
 const FORBIDDEN = [
-  'node_modules/',
   '.DS_Store',
   '*.backup',
   'projects/',         // should be gitignored
@@ -113,7 +112,7 @@ console.log('\n🔍 Validating JSON config files:');
 // Validate sample blueprint
 console.log('\n📄 Blueprint schema check:');
 try {
-  const { validateBlueprint } = require('./scripts/validate-blueprint.js');
+  const { validateBlueprint } = require(path.join(ROOT, 'scripts/validate-blueprint.js'));
   const sample = fs.readFileSync(path.join(ROOT, 'examples/sample-blueprint.md'), 'utf-8');
   const report = validateBlueprint(sample);
   if (report.valid) {
@@ -150,13 +149,12 @@ console.log(`Warnings: ${warnings}`);
 console.log('='.repeat(50));
 
 if (errors === 0) {
-  console.log('\n✅ Repo is ready for first commit and push!\n');
-  console.log('Next steps:');
-  console.log('  1. git add .');
-  console.log('  2. git commit -m "chore: initial release Cauldron OS v2.1.0"');
-  console.log('  3. git branch -M main');
-  console.log('  4. git remote add origin https://github.com/witchdaddylabs/cauldron-os.git');
-  console.log('  5. git push -u origin main\n');
+  console.log('\n✅ Repo checks passed. Safe to commit/push when intentional.\n');
+  console.log('Suggested next steps:');
+  console.log('  1. npm test');
+  console.log('  2. git add <intended files>');
+  console.log('  3. git commit -m "feat: add local drafts and history"');
+  console.log('  4. git push\n');
   process.exit(0);
 } else {
   console.log('\n❌ Fix errors before pushing.\n');

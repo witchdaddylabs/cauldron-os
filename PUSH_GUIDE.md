@@ -8,7 +8,7 @@
 
 ## ✅ Pre-Push Checklist (COMPLETE)
 
-All files are in place. Local repo at `~/hermes/witch-daddy-labs/cauldron-os/` is ready.
+All files are in place. The local repo folder is ready.
 
 ---
 
@@ -38,7 +38,7 @@ Open Terminal on your Mac (where Hermes runs):
 
 ```bash
 # Navigate to the prepared repo
-cd /Users/habibi/hermes/witch-daddy-labs/cauldron-os
+cd cauldron-os
 
 # Verify you see server.js, README.md, etc.
 ls -la

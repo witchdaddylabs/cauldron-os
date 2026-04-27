@@ -4,9 +4,9 @@
 
 ---
 
-## Project Blueprint
+# Project Blueprint
 
-### PRD
+## PRD
 
 **App Concept:** FocusFlow is a minimalist Pomodoro timer with integrated task sequencing and ambient soundscapes. It helps deep workers maintain flow state through structured intervals and environmental audio.
 

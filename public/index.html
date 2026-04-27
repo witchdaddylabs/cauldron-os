@@ -34,7 +34,7 @@
           },
           backgroundImage: {
             'mesh': 'radial-gradient(at 0% 0%, rgba(183,148,246,0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(52,211,153,0.08) 0px, transparent 50%)',
-            'noise': 'url("data:image/svg+xml,%3Csvg viewBox=\\'0 0 200 200\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cfilter id=\\'noiseFilter\\'%3E%3CfeTurbulence type=\\'fractalNoise\\' baseFrequency=\\'0.9\\' numOctaves=\\'4\\' stitchTiles=\\'stitch\\'/%3E%3C/filter%3E%3Crect width=\\'100%25\\' height=\\'100%25\\' filter=\\'url(%23noiseFilter)\\' opacity=\\'0.03\\'/%3E%3C/svg%3E")',
+            'noise': 'linear-gradient(to bottom, rgba(255,255,255,0.02), transparent)',
           }
         }
       }
@@ -193,6 +193,43 @@
     .blueprint-block .header { color: #b794f6; font-weight: 600; }
     .blueprint-block .key { color: #34d399; }
     .blueprint-block .string { color: #fbbf24; }
+
+
+    .menu-link:focus, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid rgba(183,148,246,0.75);
+      outline-offset: 2px;
+    }
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      background: rgba(9, 9, 12, 0.72);
+      backdrop-filter: blur(10px);
+    }
+    .modal-backdrop.hidden { display: none; }
+    .modal-panel {
+      width: min(760px, calc(100vw - 32px));
+      max-height: min(720px, calc(100vh - 32px));
+      overflow: auto;
+      background: linear-gradient(145deg, rgba(26,26,29,0.98), rgba(13,13,15,0.98));
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+    .draft-row {
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.025);
+      transition: border-color 0.16s ease, transform 0.16s ease;
+    }
+    .draft-row:hover, .draft-row:focus-within {
+      border-color: rgba(183,148,246,0.38);
+      transform: translateY(-1px);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+
   </style>
 </head>
 <body class="h-screen flex flex-col">
@@ -209,6 +246,21 @@
       <span class="text-xs text-obsidian-400">Master Brain active</span>
     </div>
   </header>
+
+  <!-- Menu Bar -->
+  <nav class="flex-none h-10 px-4 flex items-center gap-4 border-b border-obsidian-800/30 bg-obsidian-950/20 text-xs" aria-label="Cauldron actions">
+    <button type="button" data-action="new" class="menu-link px-2 py-1 text-obsidian-300 hover:text-neon-purple">New</button>
+    <button type="button" data-action="save" class="menu-link px-2 py-1 text-obsidian-300 hover:text-neon-purple">Save Draft <span class="text-obsidian-500">⌘S</span></button>
+    <button type="button" data-action="load" class="menu-link px-2 py-1 text-obsidian-300 hover:text-neon-purple">Drafts <span class="text-obsidian-500">⌘O</span></button>
+    <button type="button" data-action="history" class="menu-link px-2 py-1 text-obsidian-300 hover:text-neon-purple">History</button>
+    <button type="button" data-action="export-md" class="menu-link px-2 py-1 text-obsidian-300 hover:text-neon-purple">Export Markdown</button>
+    <button type="button" data-action="export-json" class="menu-link px-2 py-1 text-obsidian-300 hover:text-neon-purple">Export JSON</button>
+    <div class="ml-auto flex items-center gap-3 text-obsidian-400" aria-live="polite">
+      <span id="draftStatus" class="text-[11px] opacity-75">Ready</span>
+      <span id="unsavedIndicator" class="text-[10px] text-neon-amber hidden">● Unsaved</span>
+    </div>
+  </nav>
+
 
   <!-- Main 3-Panel Layout -->
   <main class="flex-1 flex overflow-hidden">
@@ -347,6 +399,37 @@
     </button>
   </footer>
 
+
+
+  <div id="draftModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="draftModalTitle">
+    <section class="modal-panel p-5">
+      <div class="flex items-center justify-between gap-4 mb-4">
+        <div>
+          <h2 id="draftModalTitle" class="text-sm font-semibold tracking-widest uppercase text-neon-purple">Saved Drafts</h2>
+          <p class="text-xs text-obsidian-500 mt-1">Local drafts stored on this machine only.</p>
+        </div>
+        <button type="button" data-close-modal class="px-3 py-1 text-xs border border-obsidian-700 text-obsidian-300 hover:border-neon-purple/60">Close</button>
+      </div>
+      <label class="sr-only" for="draftSearchInput">Search drafts</label>
+      <input id="draftSearchInput" class="w-full mb-4 px-3 py-2 bg-obsidian-900/50 border border-obsidian-700 text-sm text-obsidian-200" placeholder="Search drafts…">
+      <div id="draftList" class="space-y-2" aria-live="polite"></div>
+    </section>
+  </div>
+
+  <div id="historyModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="historyModalTitle">
+    <section class="modal-panel p-5">
+      <div class="flex items-center justify-between gap-4 mb-4">
+        <div>
+          <h2 id="historyModalTitle" class="text-sm font-semibold tracking-widest uppercase text-neon-emerald">Session History</h2>
+          <p class="text-xs text-obsidian-500 mt-1">Recent generation and save activity.</p>
+        </div>
+        <button type="button" data-close-modal class="px-3 py-1 text-xs border border-obsidian-700 text-obsidian-300 hover:border-neon-emerald/60">Close</button>
+      </div>
+      <div id="historyList" class="space-y-2" aria-live="polite"></div>
+    </section>
+  </div>
+
+
   <!-- Application Logic -->
   <script>
     const DOM = {
@@ -370,6 +453,13 @@
       generateBtn: document.getElementById('generateBtn'),
       executeBtn: document.getElementById('executeBtn'),
       refreshPreview: document.getElementById('refreshPreview'),
+      draftStatus: document.getElementById('draftStatus'),
+      unsavedIndicator: document.getElementById('unsavedIndicator'),
+      draftModal: document.getElementById('draftModal'),
+      historyModal: document.getElementById('historyModal'),
+      draftList: document.getElementById('draftList'),
+      historyList: document.getElementById('historyList'),
+      draftSearchInput: document.getElementById('draftSearchInput'),
     };
 
     // State
@@ -377,6 +467,9 @@
     let projectCounter = 0;
     let projectNameTouched = false;
     let currentResearchData = null; // holds scraped design findings
+    let currentDraftId = null;
+    let currentModelUsed = null;
+    let isDirty = false;
 
     const STORAGE_KEYS = {
       generationMode: 'cauldron:generationMode',
@@ -403,6 +496,156 @@
       return DOM.cloudProviderSelect.value === 'gemini'
         ? DOM.googleApiKeyInput.value.trim()
         : DOM.openaiApiKeyInput.value.trim();
+    }
+
+
+    function setDirty(value) {
+      isDirty = value;
+      DOM.unsavedIndicator.classList.toggle('hidden', !value);
+      if (!value && DOM.draftStatus.textContent === 'Unsaved changes') DOM.draftStatus.textContent = 'Saved';
+    }
+
+    function setStatus(message) {
+      DOM.draftStatus.textContent = message;
+    }
+
+    function closeModals() {
+      DOM.draftModal.classList.add('hidden');
+      DOM.historyModal.classList.add('hidden');
+    }
+
+    function openModal(modal) {
+      closeModals();
+      modal.classList.remove('hidden');
+      const focusable = modal.querySelector('button, input, [tabindex]:not([tabindex="-1"])');
+      if (focusable) focusable.focus();
+    }
+
+    function downloadText(filename, text, type = 'text/plain') {
+      const blob = new Blob([text], { type });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function currentPayload() {
+      return {
+        projectName: DOM.projectNameInput.value.trim() || 'untitled-cauldron-project',
+        brainDump: DOM.brainDump.value,
+        blueprint: currentBlueprint,
+        designReference: DOM.designSystemSelect.value,
+        generationMode: DOM.generationModeSelect.value,
+        modelUsed: currentModelUsed || getActiveModel(),
+      };
+    }
+
+    function exportMarkdown() {
+      if (!currentBlueprint) return alert('Generate or load a blueprint first.');
+      const name = slugify(DOM.projectNameInput.value || 'cauldron-blueprint') || 'cauldron-blueprint';
+      downloadText(`${name}.md`, currentBlueprint, 'text/markdown');
+    }
+
+    function exportJSON() {
+      if (!currentBlueprint) return alert('Generate or load a blueprint first.');
+      const name = slugify(DOM.projectNameInput.value || 'cauldron-blueprint') || 'cauldron-blueprint';
+      downloadText(`${name}.json`, JSON.stringify({ ...currentPayload(), exportedAt: new Date().toISOString() }, null, 2), 'application/json');
+    }
+
+    async function saveDraft() {
+      if (!currentBlueprint) return alert('Generate or load a blueprint first.');
+      const payload = currentPayload();
+      setStatus('Saving…');
+      const res = await fetch('/api/drafts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Save failed');
+      currentDraftId = data.draftId;
+      setDirty(false);
+      setStatus(`Saved draft #${currentDraftId}`);
+    }
+
+    async function loadDraft(id) {
+      const res = await fetch(`/api/drafts/${id}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Load failed');
+      const draft = data.draft;
+      currentDraftId = draft.id;
+      currentBlueprint = draft.blueprint || '';
+      currentModelUsed = draft.model_used || null;
+      DOM.projectNameInput.value = draft.project_name || '';
+      DOM.brainDump.value = draft.brain_dump || '';
+      DOM.designSystemSelect.value = draft.design_reference || 'none';
+      DOM.generationModeSelect.value = draft.generation_mode || 'local';
+      DOM.charCount.textContent = DOM.brainDump.value.length;
+      const { markdown, html } = parseBlueprint(currentBlueprint);
+      DOM.blueprint.innerHTML = syntaxHighlight(markdown || currentBlueprint);
+      renderPreviewHTML(html || '<p style="padding:24px;color:#64748b;font-family:system-ui">No HTML preview.</p>');
+      DOM.executeBtn.disabled = false;
+      DOM.modelBadge.textContent = draft.model_used ? `Loaded / ${draft.model_used}` : 'Loaded draft';
+      updateCloudPanel();
+      updateDesignHelper();
+      updateURLIndicator();
+      closeModals();
+      setDirty(false);
+      setStatus(`Loaded draft #${currentDraftId}`);
+    }
+
+    async function refreshDrafts(query = '') {
+      DOM.draftList.innerHTML = '<p class="text-xs text-obsidian-500">Loading drafts…</p>';
+      const res = await fetch(`/api/drafts?q=${encodeURIComponent(query)}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Draft fetch failed');
+      if (!data.drafts.length) {
+        DOM.draftList.innerHTML = '<p class="text-xs text-obsidian-500">No saved drafts yet.</p>';
+        return;
+      }
+      DOM.draftList.innerHTML = data.drafts.map(draft => `
+        <article class="draft-row p-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="text-sm text-obsidian-100 font-semibold">${escapeHTML(draft.project_name)}</h3>
+              <p class="text-[11px] text-obsidian-500 mt-1">${escapeHTML(draft.updated_at || draft.created_at || '')} · ${escapeHTML(draft.model_used || 'unknown model')}</p>
+              <p class="text-xs text-obsidian-400 mt-2">${escapeHTML(draft.preview || '')}</p>
+            </div>
+            <button type="button" data-load-draft="${draft.id}" class="px-3 py-1 text-xs border border-neon-purple/40 text-neon-purple hover:border-neon-purple">Load</button>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    async function refreshHistory() {
+      DOM.historyList.innerHTML = '<p class="text-xs text-obsidian-500">Loading history…</p>';
+      const res = await fetch('/api/history');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'History fetch failed');
+      if (!data.sessions.length) {
+        DOM.historyList.innerHTML = '<p class="text-xs text-obsidian-500">No session history yet.</p>';
+        return;
+      }
+      DOM.historyList.innerHTML = data.sessions.map(session => `
+        <article class="draft-row p-3">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="text-sm text-obsidian-100 font-semibold">${escapeHTML(session.project_name || session.model_used || 'Generation session')}</h3>
+              <p class="text-[11px] text-obsidian-500 mt-1">${escapeHTML(session.created_at || '')} · ${escapeHTML(session.generation_mode || 'local')}</p>
+              <p class="text-xs text-obsidian-400 mt-2">${escapeHTML((session.brain_dump || '').slice(0, 180))}</p>
+            </div>
+            ${session.draft_id ? `<button type="button" data-load-draft="${session.draft_id}" class="px-3 py-1 text-xs border border-neon-emerald/40 text-neon-emerald hover:border-neon-emerald">Open Draft</button>` : ''}
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
     }
 
     function updateRouterHelper() {
@@ -461,7 +704,7 @@
 
     // ─── URL DETECTION ─────────────────────────────────────────────────────────
     function detectURLs(text) {
-      const urlRegex = /https?:\\/\\/[^\\s<>"{}|\\^`\\[\\]]+/gi;
+      const urlRegex = /https?:\/\/[^\s<>"{}|^`\[\]]+/gi;
       return text.match(urlRegex) || [];
     }
 
@@ -533,10 +776,12 @@
       DOM.charCount.textContent = DOM.brainDump.value.length;
       suggestProjectName();
       updateURLIndicator();
+      setDirty(true);
     });
 
     DOM.projectNameInput.addEventListener('input', () => {
       projectNameTouched = DOM.projectNameInput.value.trim().length > 0;
+      setDirty(true);
     });
 
     DOM.projectTypeSelect.addEventListener('change', () => {
@@ -569,6 +814,15 @@
         e.preventDefault();
         generateBlueprint();
       }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        saveDraft().catch(err => alert('Save error: ' + err.message));
+      }
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'o') {
+        e.preventDefault();
+        refreshDrafts().then(() => openModal(DOM.draftModal)).catch(err => alert('Drafts error: ' + err.message));
+      }
+      if (e.key === 'Escape') closeModals();
     });
 
     // ─── GENERATE BLUEPRINT (with Design Reference + Research) ─────────────────
@@ -625,6 +879,9 @@
         }
 
         currentBlueprint = data.blueprint;
+        currentDraftId = null;
+        currentModelUsed = data.modelUsed;
+        setDirty(true);
 
         // Parse into markdown + HTML preview
         const { markdown, html } = parseBlueprint(data.blueprint);
@@ -696,7 +953,8 @@
           <style>
             /* Reset iframe sandbox isolation issues */
             * { box-sizing: border-box; }
-          </style>
+
+  </style>
         </head>
         <body>
           ${htmlString}
@@ -758,6 +1016,54 @@
         const { html } = parseBlueprint(currentBlueprint);
         renderPreviewHTML(html || '<p style="padding:24px;color:#64748b;font-family:Inter">No HTML preview.</p>');
       }
+    });
+
+
+
+    document.addEventListener('click', async (event) => {
+      const action = event.target.closest('[data-action]')?.dataset.action;
+      const loadDraftId = event.target.closest('[data-load-draft]')?.dataset.loadDraft;
+
+      if (action) {
+        event.preventDefault();
+        try {
+          if (action === 'new') {
+            if (isDirty && !confirm('Discard unsaved changes?')) return;
+            currentBlueprint = '';
+            currentDraftId = null;
+            currentModelUsed = null;
+            DOM.projectNameInput.value = '';
+            DOM.brainDump.value = '';
+            DOM.blueprint.textContent = '# Blueprint will appear here once you generate.';
+            renderPreviewHTML('<p style="padding:24px;color:#64748b;font-family:system-ui">Generate a blueprint to see live preview.</p>');
+            DOM.executeBtn.disabled = true;
+            setDirty(false);
+            setStatus('New draft');
+          }
+          if (action === 'save') await saveDraft();
+          if (action === 'load') { await refreshDrafts(); openModal(DOM.draftModal); }
+          if (action === 'history') { await refreshHistory(); openModal(DOM.historyModal); }
+          if (action === 'export-md') exportMarkdown();
+          if (action === 'export-json') exportJSON();
+        } catch (err) {
+          alert('Cauldron error: ' + err.message);
+          setStatus('Error');
+        }
+      }
+
+      if (loadDraftId) {
+        event.preventDefault();
+        try { await loadDraft(loadDraftId); }
+        catch (err) { alert('Load error: ' + err.message); }
+      }
+
+      if (event.target.matches('[data-close-modal]')) closeModals();
+    });
+
+    DOM.draftSearchInput.addEventListener('input', () => {
+      refreshDrafts(DOM.draftSearchInput.value).catch(err => {
+        DOM.draftList.innerHTML = `<p class="text-xs text-neon-rose">${escapeHTML(err.message)}</p>`;
+      });
     });
 
     // Initial render

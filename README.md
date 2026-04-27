@@ -1,7 +1,7 @@
 # Cauldron OS
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](CHANGELOG.md)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![GitHub](https://img.shields.io/badge/github-witchdaddylabs-181717.svg)](https://github.com/witchdaddylabs)
 
@@ -10,7 +10,7 @@
 > **Local-first, design-aware blueprint generator for builders who code with AI.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.1-blue.svg)](docs/)
+[![Version](https://img.shields.io/badge/version-2.2-blue.svg)](docs/)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)]()
 
 ---
@@ -20,7 +20,7 @@
 Cauldron OS turns vague LLM prompts into structured, implementable blueprints — with **premium design taste**, **brand DNA**, and **site research** built right in. Run it locally, keep your ideas private, and hand off clean specs to OpenCode/Cline/Claude Code.
 
 ```bash
-git clone https://github.com/witch-daddy-labs/cauldron-os
+git clone https://github.com/witchdaddylabs/cauldron-os
 cd cauldron-os
 npm install
 node server.js
@@ -39,7 +39,7 @@ Most LLM coding assistants give you *vague* output: "Build a nice dashboard with
 2. **Design Reference Selector** — Pull brand DNA from the VoltAgent awesome-design-md collection (Cursor, Vercel, Lovable, Raycast) and prepend it to the prompt so the AI thinks in that brand's visual language.
 3. **URL Research Sweep** — Paste any website URL in your brain dump, and Cauldron automatically scrapes its CSS variables, fonts, colors, and layout patterns — injecting those findings so the output feels familiar.
 
-Result: You get a **PRD**, **database schema**, **security posture**, **architecture notes**, **live HTML preview**, and a **handoff-ready** project folder — all in a consistent, premium aesthetic.
+Result: You get a **PRD**, **database schema**, **security posture**, **architecture notes**, **live HTML preview**, **local draft history**, **Markdown/JSON exports**, and a **handoff-ready** project folder — all in a consistent, premium aesthetic.
 
 ---
 
@@ -55,6 +55,8 @@ Result: You get a **PRD**, **database schema**, **security posture**, **architec
 
 ### For Solo Builders
 - Generate complete app blueprints in one keystroke (Cmd+Enter)
+- Save/load drafts locally with a searchable history log
+- Export blueprints as Markdown or JSON without leaving the browser
 - Local LLM via Ollama — no API costs, no data leaves your machine
 - Optional cloud fallback (OpenAI GPT-5.4 / Google Gemini 2.5) with your own API key
 - Automatic project scaffolding + OpenCode/CLI handoff
@@ -107,10 +109,10 @@ Both scripts will check for Node.js, install dependencies if needed, and start t
 
 ```bash
 # Clone
-git clone https://github.com/witch-daddy-labs/cauldron-os.git
+git clone https://github.com/witchdaddylabs/cauldron-os.git
 cd cauldron-os
 
-# Install dependencies (Express only)
+# Install dependencies (Express + sql.js)
 npm install
 
 # Start the server

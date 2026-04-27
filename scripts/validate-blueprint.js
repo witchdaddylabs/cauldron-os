@@ -10,11 +10,11 @@ const path = require('path');
 
 function validateBlueprint(blueprint) {
   const requiredSections = [
-    { name: 'Project Blueprint header', pattern: /^# Project Blueprint/i },
-    { name: 'PRD section', pattern: /^## PRD/i },
-    { name: 'Database Schema or Content Structure', pattern: /(?:## Database Schema|## Content Structure)/i },
-    { name: 'Security Posture', pattern: /^## Security Posture/i },
-    { name: 'Architecture Notes', pattern: /^## Architecture Notes/i },
+    { name: 'Project Blueprint header', pattern: /^# Project Blueprint/im },
+    { name: 'PRD section', pattern: /^## PRD/im },
+    { name: 'Database Schema or Content Structure', pattern: /^## (?:Database Schema|Content Structure)/im },
+    { name: 'Security Posture', pattern: /^## Security Posture/im },
+    { name: 'Architecture Notes', pattern: /^## Architecture Notes/im },
     { name: 'HTML preview block', pattern: /```html/i },
   ];
 

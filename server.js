@@ -491,8 +491,6 @@ app.post('/api/handoff', (req, res) => {
     const blueprintPath = path.join(projectPath, 'blueprint.md');
     fs.writeFileSync(blueprintPath, blueprint, 'utf-8');
     
-    console.log(`[Cauldron] Project scaffolded: ${projectPath}`);
-    console.log(`[Cauldron] Blueprint saved: ${blueprintPath}`);
     
     // Prepare OpenCode handoff prompt and launch detached background job
     const handoffPrompt = [
@@ -515,7 +513,6 @@ app.post('/api/handoff', (req, res) => {
       '-f', 'blueprint.md'
     ];
     
-    console.log(`[Cauldron] Handoff command: opencode ${opencodeArgs.join(' ')}`);
     
     const child = spawn('opencode', opencodeArgs, {
       cwd: projectPath,

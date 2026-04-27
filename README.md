@@ -84,7 +84,17 @@ Result: You get a **PRD**, **database schema**, **security posture**, **architec
 - Ollama (for local models) **or** OpenAI/Google API keys (for cloud)
 - Optional: OpenCode CLI for handoff (`npm i -g opencode`)
 
-### Installation
+#
+## Screenshots
+
+**Full three-panel interface** — Brain Dump, Blueprint Output, Live Preview  
+![Main UI](assets/screenshots/01-main-ui.png)
+
+**Design Reference selector** — fuse brand DNA from Cursor, Vercel, Lovable, or Raycast  
+![Design Reference Dropdown](assets/screenshots/02-design-dropdown.png)
+
+
+## Installation
 
 ```bash
 # Clone

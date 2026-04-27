@@ -1,0 +1,43 @@
+MIT License
+
+Copyright (c) 2026 Witch Daddy Labs (Billy C) & Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Third-Party Licenses & Attributions
+
+### Included Code (within this repository)
+- **None** — Cauldron OS has zero runtime dependencies beyond Express.js (MIT).
+
+### Inspired By / Conceptual Attribution
+- **impeccable.style** — design taste philosophy (https://impeccable.style)
+- **taste-skill** by @Leonxlnx — ANTI-PATTERNS/MANDATES structure concept (https://github.com/Leonxlnx/taste-skill), no code included, license not explicitly stated by author (public domain-style?); implementation is our own
+- **ai-website-cloner-template** by @JCodesMore — URL reconnaissance pattern (https://github.com/JCodesMore/ai-website-cloner-template), MIT License
+- **awesome-design-md** by @VoltAgent — DESIGN.md format specification (https://github.com/VoltAgent/awesome-design-md), MIT License
+
+All design system content fetched from `awesome-design-md` is served via API at runtime, not bundled. Attribution remains with the respective authors.
+
+### Open Source Licenses of Dependencies
+- **Express.js** — MIT License (bundled via npm, not vendored)
+
+---
+
+> If you believe your work has been incorrectly attributed or you wish to opt out of this distribution, please open an issue and we will promptly address it.

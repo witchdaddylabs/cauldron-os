@@ -1,0 +1,21 @@
+# Git attributes for proper handling of binary and generated files
+
+# Binary files — don't diff
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+
+# Large files — Git LFS suggestion (optional, not enabled)
+# *.png filter=lfs diff=lfs merge=lfs -text
+
+# Line endings normalization
+* text=auto
+
+# Specific handling for DESIGN.md files (keep CRLF? no, lf)
+design-systems/** text eol=lf
+
+# Markdown — ensure consistent diffs
+*.md diff=markdown

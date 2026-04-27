@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cauldron 2.1 — Witch Daddy Labs</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: {
+              50: '#f0f0f3', 100: '#d9d9dd', 200: '#b6b6bc',
+              300: '#92929a', 400: '#72727d', 500: '#595963',
+              600: '#48484f', 700: '#3a3a40', 800: '#2f2f33',
+              900: '#1a1a1d', 950: '#0d0d0f',
+            },
+            neon: {
+              purple: '#b794f6', emerald: '#34d399',
+              amber: '#fbbf24', rose: '#fb7185',
+            }
+          },
+          fontFamily: {
+            mono: ['"JetBrains Mono"', 'Menlo', 'monospace'],
+            sans: ['"Inter"', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            'glass': '0 4px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)',
+            'glass-hover': '0 8px 40px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.08)',
+          },
+          backgroundImage: {
+            'mesh': 'radial-gradient(at 0% 0%, rgba(183,148,246,0.08) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(52,211,153,0.08) 0px, transparent 50%)',
+            'noise': 'url("data:image/svg+xml,%3Csvg viewBox=\\'0 0 200 200\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cfilter id=\\'noiseFilter\\'%3E%3CfeTurbulence type=\\'fractalNoise\\' baseFrequency=\\'0.9\\' numOctaves=\\'4\\' stitchTiles=\\'stitch\\'/%3E%3C/filter%3E%3Crect width=\\'100%25\\' height=\\'100%25\\' filter=\\'url(%23noiseFilter)\\' opacity=\\'0.03\\'/%3E%3C/svg%3E")',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #0d0d0f;
+      color: #d9d9dd;
+      overflow: hidden;
+      height: 100vh;
+      background-image: linear-gradient(to bottom, #0d0d0f, #111113);
+    }
+
+    /* Noise texture overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+      z-index: 9999;
+    }
+
+    /* Panel glassmorphism */
+    .panel {
+      background: linear-gradient(145deg, rgba(30,30,33,0.7) 0%, rgba(24,24,27,0.7) 100%);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(90, 90, 99, 0.2);
+      border-radius: 2px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+
+    .panel:hover {
+      border-color: rgba(183, 148, 246, 0.25);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    /* Custom scrollbar — dark & slim */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #3a3a40; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #48484f; }
+
+    /* Textarea styling */
+    textarea {
+      background: transparent;
+      border: 1px solid rgba(90,90,99,0.15);
+      border-radius: 2px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #d9d9dd;
+      transition: all 0.2s ease;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: rgba(183,148,246,0.5);
+      box-shadow: 0 0 0 2px rgba(183,148,246,0.1);
+    }
+
+    /* Select dropdown */
+    select {
+      background: rgba(30,30,33,0.6);
+      border: 1px solid rgba(90,90,99,0.2);
+      color: #d9d9dd;
+      border-radius: 2px;
+      transition: all 0.2s ease;
+    }
+    select:focus {
+      border-color: rgba(183,148,246,0.5);
+      outline: none;
+    }
+
+    /* Execute button — feels like an ignition */
+    #executeBtn {
+      background: linear-gradient(135deg, #1a1a1d 0%, #2f2f33 100%);
+      border: 1px solid rgba(183,148,246,0.3);
+      color: #b794f6;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 600;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    #executeBtn:hover {
+      border-color: rgba(183,148,246,0.6);
+      box-shadow: 0 0 24px rgba(183,148,246,0.25), inset 0 0 20px rgba(183,148,246,0.05);
+      transform: translateY(-1px);
+    }
+    #executeBtn:active {
+      transform: translateY(1px);
+    }
+    #executeBtn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(183,148,246,0.15), transparent);
+      animation: shimmer 2.5s infinite;
+    }
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    /* Status indicator */
+    .status-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 8px rgba(52,211,153,0.5);
+    }
+
+    /* Research badge */
+    .research-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 6px;
+      font-size: 10px;
+      border-radius: 2px;
+      background: rgba(251, 191, 36, 0.15);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: #fbbf24;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Iframe container */
+    iframe {
+      background: #fff;
+      border: none;
+      border-radius: 2px;
+    }
+
+    /* Blueprint code block styling */
+    .blueprint-block {
+      white-space: pre-wrap;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #b6b6bc;
+    }
+    .blueprint-block .header { color: #b794f6; font-weight: 600; }
+    .blueprint-block .key { color: #34d399; }
+    .blueprint-block .string { color: #fbbf24; }
+  </style>
+</head>
+<body class="h-screen flex flex-col">
+
+  <!-- Top Bar -->
+  <header class="flex-none h-14 px-5 flex items-center justify-between border-b border-obsidian-800/50 bg-obsidian-950/30 backdrop-blur">
+    <div class="flex items-center gap-3">
+      <div class="w-3 h-3 rounded-full bg-neon-amber shadow-[0_0_10px_rgba(251,191,36,0.5)]"></div>
+      <h1 class="text-sm font-semibold tracking-widest text-obsidian-200">CAULDRON <span class="text-neon-purple font-normal">2.1</span></h1>
+      <span class="text-xs text-obsidian-500 ml-2">WITCH DADDY LABS</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="status-dot"></div>
+      <span class="text-xs text-obsidian-400">Master Brain active</span>
+    </div>
+  </header>
+
+  <!-- Main 3-Panel Layout -->
+  <main class="flex-1 flex overflow-hidden">
+
+    <!-- Left Panel — Brain Dump -->
+    <section class="panel flex-1 flex flex-col m-2 overflow-hidden rounded-none">
+      <div class="flex-none px-4 py-2 border-b border-obsidian-800/30">
+        <div class="flex items-center justify-between mb-2">
+          <label class="text-xs font-semibold text-neon-purple uppercase tracking-wider">Project Name</label>
+        </div>
+        <input type="text" id="projectNameInput"
+          class="w-full px-3 py-2 bg-obsidian-900/40 border border-obsidian-700 text-obsidian-200 text-sm placeholder-obsidian-600 focus:border-neon-purple/50 focus:outline-none transition-colors"
+          placeholder="my-awesome-app" autocomplete="off" spellcheck="false">
+      </div>
+      <div class="flex-none px-4 py-2 border-b border-obsidian-800/30 space-y-3">
+        <div class="flex items-center justify-between gap-4">
+          <label class="text-xs font-semibold text-neon-purple uppercase tracking-wider">Brain Dump</label>
+          <div class="flex items-center gap-2">
+            <label for="generationModeSelect" class="text-[10px] text-obsidian-500 uppercase tracking-wider">Generation Mode</label>
+            <select id="generationModeSelect" class="px-2 py-1 text-xs bg-obsidian-900/50 border border-obsidian-700">
+              <option value="local">Local Router</option>
+              <option value="cloud">Cloud Cauldron</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <label for="projectTypeSelect" class="text-[10px] text-obsidian-500 uppercase tracking-wider">Witch Daddy Router</label>
+              <p id="routerHelper" class="text-[11px] text-obsidian-500 mt-1">Apps use Qwen for schema/state logic. Sites use Gemma for tighter layout output.</p>
+            </div>
+            <select id="projectTypeSelect" class="px-2 py-1 text-xs bg-obsidian-900/50 border border-obsidian-700">
+              <option value="app">Web / iOS App → Qwen 3.5 9B</option>
+              <option value="site">Static Site → Gemma 4 E4B</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- NEW: Design System Reference Selector -->
+        <div class="flex items-center justify-between gap-4">
+          <div>
+            <label for="designSystemSelect" class="text-[10px] text-obsidian-500 uppercase tracking-wider">Design Reference</label>
+            <p id="designHelper" class="text-[11px] text-obsidian-500 mt-1">Fuse brand DNA from awesome-design-md into Grendel's taste buds.</p>
+          </div>
+          <select id="designSystemSelect" class="px-2 py-1 text-xs bg-obsidian-900/50 border border-obsidian-700">
+            <option value="none">No Reference</option>
+            <option value="cursor">Cursor (Sleek Dark)</option>
+            <option value="vercel">Vercel (Precision Geist)</option>
+            <option value="lovable">Lovable (Playful Gradients)</option>
+            <option value="raycast">Raycast (Vibrant Chrome)</option>
+          </select>
+        </div>
+
+        <!-- Cloud Cauldron Panel (unchanged) -->
+        <div id="cloudCauldronPanel" class="border border-obsidian-800/60 bg-obsidian-950/30 p-3 space-y-3 hidden">
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <label class="text-[10px] text-neon-amber uppercase tracking-wider">Cloud Cauldron</label>
+              <p class="text-[11px] text-obsidian-500 mt-1">Store API keys in this browser and choose a cloud provider when you want to bypass local Ollama.</p>
+            </div>
+            <select id="cloudProviderSelect" class="px-2 py-1 text-xs bg-obsidian-900/50 border border-obsidian-700">
+              <option value="openai">OpenAI</option>
+              <option value="gemini">Google AI Studio</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-1 gap-2">
+            <input type="password" id="openaiApiKeyInput"
+              class="w-full px-3 py-2 bg-obsidian-900/40 border border-obsidian-700 text-obsidian-200 text-xs placeholder-obsidian-600 focus:border-neon-amber/50 focus:outline-none transition-colors"
+              placeholder="OpenAI API key (stored locally in browser)">
+            <input type="password" id="googleApiKeyInput"
+              class="w-full px-3 py-2 bg-obsidian-900/40 border border-obsidian-700 text-obsidian-200 text-xs placeholder-obsidian-600 focus:border-neon-amber/50 focus:outline-none transition-colors"
+              placeholder="Google AI Studio API key (stored locally in browser)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Research indicator + Brain Dump -->
+      <div class="relative flex-1">
+        <div id="researchIndicator" class="absolute top-2 right-2 z-10 research-badge hidden">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <span>Researching</span>
+        </div>
+        <textarea id="brainDump" class="flex-1 p-4 resize-none focus:border-neon-purple/50"
+          placeholder="Unload your idea here. Be messy. We'll clean it up.&#10;&#10;Tip: Paste a URL anywhere in this text to trigger research mode and capture the design DNA of that site."></textarea>
+      </div>
+      <div class="flex-none px-4 py-2 border-t border-obsidian-800/30 text-xs text-obsidian-500">
+        <span id="charCount">0</span> chars
+        <span class="ml-2" id="urlDetected" style="color:#fbbf24; display:none;">🔗 URL detected — will research automatically</span>
+      </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="w-px bg-obsidian-800 self-stretch my-4 opacity-60"></div>
+
+    <!-- Center Panel — Blueprint -->
+    <section class="panel flex-1 flex flex-col m-2 overflow-hidden rounded-none">
+      <div class="flex-none px-4 py-2 border-b border-obsidian-800/30 flex items-center justify-between gap-4">
+        <label class="text-xs font-semibold text-neon-emerald uppercase tracking-wider">Generated Blueprint</label>
+        <span id="modelBadge" class="text-[10px] text-obsidian-500 uppercase tracking-wider">Awaiting generation</span>
+      </div>
+      <div class="flex-1 p-4 overflow-auto">
+        <div id="blueprint" class="blueprint-block font-mono text-obsidian-300">
+# Blueprint will appear here once you generate.
+
+1. Enter your idea in the Brain Dump
+2. Choose Local Router or Cloud Cauldron
+3. Click Generate Blueprint or press Cmd+Enter
+4. When the blueprint looks good, hit Execute & Hand-off
+        </div>
+      </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="w-px bg-obsidian-800 self-stretch my-4 opacity-60"></div>
+
+    <!-- Right Panel — Live Preview -->
+    <section class="panel flex-1 flex flex-col m-2 overflow-hidden rounded-none">
+      <div class="flex-none px-4 py-2 border-b border-obsidian-800/30 flex items-center justify-between">
+        <label class="text-xs font-semibold text-neon-amber uppercase tracking-wider">Live Preview</label>
+        <button id="refreshPreview" class="text-xs text-obsidian-400 hover:text-neon-amber">↻ Refresh</button>
+      </div>
+      <div class="flex-1 relative bg-white">
+        <iframe id="previewFrame" class="w-full h-full" sandbox="allow-scripts allow-same-origin"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom Bar — Actions -->
+  <footer class="flex-none h-16 px-6 flex items-center justify-center gap-4 border-t border-obsidian-800/50 bg-gradient-to-r from-obsidian-950/40 to-obsidian-900/40 backdrop-blur">
+    <button id="generateBtn" class="px-8 py-3 font-mono text-sm tracking-widest uppercase border border-neon-emerald/40 text-neon-emerald bg-obsidian-950/60 hover:border-neon-emerald/70 hover:shadow-[0_0_20px_rgba(52,211,153,0.18)] transition-all">
+      Generate Blueprint
+    </button>
+    <button id="executeBtn" class="px-10 py-3 rounded font-mono text-sm tracking-widest disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+      Execute & Hand-off to OpenCode
+    </button>
+  </footer>
+
+  <!-- Application Logic -->
+  <script>
+    const DOM = {
+      projectNameInput: document.getElementById('projectNameInput'),
+      brainDump: document.getElementById('brainDump'),
+      generationModeSelect: document.getElementById('generationModeSelect'),
+      projectTypeSelect: document.getElementById('projectTypeSelect'),
+      designSystemSelect: document.getElementById('designSystemSelect'),
+      cloudProviderSelect: document.getElementById('cloudProviderSelect'),
+      openaiApiKeyInput: document.getElementById('openaiApiKeyInput'),
+      googleApiKeyInput: document.getElementById('googleApiKeyInput'),
+      cloudCauldronPanel: document.getElementById('cloudCauldronPanel'),
+      routerHelper: document.getElementById('routerHelper'),
+      designHelper: document.getElementById('designHelper'),
+      modelBadge: document.getElementById('modelBadge'),
+      charCount: document.getElementById('charCount'),
+      urlDetected: document.getElementById('urlDetected'),
+      researchIndicator: document.getElementById('researchIndicator'),
+      blueprint: document.getElementById('blueprint'),
+      previewFrame: document.getElementById('previewFrame'),
+      generateBtn: document.getElementById('generateBtn'),
+      executeBtn: document.getElementById('executeBtn'),
+      refreshPreview: document.getElementById('refreshPreview'),
+    };
+
+    // State
+    let currentBlueprint = '';
+    let projectCounter = 0;
+    let projectNameTouched = false;
+    let currentResearchData = null; // holds scraped design findings
+
+    const STORAGE_KEYS = {
+      generationMode: 'cauldron:generationMode',
+      projectType: 'cauldron:projectType',
+      designSystem: 'cauldron:designSystem',
+      cloudProvider: 'cauldron:cloudProvider',
+      openaiApiKey: 'cauldron:openaiApiKey',
+      googleApiKey: 'cauldron:googleApiKey',
+    };
+
+    function getRoutedModel() {
+      return DOM.projectTypeSelect.value === 'site' ? 'gemma4:e4b' : 'qwen3.5:9b';
+    }
+
+    function getCloudModel() {
+      return DOM.cloudProviderSelect.value;
+    }
+
+    function getActiveModel() {
+      return DOM.generationModeSelect.value === 'cloud' ? getCloudModel() : getRoutedModel();
+    }
+
+    function getActiveApiKey() {
+      return DOM.cloudProviderSelect.value === 'gemini'
+        ? DOM.googleApiKeyInput.value.trim()
+        : DOM.openaiApiKeyInput.value.trim();
+    }
+
+    function updateRouterHelper() {
+      if (DOM.generationModeSelect.value === 'cloud') {
+        const routeLabel = DOM.projectTypeSelect.value === 'site' ? 'static-site' : 'app';
+        DOM.routerHelper.textContent = DOM.cloudProviderSelect.value === 'gemini'
+          ? `Cloud Cauldron active. Google AI Studio will be used for the ${routeLabel} blueprint.`
+          : `Cloud Cauldron active. OpenAI will be used for the ${routeLabel} blueprint.`;
+        return;
+      }
+
+      DOM.routerHelper.textContent = DOM.projectTypeSelect.value === 'site'
+        ? 'Sites use Gemma for tighter layout output and cleaner static markup.'
+        : 'Apps use Qwen for schema/state logic, dashboards, and relational build planning.';
+    }
+
+    function updateCloudPanel() {
+      const isCloud = DOM.generationModeSelect.value === 'cloud';
+      DOM.cloudCauldronPanel.classList.toggle('hidden', !isCloud);
+      updateRouterHelper();
+    }
+
+    function updateDesignHelper() {
+      const selection = DOM.designSystemSelect.value;
+      if (selection === 'none') {
+        DOM.designHelper.textContent = 'No design reference loaded — Grendel uses default taste.';
+      } else {
+        const name = DOM.designSystemSelect.options[DOM.designSystemSelect.selectedIndex].text;
+        DOM.designHelper.textContent = `Using ${name} — brand DNA injected into Grendel's prompt.`;
+      }
+    }
+
+    function slugify(text) {
+      return text
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '')
+        .replace(/-+/g, '-');
+    }
+
+    function suggestProjectName() {
+      if (projectNameTouched && DOM.projectNameInput.value.trim()) return;
+
+      const suffix = DOM.projectTypeSelect.value === 'site' ? 'site' : 'app';
+      const meaningful = DOM.brainDump.value
+        .toLowerCase()
+        .replace(/[^a-z0-9\\s]/g, ' ')
+        .split(/\\s+/)
+        .filter(Boolean)
+        .filter(word => !['a','an','the','and','for','with','that','this','from','into','your','want','need','build','create','make','site','app','portal','dashboard'].includes(word))
+        .slice(0, 3)
+        .join('-');
+
+      DOM.projectNameInput.value = meaningful ? `${meaningful}-${suffix}` : `new-${suffix}`;
+    }
+
+    // ─── URL DETECTION ─────────────────────────────────────────────────────────
+    function detectURLs(text) {
+      const urlRegex = /https?:\\/\\/[^\\s<>"{}|\\^`\\[\\]]+/gi;
+      return text.match(urlRegex) || [];
+    }
+
+    function updateURLIndicator() {
+      const urls = detectURLs(DOM.brainDump.value);
+      if (urls.length > 0) {
+        DOM.urlDetected.style.display = 'inline';
+        DOM.urlDetected.textContent = `🔗 URL detected — research mode active (${urls[0]})`;
+      } else {
+        DOM.urlDetected.style.display = 'none';
+      }
+    }
+
+    // ─── RESEARCH SCRAPER ──────────────────────────────────────────────────────
+    async function triggerResearch() {
+      const urls = detectURLs(DOM.brainDump.value);
+      if (urls.length === 0) {
+        currentResearchData = null;
+        return;
+      }
+
+      // Use first URL only
+      const targetUrl = urls[0];
+      DOM.researchIndicator.classList.remove('hidden');
+
+      try {
+        const res = await fetch('/api/research-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: targetUrl }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Research failed');
+
+        currentResearchData = data;
+        console.log('[Cauldron] Research findings:', data.findings);
+      } catch (err) {
+        console.error('[Cauldron] Research error:', err);
+        currentResearchData = null; // fail gracefully, continue without
+      } finally {
+        DOM.researchIndicator.classList.add('hidden');
+      }
+    }
+
+    function persistSettings() {
+      localStorage.setItem(STORAGE_KEYS.generationMode, DOM.generationModeSelect.value);
+      localStorage.setItem(STORAGE_KEYS.projectType, DOM.projectTypeSelect.value);
+      localStorage.setItem(STORAGE_KEYS.designSystem, DOM.designSystemSelect.value);
+      localStorage.setItem(STORAGE_KEYS.cloudProvider, DOM.cloudProviderSelect.value);
+      localStorage.setItem(STORAGE_KEYS.openaiApiKey, DOM.openaiApiKeyInput.value);
+      localStorage.setItem(STORAGE_KEYS.googleApiKey, DOM.googleApiKeyInput.value);
+    }
+
+    function restoreSettings() {
+      DOM.generationModeSelect.value = localStorage.getItem(STORAGE_KEYS.generationMode) || 'local';
+      DOM.projectTypeSelect.value = localStorage.getItem(STORAGE_KEYS.projectType) || 'app';
+      DOM.designSystemSelect.value = localStorage.getItem(STORAGE_KEYS.designSystem) || 'none';
+      DOM.cloudProviderSelect.value = localStorage.getItem(STORAGE_KEYS.cloudProvider) || 'openai';
+      DOM.openaiApiKeyInput.value = localStorage.getItem(STORAGE_KEYS.openaiApiKey) || '';
+      DOM.googleApiKeyInput.value = localStorage.getItem(STORAGE_KEYS.googleApiKey) || '';
+      updateCloudPanel();
+      updateDesignHelper();
+      suggestProjectName();
+    }
+
+    // Char count + smart name suggestion + URL detection
+    DOM.brainDump.addEventListener('input', () => {
+      DOM.charCount.textContent = DOM.brainDump.value.length;
+      suggestProjectName();
+      updateURLIndicator();
+    });
+
+    DOM.projectNameInput.addEventListener('input', () => {
+      projectNameTouched = DOM.projectNameInput.value.trim().length > 0;
+    });
+
+    DOM.projectTypeSelect.addEventListener('change', () => {
+      updateRouterHelper();
+      suggestProjectName();
+      persistSettings();
+    });
+
+    DOM.generationModeSelect.addEventListener('change', () => {
+      updateCloudPanel();
+      persistSettings();
+    });
+
+    DOM.designSystemSelect.addEventListener('change', () => {
+      updateDesignHelper();
+      persistSettings();
+    });
+
+    DOM.cloudProviderSelect.addEventListener('change', () => {
+      updateRouterHelper();
+      persistSettings();
+    });
+
+    DOM.openaiApiKeyInput.addEventListener('input', persistSettings);
+    DOM.googleApiKeyInput.addEventListener('input', persistSettings);
+
+    // Keybinding: Cmd+Enter to generate
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+        e.preventDefault();
+        generateBlueprint();
+      }
+    });
+
+    // ─── GENERATE BLUEPRINT (with Design Reference + Research) ─────────────────
+    async function generateBlueprint() {
+      const prompt = DOM.brainDump.value.trim();
+      const generationMode = DOM.generationModeSelect.value;
+      const projectType = DOM.projectTypeSelect.value;
+      const model = getActiveModel();
+      const apiKey = generationMode === 'cloud' ? getActiveApiKey() : '';
+      const designReference = DOM.designSystemSelect.value;
+
+      if (!prompt) {
+        alert('Brain dump empty — write something first.');
+        return;
+      }
+
+      // Trigger research if URL detected (synchronous wait)
+      if (detectURLs(prompt).length > 0) {
+        DOM.generateBtn.textContent = 'Researching URL…';
+        DOM.generateBtn.disabled = true;
+        await triggerResearch();
+        DOM.generateBtn.textContent = 'Generating…';
+      }
+
+      if (generationMode === 'cloud' && !apiKey) {
+        alert(`Add your ${DOM.cloudProviderSelect.value === 'gemini' ? 'Google AI Studio' : 'OpenAI'} API key in Cloud Cauldron first.`);
+        return;
+      }
+
+      DOM.generateBtn.textContent = 'Generating…';
+      DOM.generateBtn.disabled = true;
+      DOM.executeBtn.disabled = true;
+      DOM.modelBadge.textContent = `Generating via ${model}`;
+
+      try {
+        const res = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt,
+            model,
+            projectType,
+            apiKey,
+            designReference,
+            researchData: currentResearchData,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          const detail = data.details ? `\n\n${data.details}` : '';
+          throw new Error(`${data.error || 'Generation failed'}${detail}`);
+        }
+
+        currentBlueprint = data.blueprint;
+
+        // Parse into markdown + HTML preview
+        const { markdown, html } = parseBlueprint(data.blueprint);
+
+        // Render blueprint (markdown) in center panel
+        DOM.blueprint.innerHTML = syntaxHighlight(markdown);
+
+        // Render HTML directly into iframe (if present)
+        if (html) {
+          renderPreviewHTML(html);
+        } else {
+          renderPreviewHTML('<p style="padding:24px;color:#64748b;font-family:Inter">No HTML preview generated.</p>');
+        }
+
+        DOM.generateBtn.textContent = 'Generate Blueprint';
+        DOM.generateBtn.disabled = false;
+        DOM.modelBadge.textContent = `${data.providerUsed} / ${data.modelUsed}`;
+        DOM.executeBtn.textContent = data.canHandoff
+          ? 'Execute & Hand-off to OpenCode'
+          : 'Cloud Blueprint Ready';
+        DOM.executeBtn.disabled = !data.canHandoff;
+
+      } catch (err) {
+        console.error(err);
+        alert('Generation error: ' + err.message);
+        currentBlueprint = '';
+        DOM.generateBtn.textContent = 'Generate Blueprint';
+        DOM.generateBtn.disabled = false;
+        DOM.modelBadge.textContent = 'Generation failed';
+        DOM.executeBtn.textContent = 'Execute & Hand-off to OpenCode';
+        DOM.executeBtn.disabled = true;
+      }
+    }
+
+    // ─── SYNTAX HIGHLIGHTING ───────────────────────────────────────────────────
+    function syntaxHighlight(md) {
+      return md
+        .replace(/^# (.+)$/gm, '<span class="text-neon-purple font-bold"># $1</span>')
+        .replace(/^## (.+)$/gm, '<span class="text-neon-emerald font-semibold">## $1</span>')
+        .replace(/```json/g, '<span class="text-neon-amber">```json</span>')
+        .replace(/```/g, '<span class="text-obsidian-500">```</span>')
+        .replace(/\*\*(.+?)\*\*/g, '<strong class="text-neon-amber">$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em class="text-neon-emerald">$1</em>');
+    }
+
+    // ─── BLUEPRINT PARSER ───────────────────────────────────────────────────────
+    function parseBlueprint(fullText) {
+      const htmlBlockRegex = /```html\s*([\s\S]*?)\s*```/i;
+      const match = fullText.match(htmlBlockRegex);
+
+      if (match && match[1]) {
+        const markdownOnly = fullText.replace(htmlBlockRegex, '').trim();
+        return { markdown: markdownOnly, html: match[1].trim() };
+      }
+
+      return { markdown: fullText, html: '' };
+    }
+
+    // ─── PREVIEW RENDERER ───────────────────────────────────────────────────────
+    function renderPreviewHTML(htmlString) {
+      const doc = DOM.previewFrame.contentDocument || DOM.previewFrame.contentWindow.document;
+
+      const fullDoc = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            /* Reset iframe sandbox isolation issues */
+            * { box-sizing: border-box; }
+          </style>
+        </head>
+        <body>
+          ${htmlString}
+        </body>
+        </html>
+      `;
+
+      doc.open();
+      doc.write(fullDoc);
+      doc.close();
+    }
+
+    // ─── EVENT LISTENERS ────────────────────────────────────────────────────────
+    DOM.generateBtn.addEventListener('click', generateBlueprint);
+
+    DOM.executeBtn.addEventListener('click', async () => {
+      if (!currentBlueprint) {
+        alert('Generate a blueprint first.');
+        return;
+      }
+
+      const projectName = DOM.projectNameInput.value.trim() || `project-${++projectCounter}`;
+
+      const confirmed = confirm(`Create project "${projectName}" and hand off to OpenCode?`);
+
+      if (!confirmed) return;
+
+      DOM.executeBtn.textContent = 'Handing off…';
+      DOM.executeBtn.disabled = true;
+
+      try {
+        const res = await fetch('/api/handoff', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectName,
+            blueprint: currentBlueprint,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error || 'Handoff failed');
+
+        alert(`✅ Project created at: ${data.projectPath}\n${data.message}\n\nOpenCode PID: ${data.pid}\nLog: ${data.logPath}`);
+        console.log('[Cauldron] Handoff result:', data);
+
+      } catch (err) {
+        console.error(err);
+        alert('Handoff error: ' + err.message);
+      } finally {
+        DOM.executeBtn.textContent = 'Execute & Hand-off to OpenCode';
+        DOM.executeBtn.disabled = false;
+      }
+    });
+
+    DOM.refreshPreview.addEventListener('click', () => {
+      if (currentBlueprint) {
+        const { html } = parseBlueprint(currentBlueprint);
+        renderPreviewHTML(html || '<p style="padding:24px;color:#64748b;font-family:Inter">No HTML preview.</p>');
+      }
+    });
+
+    // Initial render
+    restoreSettings();
+    DOM.charCount.textContent = DOM.brainDump.value.length;
+    updateURLIndicator();
+    renderPreviewHTML('<p style="padding:24px;color:#64748b;font-family:Inter">Generate a blueprint to see live preview.</p>');
+  </script>
+</body>
+</html>

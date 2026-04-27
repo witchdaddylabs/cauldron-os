@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint || true  # lint won't fail build
+
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: node server.js &
+        env:
+          PORT: 3000
+      - run: sleep 2  # wait for server startup
+      - run: |
+          curl -s http://localhost:3000/api/health | grep -q '"status":"ok"' \
+            && echo "✓ Health check passed" \
+            || (echo "✗ Health check failed" && exit 1)
+      - run: |
+          # Validate blueprint structure on sample
+          node scripts/validate-blueprint.js examples/sample-blueprint.md \
+            || echo "Sample blueprint validation note: see output above"

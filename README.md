@@ -5,7 +5,11 @@
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![GitHub](https://img.shields.io/badge/github-witchdaddylabs-181717.svg)](https://github.com/witchdaddylabs)
 
+<div align="center">
 
+<img src="assets/hero-header.png" alt="Cauldron OS Hero" width="100%"/>
+
+</div>
 
 > **Local-first, design-aware blueprint generator for builders who code with AI.**
 

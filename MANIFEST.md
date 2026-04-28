@@ -1,6 +1,6 @@
 # Cauldron OS — Repository Manifest
 
-Version: 2.1.0
+Version: 2.3.0
 License: MIT
 Organization: Witch Daddy Labs
 Repository: github.com/witchdaddylabs/cauldron-os
@@ -12,7 +12,7 @@ Repository: github.com/witchdaddylabs/cauldron-os
 ### Root Level
 ```
 server.js               — Main Node.js server (526 lines)
-package.json            — Project metadata & dependencies v2.1.0
+package.json            — Project metadata & dependencies v2.3.0
 README.md               — Public documentation (with hero image)
 LICENSE                 — MIT License (Witch Daddy Labs)
 .gitignore              — Excludes node_modules, .DS_Store, etc.

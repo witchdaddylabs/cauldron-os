@@ -5,7 +5,7 @@ $ErrorActionPreference = 'Stop'
 
 Write-Host ''
 Write-Host '========================================' -ForegroundColor Magenta
-Write-Host '   Cauldron OS 2.1.0 — Witch Daddy Labs' -ForegroundColor Magenta
+Write-Host '   Cauldron OS 2.3.0 — Witch Daddy Labs' -ForegroundColor Magenta
 Write-Host '========================================' -ForegroundColor Magenta
 Write-Host ''
 

@@ -1,6 +1,6 @@
 # Cauldron OS Architecture
 
-**Version:** 2.1
+**Version:** 2.3
 **Core Principle:** Local-first, modular, skill-based Master Brain upgrades.
 
 ---
@@ -58,7 +58,7 @@ User Idea → Prompt Builder (Master Brain) → LLM → Blueprint → Handoff
 
 | Route | Method | Purpose |
 |-------|--------|---------|
-| `/api/health` | GET | Health check — returns `{status:'ok', service:'Cauldron 2.1'}` |
+| `/api/health` | GET | Health check — returns `{status:'ok', service:'Cauldron 2.3'}` |
 | `/api/design-systems` | GET | Returns list of available brand references |
 | `/api/design-reference` | POST | Fetch DESIGN.md from GitHub, cache in memory |
 | `/api/research-url` | POST | Scrape URL, extract design signals, return formatted findings |
@@ -197,7 +197,7 @@ Cauldron is currently Ollama-first. To add another local provider:
 
 ---
 
-## Future Roadmap (2.2 ideas)
+## Future Roadmap
 
 - [ ] Docker + docker-compose with Ollama container included
 - [ ] Streaming responses (Server-Sent Events) for progressive blueprint rendering
@@ -209,4 +209,4 @@ Cauldron is currently Ollama-first. To add another local provider:
 
 ---
 
-*Architecture document version: 2.1 — Last updated 2026-04-27 by Hermes Agent for Witch Daddy Labs*
+*Architecture document version: 2.3 — Last updated 2026-04-27 by Hermes Agent for Witch Daddy Labs*

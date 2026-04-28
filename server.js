@@ -1,5 +1,5 @@
 /**
- * Cauldron 2.1 — Master Brain Upgrades
+ * Cauldron 2.3 — Adaptive Local Models
  * Witch Daddy Labs Internal Dev Tool
  *
  * Upgrades:
@@ -18,7 +18,9 @@ const db = require('./db');
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
-const OLLAMA_URL = 'http://127.0.0.1:11434/api/generate';
+const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434';
+const OLLAMA_URL = `${OLLAMA_BASE_URL}/api/generate`;
+const OLLAMA_TAGS_URL = `${OLLAMA_BASE_URL}/api/tags`;
 const OLLAMA_TIMEOUT_MS = 600000;
 const CLOUD_TIMEOUT_MS = 300000;
 const OPENAI_BASE_URL = 'https://api.openai.com/v1/chat/completions';
@@ -30,12 +32,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Cache for design system references (avoid re-fetching)
 const designSystemCache = new Map();
+const DESIGN_SYSTEM_SOURCE = 'https://raw.githubusercontent.com/Meliwat/awesome-design-md-pre-paywall/main/design-md';
 const DESIGN_SYSTEMS = {
   none: { name: 'None', repo: null },
-  cursor: { name: 'Cursor (Sleek Dark)', repo: 'Cursor', path: 'DESIGN.md' },
-  vercel: { name: 'Vercel (Precision Geist)', repo: 'Vercel', path: 'DESIGN.md' },
-  lovable: { name: 'Lovable (Playful Gradients)', repo: 'Lovable', path: 'DESIGN.md' },
-  raycast: { name: 'Raycast (Vibrant Chrome)', repo: 'Raycast', path: 'DESIGN.md' },
+  cursor: { name: 'Cursor (Sleek Dark)', repo: 'cursor', path: 'DESIGN.md' },
+  vercel: { name: 'Vercel (Precision Geist)', repo: 'vercel', path: 'DESIGN.md' },
+  lovable: { name: 'Lovable (Playful Gradients)', repo: 'lovable', path: 'DESIGN.md' },
+  raycast: { name: 'Raycast (Vibrant Chrome)', repo: 'raycast', path: 'DESIGN.md' },
+  linear: { name: 'Linear (Precise Dark Ops)', repo: 'linear.app', path: 'DESIGN.md' },
+  stripe: { name: 'Stripe (Editorial Systems)', repo: 'stripe', path: 'DESIGN.md' },
+  notion: { name: 'Notion (Warm Structured Docs)', repo: 'notion', path: 'DESIGN.md' },
+  apple: { name: 'Apple (Quiet Premium)', repo: 'apple', path: 'DESIGN.md' },
+  figma: { name: 'Figma (Collaborative Canvas)', repo: 'figma', path: 'DESIGN.md' },
+  supabase: { name: 'Supabase (Developer Emerald)', repo: 'supabase', path: 'DESIGN.md' },
+  resend: { name: 'Resend (Minimal Developer SaaS)', repo: 'resend', path: 'DESIGN.md' },
+  webflow: { name: 'Webflow (Visual Builder Polish)', repo: 'webflow', path: 'DESIGN.md' },
+  opencode: { name: 'OpenCode (Terminal-native Builder)', repo: 'opencode.ai', path: 'DESIGN.md' },
 };
 
 // ─── 1. IMPECCABLE TASTE PROMPT (Grendel) ────────────────────────────────────
@@ -85,8 +97,8 @@ Provide one JSON code block with likely tables, fields, and relationships.
 - Hosting / deployment
 - Integrations
 
-At the end, include one HTML code block that previews the core app UI.
-Use triple backticks with html.
+At the end, include one HTML code block that previews the core app UI as a self-contained HTML + AlpineJS prototype.
+Use triple backticks with html. Include Alpine via CDN when interactivity is useful, use x-data/x-show/x-for/click handlers for quick prototype behaviour, and keep the markup runnable in a sandboxed iframe.
 
 Be concise, practical, and specific. No fluff.`;
 
@@ -119,8 +131,8 @@ Provide one JSON code block with page sections, modules, and content slots.
 - Analytics / integrations
 - Performance / SEO
 
-At the end, include one HTML code block that previews the landing page or site layout.
-Use triple backticks with html.
+At the end, include one HTML code block that previews the landing page or site layout as a self-contained HTML + AlpineJS prototype.
+Use triple backticks with html. Include Alpine via CDN when interactivity is useful, use x-data/x-show/x-for/click handlers for quick prototype behaviour, and keep the markup runnable in a sandboxed iframe.
 
 Prioritise clean layout, hierarchy, and conversion clarity. No fluff.`;
 
@@ -164,7 +176,7 @@ function getCloudModelName(provider, _projectType = 'app', requestedModel = '') 
 
 // ─── 2. DESIGN REFERENCE FETCHER ────────────────────────────────────────────
 function fetchDesignSystem(repo, callback) {
-  const url = `https://raw.githubusercontent.com/VoltAgent/awesome-design-md/main/design-systems/${repo}/DESIGN.md`;
+  const url = `${DESIGN_SYSTEM_SOURCE}/${repo}/DESIGN.md`;
   
   https.get(url, (res) => {
     let data = '';
@@ -177,6 +189,23 @@ function fetchDesignSystem(repo, callback) {
       }
     });
   }).on('error', callback);
+}
+
+function ensureDesignSystem(system) {
+  if (!system || system === 'none' || !DESIGN_SYSTEMS[system]) return Promise.resolve('');
+  if (designSystemCache.has(system)) return Promise.resolve(designSystemCache.get(system));
+  const { repo } = DESIGN_SYSTEMS[system];
+  if (!repo) return Promise.resolve('');
+  return new Promise((resolve) => {
+    fetchDesignSystem(repo, (err, content) => {
+      if (err) {
+        console.warn(`[Cauldron] Design reference ${system} unavailable:`, err.message);
+        return resolve('');
+      }
+      designSystemCache.set(system, content);
+      resolve(content);
+    });
+  });
 }
 
 // ─── 3. URL RESEARCH SCRAPER (Grendel) ───────────────────────────────────────
@@ -282,7 +311,7 @@ function formatResearchForPrompt(findings) {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', service: 'Cauldron 2.1' });
+  res.json({ status: 'ok', service: 'Cauldron 2.3' });
 });
 
 
@@ -409,6 +438,29 @@ app.get('/api/cloud-models', (req, res) => {
   res.json({ success: true, providers: CLOUD_MODELS });
 });
 
+app.get('/api/ollama-models', async (req, res) => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 5000);
+  try {
+    const response = await fetch(OLLAMA_TAGS_URL, { signal: controller.signal });
+    if (!response.ok) throw new Error(`Ollama ${response.status}`);
+    const data = await response.json();
+    const models = Array.isArray(data.models)
+      ? data.models.map(model => ({
+          name: model.name,
+          label: model.name,
+          size: model.size || null,
+          modifiedAt: model.modified_at || null,
+        })).filter(model => model.name)
+      : [];
+    res.json({ success: true, baseUrl: OLLAMA_BASE_URL, models });
+  } catch (err) {
+    res.status(503).json({ success: false, baseUrl: OLLAMA_BASE_URL, models: [], error: 'Unable to detect Ollama models', details: err.message });
+  } finally {
+    clearTimeout(timeout);
+  }
+});
+
 // Get available design systems
 app.get('/api/design-systems', (req, res) => {
   const list = Object.entries(DESIGN_SYSTEMS)
@@ -467,10 +519,16 @@ app.post('/api/research-url', (req, res) => {
 // POST /api/generate — Routes to local Ollama or cloud models
 app.post('/api/generate', async (req, res) => {
   try {
-    const { prompt, model, projectType = 'app', apiKey = '', designReference = 'none', researchData = null, cloudModel = '' } = req.body;
+    const { prompt, model, projectType = 'app', apiKey = '', designReference = 'none', researchData = null, cloudModel = '', researchUrl = '' } = req.body;
     
+    await ensureDesignSystem(designReference);
     let systemPrompt = getSystemPrompt(projectType, designReference);
     
+    // Inject dedicated research URL for traceability even when scrape fails or is skipped
+    if (researchUrl) {
+      systemPrompt += `\n\n## User-provided research URL\n${researchUrl}\nUse this as a visual/reference target when relevant.`;
+    }
+
     // Inject research findings if provided
     if (researchData && researchData.formatted) {
       systemPrompt += `\n\n${researchData.formatted}\n\nUse these design signals to match the visual language and structure.`;
@@ -705,7 +763,7 @@ app.use((req, res) => {
   await db.init();
 
   app.listen(PORT, () => {
-    console.log(`\n🔥 Cauldron OS 2.2.0 — Witch Daddy Labs (open source)`);
+    console.log(`\n🔥 Cauldron OS 2.3.0 — Witch Daddy Labs (open source)`);
     console.log(`   Master Brain upgrades loaded:`);
     console.log(`   • Impeccable Taste (Grendel)`);
     console.log(`   • Design Reference Selector (Camilo & Grendel)`);

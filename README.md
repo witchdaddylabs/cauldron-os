@@ -1,7 +1,7 @@
 # Cauldron OS
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](CHANGELOG.md)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![GitHub](https://img.shields.io/badge/github-witchdaddylabs-181717.svg)](https://github.com/witchdaddylabs)
 
@@ -13,7 +13,7 @@
 
 > **Bring the messy idea. Cauldron brings the structure, taste, and next steps.**
 
-Cauldron OS is a local-first workshop for AI-assisted builders. Drop in a rough app or website idea, choose a model or design reference, and Cauldron turns the mess into a structured product blueprint with architecture notes, schema ideas, exportable docs, and a live HTML preview.
+Cauldron OS is a local-first workshop for AI-assisted builders. Drop in a rough app or website idea, choose a model or design reference, and Cauldron turns the mess into a structured product blueprint with architecture notes, schema ideas, exportable docs, and a live HTML + AlpineJS prototype preview.
 
 It is built for hobbyists, indie builders, designers, enthusiasts, and developers who want better AI output than “make me a nice dashboard”.
 
@@ -50,7 +50,7 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
    You get product notes, architecture direction, schema ideas, security considerations, and implementation guidance.
 
 4. **You get a live preview**<br>
-   Cauldron asks the model for an HTML preview so you can see the shape of the idea, not just read about it.
+   Cauldron asks the model for an HTML + AlpineJS prototype preview so you can see and click through the shape of the idea, not just read about it.
 
 5. **You save, export, or hand it off**<br>
    Drafts and history are stored locally. You can export Markdown/JSON or hand the blueprint to a coding agent such as OpenCode.
@@ -59,10 +59,10 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 
 ## Screenshots
 
-**Full three-panel interface** — Brain Dump, Blueprint Output, Live Preview<br>
+**Full three-panel interface** — Brain Dump, Blueprint Output, HTML + AlpineJS Preview<br>
 ![Main UI](assets/screenshots/01-main-ui.png)
 
-**Design Reference selector** — fuse brand DNA from Cursor, Vercel, Lovable, or Raycast<br>
+**Design Reference selector** — fuse brand DNA from Cursor, Vercel, Lovable, Raycast, Linear, Stripe, Notion, Apple, Figma, Supabase, Resend, Webflow, or OpenCode<br>
 ![Design Reference Dropdown](assets/screenshots/02-design-dropdown.png)
 
 ---
@@ -76,12 +76,14 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 - Optional cloud fallback using your own OpenAI or Google AI Studio API key
 - Save/load drafts locally with searchable history
 - Export blueprints as Markdown or JSON
-- Generate a live HTML preview alongside the written blueprint
+- Save and download blueprints with one click
+- Generate a live HTML + AlpineJS prototype preview alongside the written blueprint
 - Create project folders and hand off to OpenCode/CLI agents
 
 ### For design-conscious builders
 
-- Design Reference dropdown for Cursor, Vercel, Lovable, and Raycast-style visual direction
+- Expanded Design Reference dropdown for Cursor, Vercel, Lovable, Raycast, Linear, Stripe, Notion, Apple, Figma, Supabase, Resend, Webflow, and OpenCode-style visual direction
+- Dedicated one-URL cloner target field plus Brain Dump URL detection
 - URL research mode that extracts CSS variables, fonts, colours, and layout hints from reference sites
 - Taste guardrails that avoid generic AI UI sludge: default Inter/Roboto, pure black, nested cards, and tired blue gradients
 - Prompts for stronger spacing, typography, component states, and micro-interactions
@@ -100,11 +102,12 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 1. Enter an idea, for example: `A tiny CRM for freelance designers who hate spreadsheets`.
 2. Pick **Local Router** or **Cloud Cauldron**.
 3. Choose **App** or **Static Site**.
-4. Optionally choose a design reference.
-5. Optionally paste a URL like `https://raycast.com` to trigger research mode.
-6. Click **Generate Blueprint** or press **Cmd/Ctrl + Enter**.
-7. Review the blueprint and live preview.
-8. Save, export, or click **Execute & Hand-off** if you want a coding agent to start building.
+4. Pick a detected local Ollama model, or switch to Cloud Cauldron.
+5. Optionally choose a design reference.
+6. Optionally add one reference URL in the cloner target field, or paste a URL like `https://raycast.com` into Brain Dump to trigger research mode.
+7. Click **Generate Blueprint** or press **Cmd/Ctrl + Enter**.
+8. Review the blueprint and HTML + AlpineJS preview.
+9. Save/download, export, or click **Execute & Hand-off** if you want a coding agent to start building.
 
 ---
 
@@ -112,14 +115,14 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 
 ### Local models
 
-By default, Cauldron routes local generation to Ollama models:
+Cauldron auto-detects local Ollama models from `/api/tags` on startup and fills the Local Ollama Model dropdown. Defaults remain available as fallbacks:
 
 | Project Type | Default Local Model | Best For |
 |--------------|---------------------|----------|
 | App / product blueprint | `qwen3.5:9b` | Architecture, state, schema, full-stack planning |
 | Static site / landing page | `gemma4:e4b` | Layout, visual hierarchy, static markup |
 
-You can change the selected model in the UI.
+You can change the selected model in the UI. This makes cloned installs portable across machines with different Ollama model libraries, including Windows desktops with heavier models.
 
 ### Cloud models
 
@@ -142,7 +145,7 @@ Cauldron’s prompt builder adds three design-aware upgrades before generation:
 |--------|--------------|
 | Impeccable Taste | Adds design anti-patterns and premium UI mandates |
 | Design Reference Selector | Pulls brand DNA from `awesome-design-md` style references |
-| URL Research Sweep | Scrapes reference URLs for CSS variables, fonts, colours, and layout patterns |
+| URL Research Sweep | Scrapes the dedicated reference URL or first Brain Dump URL for CSS variables, fonts, colours, and layout patterns |
 
 This means the model gets more than “build me an app”. It gets taste, constraints, references, and context.
 
@@ -155,7 +158,7 @@ cauldron-os/
 ├── server.js               # Express backend, model proxy, prompt builder, research scraper
 ├── db/                     # Local sql.js records backend
 ├── public/
-│   └── index.html          # Frontend cockpit
+│   └── index.html          # Frontend cockpit with HTML + AlpineJS preview
 ├── projects/               # Generated handoff projects (gitignored)
 ├── data/                   # Local runtime DB/drafts (gitignored)
 ├── docs/                   # Architecture, install, contributing, and upgrade notes
@@ -196,7 +199,7 @@ Pull requests are welcome. Useful areas:
 
 - Add new design references
 - Improve URL research, especially for SPAs
-- Add template/scaffold options such as HTML + AlpineJS, React + Vite, Next.js, FastAPI, or SwiftUI
+- Add template/scaffold options such as React + Vite, Next.js, FastAPI, or SwiftUI
 - Improve exports and blueprint diffing
 - Improve accessibility
 - Add tests and docs
@@ -210,10 +213,7 @@ Please read [CONTRIBUTING.md](docs/CONTRIBUTING.md) before opening a PR.
 
 Near-term public roadmap candidates:
 
-- One-click export panel
 - Templates library
-- HTML + AlpineJS lightweight prototype template
-- Local Ollama model switcher
 - Blueprint diffing
 - Blueprint gallery
 - Basic scaffold generator

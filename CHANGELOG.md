@@ -11,6 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.3.0] — 2026-04-28
+
+### Added
+- Local Ollama model autodetection via `/api/ollama-models`, backed by Ollama `/api/tags`
+- Local model dropdown with refresh action for machines with different installed models
+- Dedicated one-URL Reference URL / Cloner Target field alongside Brain Dump URL detection
+- Expanded Design Reference selector to match private Cauldron options: Cursor, Vercel, Lovable, Raycast, Linear, Stripe, Notion, Apple, Figma, Supabase, Resend, Webflow, and OpenCode
+- Save & Download Blueprint action that saves a local draft and downloads the Markdown blueprint
+
+### Changed
+- Preview generation now requests and labels self-contained HTML + AlpineJS prototypes
+- Preview iframe injects AlpineJS CDN when generated markup uses Alpine directives but omits the script
+- Design reference fetching now uses the richer pre-paywall design-md source used by private Cauldron
+- Brain Dump textarea now fills the full available input panel space
+
+### Fixed
+- Public UI no longer hardcodes only two local Ollama router choices when a machine has different models installed
+
+---
+
 ## [2.2.0] — 2026-04-27
 
 ### Added

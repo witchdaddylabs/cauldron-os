@@ -6,7 +6,7 @@ cd /d "%~dp0"
 
 echo.
 echo ========================================
-echo    Cauldron OS 2.1.0 — Witch Daddy Labs
+echo    Cauldron OS 2.3.0 — Witch Daddy Labs
 echo ========================================
 echo.
 

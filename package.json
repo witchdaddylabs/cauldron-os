@@ -1,6 +1,6 @@
 {
   "name": "cauldron-os",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Local-first, design-aware blueprint generator for AI-assisted development",
   "main": "server.js",
   "scripts": {

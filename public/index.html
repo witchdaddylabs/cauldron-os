@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cauldron 2.1 — Witch Daddy Labs</title>
+  <title>Cauldron 2.3 — Witch Daddy Labs</title>
 
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -26,7 +26,7 @@
           },
           fontFamily: {
             mono: ['"JetBrains Mono"', 'Menlo', 'monospace'],
-            sans: ['"Inter"', 'system-ui', 'sans-serif'],
+            sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'sans-serif'],
           },
           boxShadow: {
             'glass': '0 4px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)',
@@ -44,12 +44,12 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <style>
     * { box-sizing: border-box; }
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background-color: #0d0d0f;
       color: #d9d9dd;
       overflow: hidden;
@@ -238,7 +238,7 @@
   <header class="flex-none h-14 px-5 flex items-center justify-between border-b border-obsidian-800/50 bg-obsidian-950/30 backdrop-blur">
     <div class="flex items-center gap-3">
       <div class="w-3 h-3 rounded-full bg-neon-amber shadow-[0_0_10px_rgba(251,191,36,0.5)]"></div>
-      <h1 class="text-sm font-semibold tracking-widest text-obsidian-200">CAULDRON <span class="text-neon-purple font-normal">2.1</span></h1>
+      <h1 class="text-sm font-semibold tracking-widest text-obsidian-200">CAULDRON <span class="text-neon-purple font-normal">2.3</span></h1>
       <span class="text-xs text-obsidian-500 ml-2">WITCH DADDY LABS</span>
     </div>
     <div class="flex items-center gap-4">
@@ -294,9 +294,23 @@
               <p id="routerHelper" class="text-[11px] text-obsidian-500 mt-1">Apps use Qwen for schema/state logic. Sites use Gemma for tighter layout output.</p>
             </div>
             <select id="projectTypeSelect" class="px-2 py-1 text-xs bg-obsidian-900/50 border border-obsidian-700">
-              <option value="app">Web / iOS App → Qwen 3.5 9B</option>
-              <option value="site">Static Site → Gemma 4 E4B</option>
+              <option value="app">Web / iOS App</option>
+              <option value="site">Static Site</option>
             </select>
+          </div>
+        </div>
+
+        <div id="localModelPanel" class="flex items-center justify-between gap-4">
+          <div>
+            <label for="localModelSelect" class="text-[10px] text-obsidian-500 uppercase tracking-wider">Local Ollama Model</label>
+            <p id="localModelHelper" class="text-[11px] text-obsidian-500 mt-1">Auto-detecting models from local Ollama…</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <select id="localModelSelect" class="px-2 py-1 text-xs bg-obsidian-900/50 border border-obsidian-700 min-w-[190px]">
+              <option value="qwen3.5:9b">Qwen 3.5 9B — default app router</option>
+              <option value="gemma4:e4b">Gemma 4 E4B — default site router</option>
+            </select>
+            <button type="button" id="refreshModelsBtn" class="px-2 py-1 text-[10px] border border-obsidian-700 text-obsidian-400 hover:text-neon-purple hover:border-neon-purple/50">Refresh</button>
           </div>
         </div>
 
@@ -312,6 +326,15 @@
             <option value="vercel">Vercel (Precision Geist)</option>
             <option value="lovable">Lovable (Playful Gradients)</option>
             <option value="raycast">Raycast (Vibrant Chrome)</option>
+            <option value="linear">Linear (Precise Dark Ops)</option>
+            <option value="stripe">Stripe (Editorial Systems)</option>
+            <option value="notion">Notion (Warm Structured Docs)</option>
+            <option value="apple">Apple (Quiet Premium)</option>
+            <option value="figma">Figma (Collaborative Canvas)</option>
+            <option value="supabase">Supabase (Developer Emerald)</option>
+            <option value="resend">Resend (Minimal Developer SaaS)</option>
+            <option value="webflow">Webflow (Visual Builder Polish)</option>
+            <option value="opencode">OpenCode (Terminal-native Builder)</option>
           </select>
         </div>
 
@@ -342,13 +365,20 @@
         </div>
       </div>
 
+      <div class="flex-none px-4 py-2 border-b border-obsidian-800/30">
+        <label for="researchUrlInput" class="text-[10px] text-obsidian-500 uppercase tracking-wider">Reference URL / Cloner Target</label>
+        <input type="url" id="researchUrlInput"
+          class="w-full mt-2 px-3 py-2 bg-obsidian-900/40 border border-obsidian-700 text-obsidian-200 text-xs placeholder-obsidian-600 focus:border-neon-amber/50 focus:outline-none transition-colors"
+          placeholder="https://example.com — optional, one URL to research alongside the brain dump" autocomplete="off" spellcheck="false">
+      </div>
+
       <!-- Research indicator + Brain Dump -->
-      <div class="relative flex-1">
+      <div class="relative flex-1 min-h-0">
         <div id="researchIndicator" class="absolute top-2 right-2 z-10 research-badge hidden">
           <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
           <span>Researching</span>
         </div>
-        <textarea id="brainDump" class="flex-1 p-4 resize-none focus:border-neon-purple/50"
+        <textarea id="brainDump" class="absolute inset-0 w-full h-full p-4 resize-none focus:border-neon-purple/50"
           placeholder="Unload your idea here. Be messy. We'll clean it up.&#10;&#10;Tip: Paste a URL anywhere in this text to trigger research mode and capture the design DNA of that site."></textarea>
       </div>
       <div class="flex-none px-4 py-2 border-t border-obsidian-800/30 text-xs text-obsidian-500">
@@ -384,7 +414,7 @@
     <!-- Right Panel — Live Preview -->
     <section class="panel flex-1 flex flex-col m-2 overflow-hidden rounded-none">
       <div class="flex-none px-4 py-2 border-b border-obsidian-800/30 flex items-center justify-between">
-        <label class="text-xs font-semibold text-neon-amber uppercase tracking-wider">Live Preview</label>
+        <label class="text-xs font-semibold text-neon-amber uppercase tracking-wider">HTML + AlpineJS Preview</label>
         <button id="refreshPreview" class="text-xs text-obsidian-400 hover:text-neon-amber">↻ Refresh</button>
       </div>
       <div class="flex-1 relative bg-white">
@@ -397,6 +427,9 @@
   <footer class="flex-none h-16 px-6 flex items-center justify-center gap-4 border-t border-obsidian-800/50 bg-gradient-to-r from-obsidian-950/40 to-obsidian-900/40 backdrop-blur">
     <button id="generateBtn" class="px-8 py-3 font-mono text-sm tracking-widest uppercase border border-neon-emerald/40 text-neon-emerald bg-obsidian-950/60 hover:border-neon-emerald/70 hover:shadow-[0_0_20px_rgba(52,211,153,0.18)] transition-all">
       Generate Blueprint
+    </button>
+    <button id="saveDownloadBtn" class="px-6 py-3 font-mono text-sm tracking-widest uppercase border border-neon-purple/40 text-neon-purple bg-obsidian-950/60 hover:border-neon-purple/70 hover:shadow-[0_0_20px_rgba(183,148,246,0.18)] transition-all disabled:opacity-40 disabled:cursor-not-allowed" disabled>
+      Save & Download Blueprint
     </button>
     <button id="executeBtn" class="px-10 py-3 rounded font-mono text-sm tracking-widest disabled:opacity-40 disabled:cursor-not-allowed" disabled>
       Execute & Hand-off to OpenCode
@@ -441,6 +474,11 @@
       brainDump: document.getElementById('brainDump'),
       generationModeSelect: document.getElementById('generationModeSelect'),
       projectTypeSelect: document.getElementById('projectTypeSelect'),
+      localModelSelect: document.getElementById('localModelSelect'),
+      localModelHelper: document.getElementById('localModelHelper'),
+      localModelPanel: document.getElementById('localModelPanel'),
+      refreshModelsBtn: document.getElementById('refreshModelsBtn'),
+      researchUrlInput: document.getElementById('researchUrlInput'),
       designSystemSelect: document.getElementById('designSystemSelect'),
       cloudProviderSelect: document.getElementById('cloudProviderSelect'),
       geminiModelSelect: document.getElementById('geminiModelSelect'),
@@ -456,6 +494,7 @@
       blueprint: document.getElementById('blueprint'),
       previewFrame: document.getElementById('previewFrame'),
       generateBtn: document.getElementById('generateBtn'),
+      saveDownloadBtn: document.getElementById('saveDownloadBtn'),
       executeBtn: document.getElementById('executeBtn'),
       refreshPreview: document.getElementById('refreshPreview'),
       draftStatus: document.getElementById('draftStatus'),
@@ -484,10 +523,15 @@
       geminiModel: 'cauldron:geminiModel',
       openaiApiKey: 'cauldron:openaiApiKey',
       googleApiKey: 'cauldron:googleApiKey',
+      localModel: 'cauldron:localModel',
     };
 
-    function getRoutedModel() {
+    function fallbackRoutedModel() {
       return DOM.projectTypeSelect.value === 'site' ? 'gemma4:e4b' : 'qwen3.5:9b';
+    }
+
+    function getRoutedModel() {
+      return DOM.localModelSelect.value || fallbackRoutedModel();
     }
 
     function getCloudModel() {
@@ -552,12 +596,48 @@
     function currentPayload() {
       return {
         projectName: DOM.projectNameInput.value.trim() || 'untitled-cauldron-project',
-        brainDump: DOM.brainDump.value,
+        brainDump: [DOM.brainDump.value, DOM.researchUrlInput.value.trim() ? `Reference URL: ${DOM.researchUrlInput.value.trim()}` : ''].filter(Boolean).join('\n\n'),
         blueprint: currentBlueprint,
         designReference: DOM.designSystemSelect.value,
         generationMode: DOM.generationModeSelect.value,
         modelUsed: currentModelUsed || getActiveModelLabel(),
       };
+    }
+
+
+    async function loadOllamaModels() {
+      if (!DOM.localModelSelect) return;
+      DOM.localModelHelper.textContent = 'Auto-detecting models from local Ollama…';
+      try {
+        const res = await fetch('/api/ollama-models');
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.details || data.error || 'Detection failed');
+        const preferred = localStorage.getItem(STORAGE_KEYS.localModel) || fallbackRoutedModel();
+        const models = data.models || [];
+        if (models.length) {
+          DOM.localModelSelect.innerHTML = models.map(model => `<option value="${escapeHTML(model.name)}">${escapeHTML(model.label || model.name)}</option>`).join('');
+          DOM.localModelSelect.value = models.some(model => model.name === preferred) ? preferred : (models.some(model => model.name === fallbackRoutedModel()) ? fallbackRoutedModel() : models[0].name);
+          DOM.localModelHelper.textContent = `${models.length} local Ollama model${models.length === 1 ? '' : 's'} detected from ${data.baseUrl}.`;
+        } else {
+          DOM.localModelHelper.textContent = `Ollama responded but returned no models from ${data.baseUrl}.`;
+        }
+      } catch (err) {
+        DOM.localModelHelper.textContent = `Could not auto-detect Ollama models — using fallback router (${fallbackRoutedModel()}).`;
+        console.warn('[Cauldron] Ollama model detection failed:', err);
+      }
+      updateRouterHelper();
+    }
+
+    async function saveAndDownloadBlueprint() {
+      if (!currentBlueprint) return alert('Generate or load a blueprint first.');
+      try {
+        await saveDraft();
+      } catch (err) {
+        if (!confirm(`Save failed: ${err.message}
+
+Download locally anyway?`)) return;
+      }
+      exportMarkdown();
     }
 
     function exportMarkdown() {
@@ -603,8 +683,9 @@
       DOM.charCount.textContent = DOM.brainDump.value.length;
       const { markdown, html } = parseBlueprint(currentBlueprint);
       DOM.blueprint.innerHTML = syntaxHighlight(markdown || currentBlueprint);
-      renderPreviewHTML(html || '<p style="padding:24px;color:#64748b;font-family:system-ui">No HTML preview.</p>');
+      renderPreviewHTML(html || '<p style="padding:24px;color:#64748b;font-family:system-ui">No HTML + AlpineJS preview.</p>');
       DOM.executeBtn.disabled = false;
+      DOM.saveDownloadBtn.disabled = false;
       DOM.modelBadge.textContent = draft.model_used ? `Loaded / ${draft.model_used}` : 'Loaded draft';
       updateCloudPanel();
       updateDesignHelper();
@@ -674,14 +755,15 @@
       }
 
       DOM.routerHelper.textContent = DOM.projectTypeSelect.value === 'site'
-        ? 'Sites use Gemma for tighter layout output and cleaner static markup.'
-        : 'Apps use Qwen for schema/state logic, dashboards, and relational build planning.';
+        ? `Sites use selected local model (${getRoutedModel()}) with static-site prompt bias.`
+        : `Apps use selected local model (${getRoutedModel()}) for schema/state logic and build planning.`;
     }
 
     function updateCloudPanel() {
       const isCloud = DOM.generationModeSelect.value === 'cloud';
       const isGemini = DOM.cloudProviderSelect.value === 'gemini';
       DOM.cloudCauldronPanel.classList.toggle('hidden', !isCloud);
+      DOM.localModelPanel.classList.toggle('hidden', isCloud);
       DOM.geminiModelSelect.classList.toggle('hidden', !isGemini);
       updateRouterHelper();
     }
@@ -723,7 +805,10 @@
     // ─── URL DETECTION ─────────────────────────────────────────────────────────
     function detectURLs(text) {
       const urlRegex = /https?:\/\/[^\s<>"{}|^`\[\]]+/gi;
-      return text.match(urlRegex) || [];
+      const urls = text.match(urlRegex) || [];
+      const dedicated = DOM.researchUrlInput?.value.trim();
+      if (dedicated) urls.unshift(dedicated);
+      return [...new Set(urls)].slice(0, 1);
     }
 
     function updateURLIndicator() {
@@ -776,6 +861,7 @@
       localStorage.setItem(STORAGE_KEYS.geminiModel, DOM.geminiModelSelect.value);
       localStorage.setItem(STORAGE_KEYS.openaiApiKey, DOM.openaiApiKeyInput.value);
       localStorage.setItem(STORAGE_KEYS.googleApiKey, DOM.googleApiKeyInput.value);
+      localStorage.setItem(STORAGE_KEYS.localModel, DOM.localModelSelect.value);
     }
 
     function restoreSettings() {
@@ -786,6 +872,7 @@
       DOM.geminiModelSelect.value = localStorage.getItem(STORAGE_KEYS.geminiModel) || 'gemini-3.1-flash-lite';
       DOM.openaiApiKeyInput.value = localStorage.getItem(STORAGE_KEYS.openaiApiKey) || '';
       DOM.googleApiKeyInput.value = localStorage.getItem(STORAGE_KEYS.googleApiKey) || '';
+      DOM.localModelSelect.value = localStorage.getItem(STORAGE_KEYS.localModel) || fallbackRoutedModel();
       updateCloudPanel();
       updateDesignHelper();
       suggestProjectName();
@@ -832,6 +919,9 @@
 
     DOM.openaiApiKeyInput.addEventListener('input', persistSettings);
     DOM.googleApiKeyInput.addEventListener('input', persistSettings);
+    DOM.localModelSelect.addEventListener('change', () => { persistSettings(); updateRouterHelper(); });
+    DOM.refreshModelsBtn.addEventListener('click', loadOllamaModels);
+    DOM.researchUrlInput.addEventListener('input', () => { updateURLIndicator(); setDirty(true); });
 
     // Keybinding: Cmd+Enter to generate
     document.addEventListener('keydown', (e) => {
@@ -852,7 +942,8 @@
 
     // ─── GENERATE BLUEPRINT (with Design Reference + Research) ─────────────────
     async function generateBlueprint() {
-      const prompt = DOM.brainDump.value.trim();
+      const dedicatedUrl = DOM.researchUrlInput.value.trim();
+      const prompt = [DOM.brainDump.value.trim(), dedicatedUrl ? `Reference URL: ${dedicatedUrl}` : ''].filter(Boolean).join('\n\n');
       const generationMode = DOM.generationModeSelect.value;
       const projectType = DOM.projectTypeSelect.value;
       const model = getActiveModel();
@@ -861,7 +952,7 @@
       const designReference = DOM.designSystemSelect.value;
 
       if (!prompt) {
-        alert('Brain dump empty — write something first.');
+        alert('Brain dump empty — write something first, or add a Reference URL.');
         return;
       }
 
@@ -881,6 +972,7 @@
       DOM.generateBtn.textContent = 'Generating…';
       DOM.generateBtn.disabled = true;
       DOM.executeBtn.disabled = true;
+      DOM.saveDownloadBtn.disabled = true;
       DOM.modelBadge.textContent = `Generating via ${cloudModel || model}`;
 
       try {
@@ -895,6 +987,7 @@
             apiKey,
             designReference,
             researchData: currentResearchData,
+            researchUrl: DOM.researchUrlInput.value.trim(),
           }),
         });
 
@@ -910,7 +1003,7 @@
         currentModelUsed = data.modelUsed;
         setDirty(true);
 
-        // Parse into markdown + HTML preview
+        // Parse into markdown + HTML + AlpineJS preview
         const { markdown, html } = parseBlueprint(data.blueprint);
 
         // Render blueprint (markdown) in center panel
@@ -920,7 +1013,7 @@
         if (html) {
           renderPreviewHTML(html);
         } else {
-          renderPreviewHTML('<p style="padding:24px;color:#64748b;font-family:Inter">No HTML preview generated.</p>');
+          renderPreviewHTML('<p style="padding:24px;color:#64748b;font-family:system-ui">No HTML + AlpineJS preview generated.</p>');
         }
 
         DOM.generateBtn.textContent = 'Generate Blueprint';
@@ -930,6 +1023,7 @@
           ? 'Execute & Hand-off to OpenCode'
           : 'Cloud Blueprint Ready';
         DOM.executeBtn.disabled = !data.canHandoff;
+        DOM.saveDownloadBtn.disabled = false;
 
       } catch (err) {
         console.error(err);
@@ -940,6 +1034,7 @@
         DOM.modelBadge.textContent = 'Generation failed';
         DOM.executeBtn.textContent = 'Execute & Hand-off to OpenCode';
         DOM.executeBtn.disabled = true;
+        DOM.saveDownloadBtn.disabled = true;
       }
     }
 
@@ -971,17 +1066,21 @@
     function renderPreviewHTML(htmlString) {
       const doc = DOM.previewFrame.contentDocument || DOM.previewFrame.contentWindow.document;
 
+      const hasAlpine = /alpinejs|x-data|x-show|x-for|@click|x-on:/i.test(htmlString);
+      const alpineScript = hasAlpine && !/cdn\.jsdelivr\.net\/npm\/alpinejs|unpkg\.com\/alpinejs/i.test(htmlString)
+        ? '<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"><\/script>'
+        : '';
       const fullDoc = `
         <!DOCTYPE html>
         <html>
         <head>
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          ${alpineScript}
           <style>
-            /* Reset iframe sandbox isolation issues */
             * { box-sizing: border-box; }
-
-  </style>
+            body { margin: 0; min-height: 100vh; }
+          </style>
         </head>
         <body>
           ${htmlString}
@@ -996,6 +1095,7 @@
 
     // ─── EVENT LISTENERS ────────────────────────────────────────────────────────
     DOM.generateBtn.addEventListener('click', generateBlueprint);
+    DOM.saveDownloadBtn.addEventListener('click', saveAndDownloadBlueprint);
 
     DOM.executeBtn.addEventListener('click', async () => {
       if (!currentBlueprint) {
@@ -1035,13 +1135,14 @@
       } finally {
         DOM.executeBtn.textContent = 'Execute & Hand-off to OpenCode';
         DOM.executeBtn.disabled = false;
+        DOM.saveDownloadBtn.disabled = false;
       }
     });
 
     DOM.refreshPreview.addEventListener('click', () => {
       if (currentBlueprint) {
         const { html } = parseBlueprint(currentBlueprint);
-        renderPreviewHTML(html || '<p style="padding:24px;color:#64748b;font-family:Inter">No HTML preview.</p>');
+        renderPreviewHTML(html || '<p style="padding:24px;color:#64748b;font-family:system-ui">No HTML + AlpineJS preview.</p>');
       }
     });
 
@@ -1061,9 +1162,11 @@
             currentModelUsed = null;
             DOM.projectNameInput.value = '';
             DOM.brainDump.value = '';
+            DOM.researchUrlInput.value = '';
             DOM.blueprint.textContent = '# Blueprint will appear here once you generate.';
             renderPreviewHTML('<p style="padding:24px;color:#64748b;font-family:system-ui">Generate a blueprint to see live preview.</p>');
             DOM.executeBtn.disabled = true;
+            DOM.saveDownloadBtn.disabled = true;
             setDirty(false);
             setStatus('New draft');
           }
@@ -1095,9 +1198,10 @@
 
     // Initial render
     restoreSettings();
+    loadOllamaModels();
     DOM.charCount.textContent = DOM.brainDump.value.length;
     updateURLIndicator();
-    renderPreviewHTML('<p style="padding:24px;color:#64748b;font-family:Inter">Generate a blueprint to see live preview.</p>');
+    renderPreviewHTML('<p style="padding:24px;color:#64748b;font-family:system-ui">Generate a blueprint to see the HTML + AlpineJS preview.</p>');
   </script>
 </body>
 </html>

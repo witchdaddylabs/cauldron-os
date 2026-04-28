@@ -823,13 +823,14 @@ Download locally anyway?`)) return;
 
     // ─── RESEARCH SCRAPER ──────────────────────────────────────────────────────
     async function triggerResearch() {
-      const urls = detectURLs(DOM.brainDump.value);
+      const dedicatedUrl = DOM.researchUrlInput.value.trim();
+      const urls = dedicatedUrl ? [dedicatedUrl] : detectURLs(DOM.brainDump.value);
       if (urls.length === 0) {
         currentResearchData = null;
         return;
       }
 
-      // Use first URL only
+      // Dedicated cloner target wins; otherwise use first Brain Dump URL
       const targetUrl = urls[0];
       DOM.researchIndicator.classList.remove('hidden');
 

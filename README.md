@@ -59,11 +59,19 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 
 ## Screenshots
 
-**Full three-panel interface** — Brain Dump, Blueprint Output, HTML + AlpineJS Preview<br>
+**Walkthrough demo** — Rude Boy Coffee Co rewards app generated from a Brain Dump plus the live cloner/reference URL research flow.<br>
+![Rude Boy Coffee walkthrough](assets/demo/cauldron-rude-boy-coffee-walkthrough.gif)
+
+**Full three-panel interface** — Brain Dump, Blueprint Output, HTML + AlpineJS Preview using a Rude Boy Coffee Co rewards-app prompt.<br>
 ![Main UI](assets/screenshots/01-main-ui.png)
 
-**Design Reference selector** — fuse brand DNA from Cursor, Vercel, Lovable, Raycast, Linear, Stripe, Notion, Apple, Figma, Supabase, Resend, Webflow, or OpenCode<br>
+**Design Reference selector** — fuse brand DNA from Cursor, Vercel, Lovable, Raycast, Linear, Stripe, Notion, Apple, Figma, Supabase, Resend, Webflow, or OpenCode.<br>
 ![Design Reference Dropdown](assets/screenshots/02-design-dropdown.png)
+
+**Generated prototype preview** — cropped HTML + AlpineJS output with typography and palette inspired by the supplied reference site.<br>
+![Generated Rude Boy Coffee rewards preview](assets/screenshots/04-rude-boy-preview.png)
+
+A browser-recorded `.webm` walkthrough is also included at [`assets/demo/cauldron-rude-boy-coffee-walkthrough.webm`](assets/demo/cauldron-rude-boy-coffee-walkthrough.webm).
 
 ---
 

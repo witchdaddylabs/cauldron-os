@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Refreshed README screenshot/demo assets with a Rude Boy Coffee Co rewards-app walkthrough.
+
+### Fixed
+- Dedicated Reference URL / Cloner Target now feeds the research sweep even when the Brain Dump itself has no pasted URL.
+
 ---
 
 ## [2.3.0] — 2026-04-28

@@ -17,8 +17,7 @@ We actively maintain the latest version on the `main` branch.
 
 Instead, disclose them responsibly via email:
 
-**Email:** security@witchdaddylabs.com  
-**PGP Key:** [available on request — contact us first]  
+**Email:** witchdaddylabs@proton.me  
 **Response time:** We aim to respond within 48 hours and provide a fix timeline within 7 days.
 
 ### What to Include
@@ -57,13 +56,11 @@ If you discover a new vulnerability, please follow the reporting process above.
 
 When a vulnerability is confirmed:
 
-1. **Private disclosure** — we coordinate with reporter
-2. **Patch development** — fix in a private branch
-3. **Advisory CVE** — if warranted, request CVE ID
-4. **Public disclosure** — security advisory on GitHub, coordinated release
-5. **Version bump** — patch release (2.1.1 → 2.1.2)
+1. **Private disclosure** — we coordinate with the reporter
+2. **Patch development** — we prepare and test a fix
+3. **Release** — we publish the fix and note the security impact in the release notes
 
-We follow responsible disclosure timelines (~90 days for patch development).
+We aim to resolve confirmed issues as quickly as practical for a small open source project.
 
 ---
 

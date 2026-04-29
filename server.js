@@ -176,10 +176,10 @@ function getSystemPrompt(projectType = 'app', designReference = '') {
 
 const CLOUD_MODELS = {
   gemini: {
-    defaultModel: 'gemini-3.1-flash-lite',
-    models: ['gemini-3.1-flash-lite', 'gemini-3.1-pro-preview'],
+    defaultModel: 'gemini-3.1-flash-lite-preview',
+    models: ['gemini-3.1-flash-lite-preview', 'gemini-3.1-pro-preview'],
     labels: {
-      'gemini-3.1-flash-lite': 'Gemini Flash 3.1 Lite',
+      'gemini-3.1-flash-lite-preview': 'Gemini Flash 3.1 Lite Preview',
       'gemini-3.1-pro-preview': 'Gemini Pro 3.1 Preview',
     },
   },

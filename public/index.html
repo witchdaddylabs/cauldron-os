@@ -352,7 +352,7 @@
           </div>
           <div class="grid grid-cols-1 gap-2">
             <select id="geminiModelSelect" class="px-2 py-2 text-xs bg-obsidian-900/50 border border-obsidian-700">
-              <option value="gemini-3.1-flash-lite">Gemini Flash 3.1 Lite — preferred architecture model</option>
+              <option value="gemini-3.1-flash-lite-preview">Gemini Flash 3.1 Lite Preview — preferred architecture model</option>
               <option value="gemini-3.1-pro-preview">Gemini Pro 3.1 Preview — heavier fallback</option>
             </select>
             <input type="password" id="openaiApiKeyInput"
@@ -482,7 +482,7 @@
       <div id="clarifyList" class="space-y-3" aria-live="polite"></div>
       <div class="mt-5 flex items-center justify-between gap-3 border-t border-obsidian-800/50 pt-4">
         <p class="text-[11px] text-obsidian-500">Tip: leave anything unresolved blank. Cauldron will treat it as an assumption, not gospel.</p>
-        <button type="button" data-close-modal class="px-4 py-2 text-xs uppercase tracking-widest border border-neon-amber/50 text-neon-amber hover:border-neon-amber">Use these answers</button>
+        <button type="button" data-submit-clarify class="px-4 py-2 text-xs uppercase tracking-widest border border-neon-amber/50 text-neon-amber hover:border-neon-amber">Use these answers</button>
       </div>
     </section>
   </div>
@@ -997,7 +997,7 @@ Download locally anyway?`)) return;
       DOM.projectTypeSelect.value = localStorage.getItem(STORAGE_KEYS.projectType) || 'app';
       DOM.designSystemSelect.value = localStorage.getItem(STORAGE_KEYS.designSystem) || 'none';
       DOM.cloudProviderSelect.value = localStorage.getItem(STORAGE_KEYS.cloudProvider) || 'openai';
-      DOM.geminiModelSelect.value = localStorage.getItem(STORAGE_KEYS.geminiModel) || 'gemini-3.1-flash-lite';
+      DOM.geminiModelSelect.value = localStorage.getItem(STORAGE_KEYS.geminiModel) || 'gemini-3.1-flash-lite-preview';
       DOM.openaiApiKeyInput.value = localStorage.getItem(STORAGE_KEYS.openaiApiKey) || '';
       DOM.googleApiKeyInput.value = localStorage.getItem(STORAGE_KEYS.googleApiKey) || '';
       DOM.localModelSelect.value = localStorage.getItem(STORAGE_KEYS.localModel) || fallbackRoutedModel();
@@ -1326,6 +1326,10 @@ Download locally anyway?`)) return;
       }
 
       if (event.target.matches('[data-close-modal]')) closeModals();
+      if (event.target.matches('[data-submit-clarify]')) {
+        closeModals();
+        generateBlueprint();
+      }
     });
 
     DOM.draftSearchInput.addEventListener('input', () => {

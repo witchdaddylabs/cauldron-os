@@ -15,7 +15,7 @@
     "design-system",
     "local-first"
   ],
-  "author": "Witch Daddy Labs <hello@witchdaddylabs.com>",
+  "author": "Witch Daddy Labs <witchdaddylabs@proton.me>",
   "license": "MIT",
   "type": "commonjs",
   "dependencies": {

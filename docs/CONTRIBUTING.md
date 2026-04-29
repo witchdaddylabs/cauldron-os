@@ -1,118 +1,108 @@
 # Contributing to Cauldron OS
 
-Thank you for considering a contribution! Please read this guide before opening a PR.
+Cauldron OS is small, local-first, and deliberately unfancy. Good contributions make it easier for people to turn rough ideas into useful blueprints without adding framework sludge.
 
----
+Keep changes small, practical, and easy to review.
 
-## Code of Conduct
+## Good places to help
 
-Be respectful, constructive, and kind. We're all learning.
+Useful contributions line up with the public roadmap:
 
----
+- new `DESIGN.md` design references
+- better URL research, especially for SPAs
+- export improvements and blueprint diffing
+- accessibility fixes
+- install/startup fixes for Windows, macOS, and Linux
+- docs that make the local setup less painful
+- tests around prompts, routing, exports, and frontend behaviour
 
-## Getting Started
+Please open an issue first if you want to add a framework, scaffold generator, large dependency, or major architectural change. Cauldron is meant to stay portable.
 
-1. **Fork** the repo on GitHub
-2. **Clone** locally: `git clone https://github.com/your-username/cauldron-os.git`
-3. **Install**: `npm install`
-4. **Run**: `npm start`
-5. **Create a branch**: `git checkout -b my-feature`
+## Quick start
 
----
+```bash
+git clone https://github.com/your-username/cauldron-os.git
+cd cauldron-os
+npm install
+npm start
+```
 
-## Development Workflow
+Open `http://localhost:3000`.
 
-### Server Changes
-- Edit `server.js` — keep it under ~600 lines if possible
-- Use native Node 18+ APIs (fetch, AbortController) — no polyfills
-- Add new API routes as `app.METHOD('/path', handler)`
-- Error handling: always `try/catch` in async routes; return JSON `{error, details}`
+Use a focused branch:
 
-### Frontend Changes
-- Edit `public/index.html` — vanilla JS only, no frameworks
-- Tailwind via CDN (already included)
-- Keep within ~700 lines total
-- Add new DOM elements to `DOM` map object
-- Update event listeners accordingly
+```bash
+git checkout -b fix/short-description
+```
 
-### Adding a Design System
-1. Create `design-systems/{brand}/DESIGN.md` — follow the [DESIGN.md spec](https://github.com/VoltAgent/awesome-design-md)
-2. Add `{brand}` to `DESIGN_SYSTEMS` mapping in `server.js`
-3. Add `<option value="{brand}">Brand Name</option>` in `index.html`
-4. Test: Select the brand → generate → verify content appears in prompt context
-5. Submit PR with `{brand}` folder included
+## Project shape
 
-### Extending Research Scraper
-- Edit `analyseHTML()` function in `server.js`
-- Extract new signals: font weights, media queries, animations, etc.
-- Keep it fast — no external deps, no heavy parsing
-- Update `formatResearchForPrompt()` if you add new categories
-- Add test URL in `docs/RESEARCH_TEST_CASES.md`
+- Server/API: `server.js`
+- Frontend/UI: `public/index.html`
+- Local records: `db/`
+- Design references: `design-systems/{brand}/DESIGN.md`
+- Tests: `tests/`
+- Docs: `README.md`, `docs/`, `CHANGELOG.md`
 
----
+Default rule: keep it vanilla unless there is a damn good reason not to.
+
+- Node 18+
+- Express backend
+- vanilla frontend
+- no new dependencies unless necessary
+- clear JSON errors from API routes
+- local-first by default
 
 ## Testing
 
-### Smoke Test (manual)
+Before opening a PR:
+
 ```bash
-node server.js
-# In another terminal:
+npm test
+```
+
+Also run the app locally and smoke-test the thing you changed.
+
+Basic generation route check, with the server running:
+
+```bash
 curl -X POST http://localhost:3000/api/generate \
   -H "Content-Type: application/json" \
   -d '{"prompt":"Test","model":"gemma4:e4b"}'
 ```
 
-Expected: JSON response with `success: true` and a `blueprint` string.
+URL research route check:
 
-### URL Research Test
 ```bash
 curl -X POST http://localhost:3000/api/research-url \
   -H "Content-Type: application/json" \
   -d '{"url":"https://tailwindcss.com"}'
 ```
 
-Expected: `success: true`, plus `findings.colors.length > 0`.
+If a test depends on a local Ollama model or BYO cloud key, say so in the PR. Do not pretend a cloud-only path was tested locally.
 
----
+## Pull requests
 
-## Pull Request Process
+A useful PR includes:
 
-1. **Update README** if you change public behavior
-2. **Update docs/** if you add features or modify architecture
-3. **Run smoke tests** locally before pushing
-4. **Open PR** with clear description:
-   - What changed?
-   - Why?
-   - Screenshots (if UI)
-   - Test notes
-5. **Wait for review** — maintainer will respond within 48h
+- what changed
+- why it changed
+- screenshots or short screen recordings for UI work
+- test notes, including anything you could not test
+- docs updates if behaviour changed
 
-### PR Checklist
-- [ ] Code follows existing style (minimal, functional)
-- [ ] No new dependencies unless absolutely necessary
-- [ ] Backwards compatible (or documented breaking change)
-- [ ] Tests updated (if we have any yet)
-- [ ] README/docs updated
+PR checklist:
 
----
+- [ ] small, focused change
+- [ ] no unnecessary dependencies
+- [ ] backwards compatible, or clearly documented
+- [ ] tested locally
+- [ ] docs updated if needed
 
-## Release Process (Maintainers Only)
+## Code of conduct
 
-1. Bump version in `package.json` and `server.js` header
-2. Update CHANGELOG.md
-3. Commit: `git commit -am "chore: release vX.Y.Z"`
-4. Tag: `git tag vX.Y.Z`
-5. Push: `git push && git push --tags`
-6. GitHub Actions will publish (when set up)
+Be useful, be direct, and do not be a dick. See [`CODE_OF_CONDUCT.md`](../.github/CODE_OF_CONDUCT.md) for the actual line in the sand.
 
----
+## Contact
 
-## Community
-
-- **Issues**: https://github.com/witch-daddy-labs/cauldron-os/issues
-- **Discord**: (coming soon)
-- **Show & Tell**: Tag @witchdaddylabs on X/Twitter
-
----
-
-Thanks for helping build a better design-aware AI coding toolkit. 🧙‍♂️✨
+Questions or maintainer contact: **witchdaddylabs@proton.me**

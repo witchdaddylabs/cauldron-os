@@ -192,7 +192,7 @@ Cauldron is currently Ollama-first. To add another local provider:
 
 - **Design reference cache** — in-memory Map, persists until server restart (~MB). Cold start on first use per brand (200-500ms GitHub fetch).
 - **Research scraper** — synchronous `http.get`, no timeouts besides Node defaults (~2min). Consider adding `timeout: 10000` for robustness.
-- **Ollama** — streaming not implemented; `stream: false` waits for full completion. Large models (9B) at 8192 tokens can take 60–90s. Use gemma4:e4b for ~15s drafts.
+- **Ollama** — streaming not implemented; `stream: false` waits for full completion. Large models (9B) at 8192 tokens can take 60–90s. Use gemma4:e4b for ~15s drafts. Small local models (9b–E4B) are viable for blueprint generation but produce basic interrogate questions; for quality Annoying PM mode from a local model, use at least 27b parameter models.
 - **Frontend** — no bundler, just one HTML file. CDN Tailwind adds ~30KB.
 
 ---

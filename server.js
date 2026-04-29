@@ -1,11 +1,12 @@
 /**
- * Cauldron 2.3 — Adaptive Local Models
+ * Cauldron 2.35 — Adaptive Local Models
  * Witch Daddy Labs Internal Dev Tool
  *
  * Upgrades:
  * 1. Impeccable Taste Prompt Injection (Grendel)
  * 2. Awesome Design Reference Selector (Camilo & Grendel)
  * 3. Cloner Research Sweep (Grendel)
+ * 4. Annoying PM Mode / Interrogate Idea
  */
 
 const express = require('express');
@@ -385,7 +386,7 @@ function formatResearchForPrompt(findings) {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', service: 'Cauldron 2.3' });
+  res.json({ status: 'ok', service: 'Cauldron 2.35' });
 });
 
 

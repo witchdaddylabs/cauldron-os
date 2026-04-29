@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Updated model recommendations across README, Getting Started, Architecture, and UI to reflect real-world testing: small local models (9b–E4B) produce solid blueprints but weak interrogate questions. Recommended minimum for quality local Annoying PM mode is now 27b+ models (Gemma 4:26b, Qwen 3.5/3.6:27b). For best results, use cloud models (OpenAI, Gemini) for the clarify phase.
+
 ---
 
 ## [2.35.0] — 2026-04-29

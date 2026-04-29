@@ -1,6 +1,6 @@
 # Cauldron OS — Repository Manifest
 
-Version: 2.3.0
+Version: 2.35.0
 License: MIT
 Organization: Witch Daddy Labs
 Repository: github.com/witchdaddylabs/cauldron-os

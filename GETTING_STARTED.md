@@ -36,9 +36,14 @@ Server starts at http://localhost:3000
 ## Using with Ollama (Local LLM)
 
 ```bash
-# Pull models (choose one or both)
+# Pull models for blueprint generation (works on most machines)
 ollama pull qwen3.5:9b   # for complex apps, detailed schemas
 ollama pull gemma4:e4b   # for fast drafts, static sites
+
+# For a better Annoying PM / Interrogate Idea experience, pull larger models
+# (requires a machine with more RAM/VRAM, e.g. 32GB+ RAM or a discrete GPU)
+ollama pull gemma4:26b   # recommended minimum for quality local interrogate
+ollama pull qwen3.5:27b  # alternative large local option
 
 # Then select in Cauldron UI dropdown
 # Default routing: Apps → qwen3.5:9b, Sites → gemma4:e4b

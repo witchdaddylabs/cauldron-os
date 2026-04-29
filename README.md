@@ -131,12 +131,14 @@ A browser-recorded `.webm` walkthrough is also included at [`assets/demo/cauldro
 
 ### Local models
 
-Cauldron auto-detects local Ollama models from `/api/tags` on startup and fills the Local Ollama Model dropdown. Defaults remain available as fallbacks:
+Cauldron auto-detects local Ollama models from `/api/tags` on startup and fills the Local Ollama Model dropdown. Defaults remain available as fallbacks for **blueprint generation**:
 
 | Project Type | Default Local Model | Best For |
 |--------------|---------------------|----------|
 | App / product blueprint | `qwen3.5:9b` | Architecture, state, schema, full-stack planning |
 | Static site / landing page | `gemma4:e4b` | Layout, visual hierarchy, static markup |
+
+These small models (9b–E4B) produce solid blueprints and prototypes, making them viable for generation-only workflows. However, if you want **strong Annoying PM / Interrogate Idea questions** from a local model, you will want a larger model such as **Gemma 4:26b** or **Qwen 3.5/3.6:27b**. Smaller models tend to ask very basic questions during the clarify phase. For the best interrogate experience, use cloud models (OpenAI, Gemini) which produce sharp, specific, jaded-PM-tier questions in seconds.
 
 You can change the selected model in the UI. This makes cloned installs portable across machines with different Ollama model libraries, including Windows desktops with heavier models.
 

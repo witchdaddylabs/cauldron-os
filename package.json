@@ -1,12 +1,12 @@
 {
   "name": "cauldron-os",
-  "version": "2.3.0",
-  "description": "Local-first, design-aware blueprint generator for AI-assisted development",
+  "version": "2.35.0",
+  "description": "Local-first, design-aware blueprint generator with Annoying PM Mode for sharper AI-assisted development",
   "main": "server.js",
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
-    "test": "node tests/smoke.js && node tests/cloud-models-smoke.js"
+    "test": "node tests/smoke.js && node tests/cloud-models-smoke.js && node tests/frontend-static-smoke.js"
   },
   "keywords": [
     "ai",

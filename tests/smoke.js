@@ -3,10 +3,12 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { spawn } = require('node:child_process');
+const http = require('node:http');
 
 const repoRoot = path.resolve(__dirname, '..');
 const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'cauldron-smoke-'));
 const PORT = 3399;
+const OLLAMA_PORT = 3419;
 
 function wait(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -34,10 +36,42 @@ async function request(pathname, options = {}) {
   return { res, body };
 }
 
+function createFakeOllamaServer() {
+  const requests = [];
+  const server = http.createServer((req, res) => {
+    if (req.method !== 'POST' || req.url !== '/api/generate') {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'not found' }));
+      return;
+    }
+
+    let raw = '';
+    req.on('data', chunk => raw += chunk);
+    req.on('end', () => {
+      const body = JSON.parse(raw || '{}');
+      requests.push(body);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({
+        response: `Sure, here is the JSON:\n{\n  "questions": [\n    { "id": "target-users", "label": "Who is this actually for?", "why": "Clarifies audience and scope." },\n    { "label": "What is the one workflow version one must nail?", "why": "Prevents feature soup." }\n  ],\n  "assumptions": ["This is likely a web app."],\n  "redFlags": ["Payments are mentioned but trust is not."],\n  "suggestedScope": ["Start with one user role."]\n}\nNo really, that's it.`
+      }));
+    });
+  });
+
+  return new Promise(resolve => {
+    server.listen(OLLAMA_PORT, '127.0.0.1', () => resolve({ server, requests }));
+  });
+}
+
 (async () => {
+  const fakeOllama = await createFakeOllamaServer();
   const child = spawn(process.execPath, ['server.js'], {
     cwd: repoRoot,
-    env: { ...process.env, PORT: String(PORT), CAULDRON_DATA_DIR: tempDir },
+    env: {
+      ...process.env,
+      PORT: String(PORT),
+      CAULDRON_DATA_DIR: tempDir,
+      OLLAMA_BASE_URL: `http://127.0.0.1:${OLLAMA_PORT}`,
+    },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
 
@@ -87,6 +121,34 @@ async function request(pathname, options = {}) {
     assert.equal(r.res.status, 200);
     assert.equal(r.body.stats.totalDrafts, 1);
 
+    r = await request('/api/clarify', {
+      method: 'POST',
+      body: JSON.stringify({
+        prompt: 'A tiny app for neighbours to share tools and avoid buying more landfill.',
+        model: 'qwen3.5:9b',
+        projectType: 'app',
+      }),
+    });
+    assert.equal(r.res.status, 200);
+    assert.equal(r.body.success, true);
+    assert.equal(r.body.questions.length, 2);
+    assert.equal(r.body.questions[0].id, 'target-users');
+    assert.equal(r.body.questions[1].id, 'question-2');
+    assert.match(r.body.questions[0].label, /Who is this actually for/);
+    assert.deepEqual(r.body.assumptions, ['This is likely a web app.']);
+    assert.deepEqual(r.body.redFlags, ['Payments are mentioned but trust is not.']);
+    assert.deepEqual(r.body.suggestedScope, ['Start with one user role.']);
+    assert.equal(fakeOllama.requests.at(-1).model, 'qwen3.5:9b');
+    assert.match(fakeOllama.requests.at(-1).system, /blunt senior product manager/);
+    assert.match(fakeOllama.requests.at(-1).prompt, /Ask the project-manager questions/);
+
+    r = await request('/api/clarify', {
+      method: 'POST',
+      body: JSON.stringify({ prompt: '   ', model: 'qwen3.5:9b' }),
+    });
+    assert.equal(r.res.status, 400);
+    assert.match(r.body.error, /Prompt required/);
+
     r = await request(`/api/drafts/${id}`, { method: 'DELETE' });
     assert.equal(r.res.status, 200);
     assert.equal(r.body.success, true);
@@ -100,6 +162,7 @@ async function request(pathname, options = {}) {
     throw err;
   } finally {
     child.kill('SIGTERM');
+    fakeOllama.server.close();
     fs.rmSync(tempDir, { recursive: true, force: true });
   }
 })();

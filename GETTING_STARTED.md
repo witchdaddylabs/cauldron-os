@@ -64,11 +64,12 @@ ollama pull gemma4:e4b   # for fast drafts, static sites
     Users can sequence tasks, track streaks, and mix rain/café sounds."
 3. Leave "Design Reference" as "None" for now (or pick Cursor for dark IDE aesthetic)
 4. Ensure "Local Router" selected
-5. Press Cmd+Enter (or click "Generate Blueprint")
-6. Wait 10–30 seconds (gemma4:e4b) or 60–90s (qwen3.5:9b)
-7. Blueprint appears center panel; Live Preview shows rough HTML mockup
-8. Click "Execute & Hand-off" → spawns OpenCode in background at ./projects/my-focus-timer/
-9. Check that folder — `blueprint.md` saved, OpenCode starts building
+5. Optional: click "Interrogate Idea" to get the annoying PM pop-up, answer what you can, then close it
+6. Press Cmd+Enter (or click "Generate Blueprint")
+7. Wait 10–30 seconds (gemma4:e4b) or 60–90s (qwen3.5:9b)
+8. Blueprint appears center panel; Live Preview shows rough HTML mockup
+9. Click "Execute & Hand-off" → spawns OpenCode in background at ./projects/my-focus-timer/
+10. Check that folder — `blueprint.md` saved, OpenCode starts building
 ```
 
 ---

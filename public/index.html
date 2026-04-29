@@ -425,6 +425,9 @@
 
   <!-- Bottom Bar — Actions -->
   <footer class="flex-none h-16 px-6 flex items-center justify-center gap-4 border-t border-obsidian-800/50 bg-gradient-to-r from-obsidian-950/40 to-obsidian-900/40 backdrop-blur">
+    <button id="clarifyBtn" class="px-6 py-3 font-mono text-sm tracking-widest uppercase border border-neon-amber/40 text-neon-amber bg-obsidian-950/60 hover:border-neon-amber/70 hover:shadow-[0_0_20px_rgba(251,191,36,0.18)] transition-all">
+      Interrogate Idea
+    </button>
     <button id="generateBtn" class="px-8 py-3 font-mono text-sm tracking-widest uppercase border border-neon-emerald/40 text-neon-emerald bg-obsidian-950/60 hover:border-neon-emerald/70 hover:shadow-[0_0_20px_rgba(52,211,153,0.18)] transition-all">
       Generate Blueprint
     </button>
@@ -466,6 +469,24 @@
     </section>
   </div>
 
+  <div id="clarifyPanel" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="clarifyPanelTitle">
+    <section class="modal-panel p-5">
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div>
+          <p class="text-[10px] text-neon-amber uppercase tracking-[0.25em]">Annoying PM Mode</p>
+          <h2 id="clarifyPanelTitle" class="text-lg font-semibold tracking-wide text-obsidian-100 mt-1">Before I build the wrong thing, answer these questions.</h2>
+          <p class="text-xs text-obsidian-500 mt-2">Answer what you can. Blank is allowed. These get folded into the blueprint prompt.</p>
+        </div>
+        <button type="button" data-close-modal class="px-3 py-1 text-xs border border-obsidian-700 text-obsidian-300 hover:border-neon-amber/60">Close</button>
+      </div>
+      <div id="clarifyList" class="space-y-3" aria-live="polite"></div>
+      <div class="mt-5 flex items-center justify-between gap-3 border-t border-obsidian-800/50 pt-4">
+        <p class="text-[11px] text-obsidian-500">Tip: leave anything unresolved blank. Cauldron will treat it as an assumption, not gospel.</p>
+        <button type="button" data-close-modal class="px-4 py-2 text-xs uppercase tracking-widest border border-neon-amber/50 text-neon-amber hover:border-neon-amber">Use these answers</button>
+      </div>
+    </section>
+  </div>
+
 
   <!-- Application Logic -->
   <script>
@@ -493,6 +514,9 @@
       researchIndicator: document.getElementById('researchIndicator'),
       blueprint: document.getElementById('blueprint'),
       previewFrame: document.getElementById('previewFrame'),
+      clarifyBtn: document.getElementById('clarifyBtn'),
+      clarifyPanel: document.getElementById('clarifyPanel'),
+      clarifyList: document.getElementById('clarifyList'),
       generateBtn: document.getElementById('generateBtn'),
       saveDownloadBtn: document.getElementById('saveDownloadBtn'),
       executeBtn: document.getElementById('executeBtn'),
@@ -513,6 +537,8 @@
     let currentResearchData = null; // holds scraped design findings
     let currentDraftId = null;
     let currentModelUsed = null;
+    let currentClarification = null;
+    let clarificationAnswers = {};
     let isDirty = false;
 
     const STORAGE_KEYS = {
@@ -572,6 +598,7 @@
     function closeModals() {
       DOM.draftModal.classList.add('hidden');
       DOM.historyModal.classList.add('hidden');
+      DOM.clarifyPanel.classList.add('hidden');
     }
 
     function openModal(modal) {
@@ -854,6 +881,106 @@ Download locally anyway?`)) return;
       }
     }
 
+    function renderClarification(data) {
+      const questions = data?.questions || [];
+      DOM.clarifyList.innerHTML = questions.map((q, index) => `
+        <article class="border border-obsidian-800/70 bg-obsidian-950/35 p-3">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 text-[10px] text-neon-amber font-mono">${String(index + 1).padStart(2, '0')}</span>
+            <div class="flex-1 min-w-0">
+              <label for="clarify-answer-${escapeHTML(q.id)}" class="block text-sm text-obsidian-100 font-semibold">${escapeHTML(q.label)}</label>
+              ${q.why ? `<p class="text-[11px] text-obsidian-500 mt-1">${escapeHTML(q.why)}</p>` : ''}
+              <textarea id="clarify-answer-${escapeHTML(q.id)}" data-clarify-answer="${escapeHTML(q.id)}" class="mt-3 w-full min-h-[74px] p-3 resize-y bg-obsidian-900/50" placeholder="Answer, dodge, or leave blank…">${escapeHTML(clarificationAnswers[q.id] || '')}</textarea>
+            </div>
+          </div>
+        </article>
+      `).join('');
+
+      const notes = [];
+      if (data?.assumptions?.length) notes.push(`<div><h3 class="text-[10px] uppercase tracking-widest text-obsidian-500">Assumptions</h3><ul class="mt-1 text-xs text-obsidian-400 list-disc pl-5">${data.assumptions.map(item => `<li>${escapeHTML(item)}</li>`).join('')}</ul></div>`);
+      if (data?.redFlags?.length) notes.push(`<div><h3 class="text-[10px] uppercase tracking-widest text-neon-rose">Red flags</h3><ul class="mt-1 text-xs text-obsidian-400 list-disc pl-5">${data.redFlags.map(item => `<li>${escapeHTML(item)}</li>`).join('')}</ul></div>`);
+      if (data?.suggestedScope?.length) notes.push(`<div><h3 class="text-[10px] uppercase tracking-widest text-neon-emerald">Suggested V1 scope</h3><ul class="mt-1 text-xs text-obsidian-400 list-disc pl-5">${data.suggestedScope.map(item => `<li>${escapeHTML(item)}</li>`).join('')}</ul></div>`);
+      if (notes.length) DOM.clarifyList.insertAdjacentHTML('beforeend', `<section class="grid grid-cols-1 gap-3 border border-obsidian-800/50 bg-obsidian-950/20 p-3">${notes.join('')}</section>`);
+      openModal(DOM.clarifyPanel);
+    }
+
+    function buildClarifiedPrompt(basePrompt) {
+      if (!currentClarification?.questions?.length) return basePrompt;
+
+      const lines = [
+        basePrompt,
+        '',
+        '## Clarifying intake',
+        'Use these answers as additional product requirements. Blank answers mean unresolved assumptions.',
+      ];
+
+      currentClarification.questions.forEach((q) => {
+        const answer = (clarificationAnswers[q.id] || '').trim();
+        lines.push('', `Question: ${q.label}`, `Answer: ${answer || '[not answered]'}`);
+      });
+
+      if (currentClarification.assumptions?.length) {
+        lines.push('', '## Current assumptions');
+        currentClarification.assumptions.forEach(item => lines.push(`- ${item}`));
+      }
+      if (currentClarification.redFlags?.length) {
+        lines.push('', '## Risks / red flags to address');
+        currentClarification.redFlags.forEach(item => lines.push(`- ${item}`));
+      }
+      if (currentClarification.suggestedScope?.length) {
+        lines.push('', '## Suggested version-one scope');
+        currentClarification.suggestedScope.forEach(item => lines.push(`- ${item}`));
+      }
+
+      return lines.join('\n');
+    }
+
+    async function interrogateIdea() {
+      const prompt = [DOM.brainDump.value.trim(), DOM.researchUrlInput.value.trim() ? `Reference URL: ${DOM.researchUrlInput.value.trim()}` : ''].filter(Boolean).join('\n\n');
+      if (!prompt) {
+        setStatus('Add a brain dump first.');
+        alert('Add a brain dump first, then I can ask annoying questions.');
+        return;
+      }
+
+      const generationMode = DOM.generationModeSelect.value;
+      const projectType = DOM.projectTypeSelect.value;
+      const model = getActiveModel();
+      const cloudModel = generationMode === 'cloud' ? getCloudModelChoice() : '';
+      const apiKey = generationMode === 'cloud' ? getActiveApiKey() : '';
+
+      if (generationMode === 'cloud' && !apiKey) {
+        alert(`Add your ${DOM.cloudProviderSelect.value === 'gemini' ? 'Google AI Studio' : 'OpenAI'} API key in Cloud Cauldron first.`);
+        return;
+      }
+
+      DOM.clarifyBtn.disabled = true;
+      DOM.clarifyBtn.textContent = 'Interrogating…';
+      setStatus('Asking annoying PM questions…');
+
+      try {
+        const res = await fetch('/api/clarify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, model, cloudModel, projectType, apiKey }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.details || data.error || 'Clarification failed');
+        currentClarification = data;
+        clarificationAnswers = {};
+        renderClarification(data);
+        setDirty(true);
+        setStatus('Annoying questions ready');
+      } catch (err) {
+        console.error('[Cauldron] Clarify error:', err);
+        alert('Interrogate error: ' + err.message);
+        setStatus('Interrogate failed');
+      } finally {
+        DOM.clarifyBtn.disabled = false;
+        DOM.clarifyBtn.textContent = 'Interrogate Idea';
+      }
+    }
+
     function persistSettings() {
       localStorage.setItem(STORAGE_KEYS.generationMode, DOM.generationModeSelect.value);
       localStorage.setItem(STORAGE_KEYS.projectType, DOM.projectTypeSelect.value);
@@ -981,7 +1108,7 @@ Download locally anyway?`)) return;
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            prompt,
+            prompt: buildClarifiedPrompt(prompt),
             model,
             cloudModel,
             projectType,
@@ -1095,6 +1222,7 @@ Download locally anyway?`)) return;
     }
 
     // ─── EVENT LISTENERS ────────────────────────────────────────────────────────
+    DOM.clarifyBtn.addEventListener('click', interrogateIdea);
     DOM.generateBtn.addEventListener('click', generateBlueprint);
     DOM.saveDownloadBtn.addEventListener('click', saveAndDownloadBlueprint);
 
@@ -1161,6 +1289,9 @@ Download locally anyway?`)) return;
             currentBlueprint = '';
             currentDraftId = null;
             currentModelUsed = null;
+            currentClarification = null;
+            clarificationAnswers = {};
+            DOM.clarifyList.innerHTML = '';
             DOM.projectNameInput.value = '';
             DOM.brainDump.value = '';
             DOM.researchUrlInput.value = '';
@@ -1188,6 +1319,12 @@ Download locally anyway?`)) return;
         catch (err) { alert('Load error: ' + err.message); }
       }
 
+      const answerField = event.target.closest('[data-clarify-answer]');
+      if (answerField) {
+        clarificationAnswers[answerField.dataset.clarifyAnswer] = answerField.value;
+        setDirty(true);
+      }
+
       if (event.target.matches('[data-close-modal]')) closeModals();
     });
 
@@ -1195,6 +1332,13 @@ Download locally anyway?`)) return;
       refreshDrafts(DOM.draftSearchInput.value).catch(err => {
         DOM.draftList.innerHTML = `<p class="text-xs text-neon-rose">${escapeHTML(err.message)}</p>`;
       });
+    });
+
+    document.addEventListener('input', (event) => {
+      const answerField = event.target.closest('[data-clarify-answer]');
+      if (!answerField) return;
+      clarificationAnswers[answerField.dataset.clarifyAnswer] = answerField.value;
+      setDirty(true);
     });
 
     // Initial render

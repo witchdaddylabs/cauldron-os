@@ -1,7 +1,7 @@
 # Cauldron OS
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-2.35-blue.svg)](CHANGELOG.md)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![GitHub](https://img.shields.io/badge/github-witchdaddylabs-181717.svg)](https://github.com/witchdaddylabs)
 
@@ -13,7 +13,9 @@
 
 > **Bring the messy idea. Cauldron brings the structure, taste, and next steps.**
 
-Cauldron OS is a local-first workshop for AI-assisted builders. Drop in a rough app or website idea, choose a model or design reference, and Cauldron turns the mess into a structured product blueprint with architecture notes, schema ideas, exportable docs, and a live HTML + AlpineJS prototype preview.
+Cauldron OS 2.35 is a local-first workshop for AI-assisted builders. Drop in a rough app or website idea, choose a model or design reference, and Cauldron turns the mess into a structured product blueprint with architecture notes, schema ideas, exportable docs, and a live HTML + AlpineJS prototype preview.
+
+New in **2.35**: **Annoying PM Mode**. Before generation, Cauldron can interrogate the idea with the useful questions a sharp product manager would ask: who it is for, what the first version must prove, what can wait, what data is needed, and where the build might go sideways. The answers get folded into the final model prompt, which means less vague AI slop and more buildable first drafts.
 
 It is built for hobbyists, indie builders, designers, enthusiasts, and developers who want better AI output than “make me a nice dashboard”.
 
@@ -43,16 +45,19 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 1. **You brain-dump the idea**<br>
    Write naturally. Messy is fine. Paste reference URLs if you have them.
 
-2. **Cauldron adds taste and context**<br>
+2. **Optional: Annoying PM Mode / Interrogate Idea**<br>
+   Cauldron can pop up a short set of annoying project-manager questions before generation. Answer what you can; the Q&A gets folded into the final blueprint prompt so the model has firmer scope, risks, users, and assumptions before it starts pretending to be useful.
+
+3. **Cauldron adds taste and context**<br>
    It injects design rules, optional brand/design references, and URL research before the model sees your prompt.
 
-3. **The model creates a blueprint**<br>
+4. **The model creates a blueprint**<br>
    You get product notes, architecture direction, schema ideas, security considerations, and implementation guidance.
 
-4. **You get a live preview**<br>
+5. **You get a live preview**<br>
    Cauldron asks the model for an HTML + AlpineJS prototype preview so you can see and click through the shape of the idea, not just read about it.
 
-5. **You save, export, or hand it off**<br>
+6. **You save, export, or hand it off**<br>
    Drafts and history are stored locally. You can export Markdown/JSON or hand the blueprint to a coding agent such as OpenCode.
 
 ---
@@ -80,6 +85,7 @@ A browser-recorded `.webm` walkthrough is also included at [`assets/demo/cauldro
 ### For hobbyists and solo builders
 
 - Turn rough ideas into structured build blueprints
+- **Annoying PM Mode**: interrogate rough ideas with a product-manager question pass before generation, then fold the answers into the final blueprint prompt
 - Run locally with Ollama — no API costs and no data leaving your machine
 - Optional cloud fallback using your own OpenAI or Google AI Studio API key
 - Save/load drafts locally with searchable history
@@ -113,9 +119,11 @@ A browser-recorded `.webm` walkthrough is also included at [`assets/demo/cauldro
 4. Pick a detected local Ollama model, or switch to Cloud Cauldron.
 5. Optionally choose a design reference.
 6. Optionally add one reference URL in the cloner target field, or paste a URL like `https://raycast.com` into Brain Dump to trigger research mode.
-7. Click **Generate Blueprint** or press **Cmd/Ctrl + Enter**.
-8. Review the blueprint and HTML + AlpineJS preview.
-9. Save/download, export, or click **Execute & Hand-off** if you want a coding agent to start building.
+7. Optional but recommended: click **Interrogate Idea** to make Cauldron ask the annoying product-manager questions first.
+8. Answer what you can in the pop-up. Blank answers are allowed and treated as unresolved assumptions.
+9. Click **Generate Blueprint** or press **Cmd/Ctrl + Enter**.
+10. Review the blueprint and HTML + AlpineJS preview.
+11. Save/download, export, or click **Execute & Hand-off** if you want a coding agent to start building.
 
 ---
 

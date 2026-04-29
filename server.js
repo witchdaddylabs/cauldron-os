@@ -23,6 +23,8 @@ const OLLAMA_URL = `${OLLAMA_BASE_URL}/api/generate`;
 const OLLAMA_TAGS_URL = `${OLLAMA_BASE_URL}/api/tags`;
 const OLLAMA_TIMEOUT_MS = 600000;
 const CLOUD_TIMEOUT_MS = 300000;
+const CLARIFY_NUM_PREDICT = Number(process.env.CAULDRON_CLARIFY_NUM_PREDICT || 2048);
+const BLUEPRINT_NUM_PREDICT = Number(process.env.CAULDRON_BLUEPRINT_NUM_PREDICT || 8192);
 const OPENAI_BASE_URL = 'https://api.openai.com/v1/chat/completions';
 const GEMINI_BASE_URL = 'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions';
 
@@ -136,6 +138,29 @@ Use triple backticks with html. Include Alpine via CDN when interactivity is use
 
 Prioritise clean layout, hierarchy, and conversion clarity. No fluff.`;
 
+const CLARIFY_SYSTEM_PROMPT = `You are a blunt senior product manager helping a non-developer clarify an app/site idea before any code is planned.
+
+Return JSON only. No markdown. No commentary.
+
+Schema:
+{
+  "questions": [
+    { "id": "short-kebab-id", "label": "Question?", "why": "Short reason." }
+  ],
+  "assumptions": ["Short assumption."],
+  "redFlags": ["Short risk or ambiguity."],
+  "suggestedScope": ["Short scope suggestion."]
+}
+
+Rules:
+- Ask 5 to 8 questions.
+- Be practical, specific, and slightly jaded, not cute.
+- Prioritise scope, users, workflows, data, risk, version one, and what not to build.
+- Do not ask generic startup questions about markets or growth unless clearly relevant.
+- Keep every question answerable by a non-developer.
+- Keep assumptions, redFlags, and suggestedScope short.
+- Never invent implementation details as facts.`;
+
 function getSystemPrompt(projectType = 'app', designReference = '') {
   let base = projectType === 'site' ? SITE_SYSTEM_PROMPT : APP_SYSTEM_PROMPT;
   
@@ -172,6 +197,55 @@ function getCloudModelName(provider, _projectType = 'app', requestedModel = '') 
   if (!config) throw new Error(`Unsupported cloud provider: ${provider}`);
   if (requestedModel && config.models.includes(requestedModel)) return requestedModel;
   return config.defaultModel;
+}
+
+function extractJsonObject(text = '') {
+  const trimmed = String(text).trim();
+  try {
+    return JSON.parse(trimmed);
+  } catch {}
+
+  const first = trimmed.indexOf('{');
+  const last = trimmed.lastIndexOf('}');
+  if (first !== -1 && last !== -1 && last > first) {
+    return JSON.parse(trimmed.slice(first, last + 1));
+  }
+
+  throw new Error('Model did not return a JSON object');
+}
+
+function normaliseClarifyResult(raw) {
+  const fallback = {
+    questions: [],
+    assumptions: [],
+    redFlags: [],
+    suggestedScope: [],
+  };
+
+  const result = { ...fallback, ...(raw || {}) };
+  result.questions = Array.isArray(result.questions)
+    ? result.questions.slice(0, 8).map((q, index) => {
+        const id = String(q?.id || `question-${index + 1}`)
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '') || `question-${index + 1}`;
+        return {
+          id,
+          label: String(q?.label || q?.question || '').trim(),
+          why: String(q?.why || '').trim(),
+        };
+      }).filter(q => q.label)
+    : [];
+
+  result.assumptions = Array.isArray(result.assumptions) ? result.assumptions.slice(0, 4).map(String) : [];
+  result.redFlags = Array.isArray(result.redFlags) ? result.redFlags.slice(0, 4).map(String) : [];
+  result.suggestedScope = Array.isArray(result.suggestedScope) ? result.suggestedScope.slice(0, 5).map(String) : [];
+
+  if (result.questions.length === 0) {
+    throw new Error('Model returned no clarifying questions');
+  }
+
+  return result;
 }
 
 // ─── 2. DESIGN REFERENCE FETCHER ────────────────────────────────────────────
@@ -516,6 +590,47 @@ app.post('/api/research-url', (req, res) => {
   });
 });
 
+// POST /api/clarify — Ask project-manager questions before blueprint generation
+app.post('/api/clarify', async (req, res) => {
+  try {
+    const { prompt, model, projectType = 'app', apiKey = '', cloudModel = '' } = req.body;
+    if (!prompt || !prompt.trim()) {
+      return res.status(400).json({ error: 'Prompt required' });
+    }
+
+    const clarifyPrompt = `Project type: ${projectType}\n\nBrain dump:\n${prompt}\n\nAsk the project-manager questions needed before generating a build blueprint.`;
+    let rawText = '';
+
+    if (['openai', 'gemini'].includes(model)) {
+      if (!apiKey) {
+        return res.status(400).json({ error: 'Missing API key', details: `No API key was provided for ${model}.` });
+      }
+      rawText = await callCloudModel({
+        provider: model,
+        apiKey,
+        prompt: clarifyPrompt,
+        systemPrompt: CLARIFY_SYSTEM_PROMPT,
+        projectType,
+        requestedModel: cloudModel,
+      });
+    } else {
+      rawText = await callOllamaModel({
+        model,
+        prompt: clarifyPrompt,
+        systemPrompt: CLARIFY_SYSTEM_PROMPT,
+        numPredict: CLARIFY_NUM_PREDICT,
+        temperature: 0.35,
+      });
+    }
+
+    const questions = normaliseClarifyResult(extractJsonObject(rawText));
+    res.json({ success: true, ...questions });
+  } catch (err) {
+    console.error('Clarify error:', err);
+    res.status(500).json({ error: 'Clarification failed', details: err.message });
+  }
+});
+
 // POST /api/generate — Routes to local Ollama or cloud models
 app.post('/api/generate', async (req, res) => {
   try {
@@ -571,44 +686,13 @@ app.post('/api/generate', async (req, res) => {
     
     // Local models → Ollama
     const ollamaModel = model;
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), OLLAMA_TIMEOUT_MS);
-    
-    const ollamaRes = await fetch(OLLAMA_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      signal: controller.signal,
-      body: JSON.stringify({
-        model: ollamaModel,
-        prompt: prompt,
-        system: systemPrompt,
-        stream: false,
-        options: {
-          num_predict: 8192,
-          temperature: 0.55,
-          top_p: 0.9,
-        },
-      }),
-    }).catch(err => {
-      // Handle network errors gracefully (Ollama down, connection refused)
-      throw new Error(`Cannot reach Ollama at ${OLLAMA_URL}. Is Ollama running?`);
+    const blueprint = await callOllamaModel({
+      model: ollamaModel,
+      prompt,
+      systemPrompt,
+      numPredict: BLUEPRINT_NUM_PREDICT,
+      temperature: 0.55,
     });
-    
-    clearTimeout(timeout);
-    
-    if (!ollamaRes.ok) {
-      const text = await ollamaRes.text();
-      throw new Error(`Ollama ${ollamaRes.status}: ${text}`);
-    }
-    
-    let data;
-    try {
-      data = await ollamaRes.json();
-    } catch (e) {
-      const raw = await ollamaRes.text();
-      throw new Error(`Ollama returned invalid JSON: ${raw.substring(0,200)}`);
-    }
-    const blueprint = data.response || data.message || '';
     
     db.createSession({
       sessionId: req.headers['x-session-id'] || db.generateSessionId(),
@@ -636,6 +720,41 @@ app.post('/api/generate', async (req, res) => {
     res.status(500).json({ error: 'Generation failed', details: err.message });
   }
 });
+
+async function callOllamaModel({ model, prompt, systemPrompt, numPredict = 8192, temperature = 0.55 }) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), OLLAMA_TIMEOUT_MS);
+  try {
+    const ollamaRes = await fetch(OLLAMA_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        model,
+        prompt,
+        system: systemPrompt,
+        stream: false,
+        options: {
+          num_predict: numPredict,
+          temperature,
+          top_p: 0.9,
+        },
+      }),
+    }).catch(() => {
+      throw new Error(`Cannot reach Ollama at ${OLLAMA_URL}. Is Ollama running?`);
+    });
+
+    if (!ollamaRes.ok) {
+      const text = await ollamaRes.text();
+      throw new Error(`Ollama ${ollamaRes.status}: ${text}`);
+    }
+
+    const data = await ollamaRes.json();
+    return data.response || data.message || '';
+  } finally {
+    clearTimeout(timeout);
+  }
+}
 
 async function callCloudModel({ provider, apiKey, prompt, systemPrompt, projectType, requestedModel = '' }) {
   const url = provider === 'gemini' ? GEMINI_BASE_URL : OPENAI_BASE_URL;

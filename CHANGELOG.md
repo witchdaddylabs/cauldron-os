@@ -9,7 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [2.35.0] — 2026-04-29
+
+### Added
+- **Annoying PM Mode / Interrogate Idea**: a pre-generation clarification pass that asks focused product-manager questions before the blueprint is generated.
+- Clarification answers, assumptions, red flags, and suggested V1 scope are folded into the final blueprint prompt.
+- `/api/clarify` backend support for local and cloud model routing.
+- Frontend static smoke coverage for the Annoying PM modal and prompt-folding flow.
+
 ### Changed
+- Refreshed README and getting-started docs around the clarified blueprint workflow.
 - Refreshed README screenshot/demo assets with a Rude Boy Coffee Co rewards-app walkthrough.
 
 ### Fixed

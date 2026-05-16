@@ -1,25 +1,24 @@
 # Code of Conduct
 
-Cauldron OS is small, scrappy, and public. Keep it useful.
+Cauldron OS is a small public project run by an actual human. Keep it useful.
 
-## Expected behaviour
+## Do
 
-- Be respectful and constructive.
-- Criticise the work, not the person.
+- Be constructive. Criticise the work, not the person.
 - Assume good faith, but don't waste people's time.
-- Keep issues and pull requests on-topic.
+- Keep issues and PRs on-topic.
 
-## Not welcome
+## Don't
 
 - Harassment, threats, discrimination, or personal attacks.
-- Doxxing or sharing private information.
-- Spam, trolling, or deliberately derailing discussions.
+- Doxxing or sharing private info.
+- Spam, trolling, or deliberately derailing conversations.
 - Repeated bad-faith behaviour after being asked to stop.
 
 ## Enforcement
 
-Maintainers may edit, hide, or remove comments, issues, pull requests, or contributions that cross the line. Repeated or serious issues may result in a ban from project spaces.
+Maintainers can edit, hide, or remove comments, issues, PRs, or contributions that cross the line. Repeated or serious issues may result in a ban from project spaces.
 
-To report a problem, email **witchdaddylabs@proton.me**.
+To report a problem: **witchdaddylabs@proton.me**
 
-Reports will be handled privately and practically. No committee theatre.
+Reports are handled privately and practically. No committee theatre.

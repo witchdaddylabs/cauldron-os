@@ -1,69 +1,61 @@
 # Security Policy
 
-## Supported Versions
+## Supported versions
 
-We actively maintain the latest version on the `main` branch.
+We maintain the latest version on `main`. That's the one.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 2.x     | ✅ Active development |
-| 1.x     | ❌ End-of-life (unsupported) |
+| Version | Supported |
+|---------|-----------|
+| 0.x     | ✅ Active development |
 
----
+Anything older doesn't exist yet, so this is straightforward.
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-**Please do not report security vulnerabilities through public GitHub issues.**
+**Please don't report security issues through public GitHub issues.**
 
-Instead, disclose them responsibly via email:
+Email us privately:
 
-**Email:** witchdaddylabs@proton.me  
-**Response time:** We aim to respond within 48 hours and provide a fix timeline within 7 days.
+**witchdaddylabs@proton.me**
 
-### What to Include
+We aim to respond within 48 hours and have a fix timeline within 7 days.
 
-- Steps to reproduce (if possible)
-- Affected component (server.js, frontend, research scraper, etc.)
-- Potential impact (data leak, DoS, etc.)
-- Suggested fix (if you have one)
+### What to include
 
----
+- How to reproduce it (if possible)
+- Which component is affected (server.js, frontend, research scraper, etc.)
+- What the potential impact is (data leak, DoS, etc.)
+- A suggested fix if you have one
 
-## Security Measures in Cauldron OS
+## Security by design
 
-Cauldron OS is designed to be **local-first** and **privacy-respecting**:
+Cauldron OS is **local-first** and **privacy-respecting** by default:
 
 - **No data collection** — your prompts, blueprints, and designs stay on your machine
-- **API keys stored locally** — browser localStorage only; never transmitted to our servers
-- **No telemetry** — zero analytics, no tracking
-- **Open source** — you can audit the code yourself
+- **API keys stored locally** — browser localStorage only, never transmitted to our servers
+- **No telemetry** — zero analytics, zero tracking
+- **Open source** — you can audit every line
 - **Sandboxed handoffs** — OpenCode runs in your project directory only
 
-### Known Risks & Mitigations
+### Known risks
 
-| Risk | Severity | Mitigation |
-|------|----------|------------|
-| OLLAMA_URL injection (user-controlled) | Low | Cauldron connects only to localhost; ensure Ollama is not exposed externally |
-| SSRF via research-url endpoint | Medium (local-only use) | In single-user local context, risk minimal. For multi-user deployments, add URL allowlist or block private IP ranges |
-| Blueprint handoff folder permissions | Low | Projects created with current user's umask. Do not run Cauldron as root |
-| API key leakage via browser localStorage | Low | Browser localStorage is accessible to any script on localhost. Use only on trusted machine. Clear keys when done. |
+| Risk | Severity | What we do about it |
+|------|----------|---------------------|
+| OLLAMA_URL injection (user-controlled) | Low | Cauldron only connects to localhost. Keep Ollama off your network interface. |
+| SSRF via research-url endpoint | Medium (local-only) | Risk is minimal in single-user context. For multi-user deployments, add a URL allowlist or block private IP ranges. |
+| Blueprint handoff folder permissions | Low | Projects are created with your current user's umask. Don't run Cauldron as root. |
+| API key leakage via browser localStorage | Low | localStorage is accessible to any script on localhost. Use this on a machine you trust. Clear keys when you're done. |
 
-If you discover a new vulnerability, please follow the reporting process above.
+If you find something new, follow the reporting process above.
 
----
-
-## Security Update Policy
+## Disclosure process
 
 When a vulnerability is confirmed:
 
 1. **Private disclosure** — we coordinate with the reporter
-2. **Patch development** — we prepare and test a fix
-3. **Release** — we publish the fix and note the security impact in the release notes
+2. **Fix development** — we prepare and test the patch
+3. **Release** — we publish the fix and note the security impact in release notes
 
-We aim to resolve confirmed issues as quickly as practical for a small open source project.
+We resolve confirmed issues as quickly as practical for a small open source project.
 
----
-
-**Thank you for helping keep Cauldron OS and its community safe.**
-
-— Witch Daddy Labs Security Team
+Thanks for helping keep Cauldron OS safe.

@@ -22,22 +22,22 @@ SOFTWARE.
 
 ---
 
-## Third-Party Licenses & Attributions
+## Third-party licenses & attributions
 
-### Included Code (within this repository)
-- **None** — Cauldron OS has zero runtime dependencies beyond Express.js (MIT).
+### Included code (within this repo)
+None — Cauldron OS has zero runtime dependencies beyond Express.js (MIT).
 
-### Inspired By / Conceptual Attribution
+### Inspired by / conceptual attribution
 - **impeccable.style** — design taste philosophy (https://impeccable.style)
-- **taste-skill** by @Leonxlnx — ANTI-PATTERNS/MANDATES structure concept (https://github.com/Leonxlnx/taste-skill), no code included, license not explicitly stated by author (public domain-style?); implementation is our own
-- **ai-website-cloner-template** by @JCodesMore — URL reconnaissance pattern (https://github.com/JCodesMore/ai-website-cloner-template), MIT License
-- **awesome-design-md** by @VoltAgent — DESIGN.md format specification (https://github.com/VoltAgent/awesome-design-md), MIT License
+- **taste-skill** by @Leonxlnx — anti-patterns/mandates structure concept (https://github.com/Leonxlnx/taste-skill), no code included; implementation is our own
+- **ai-website-cloner-template** by @JCodesMore — URL reconnaissance pattern (https://github.com/JCodesMore/ai-website-cloner-template), MIT
+- **awesome-design-md** by @VoltAgent — DESIGN.md format spec (https://github.com/VoltAgent/awesome-design-md), MIT
 
-All design system content fetched from `awesome-design-md` is served via API at runtime, not bundled. Attribution remains with the respective authors.
+Design system content fetched from `awesome-design-md` is served via API at runtime, not bundled. Attribution remains with the respective authors.
 
-### Open Source Licenses of Dependencies
-- **Express.js** — MIT License (bundled via npm, not vendored)
+### Dependencies
+- **Express.js** — MIT (bundled via npm, not vendored)
 
 ---
 
-> If you believe your work has been incorrectly attributed or you wish to opt out of this distribution, please open an issue and we will promptly address it.
+> If you believe your work has been incorrectly attributed or want to opt out of this distribution, open an issue and we'll sort it out promptly.

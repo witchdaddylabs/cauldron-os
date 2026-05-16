@@ -2,21 +2,21 @@
 
 Cauldron OS is small, local-first, and deliberately unfancy. Good contributions make it easier for people to turn rough ideas into useful blueprints without adding framework sludge.
 
-Keep changes small, practical, and easy to review.
+Keep changes small, practical, and easy to review. Nobody wants a 47-file PR that rearranges the furniture.
 
 ## Good places to help
 
-Useful contributions line up with the public roadmap:
+Things that actually move the needle:
 
-- new `DESIGN.md` design references
-- better URL research, especially for SPAs
-- export improvements and blueprint diffing
-- accessibility fixes
-- install/startup fixes for Windows, macOS, and Linux
-- docs that make the local setup less painful
-- tests around prompts, routing, exports, and frontend behaviour
+- New `DESIGN.md` design references
+- Better URL research, especially for single-page apps
+- Export improvements and blueprint diffing
+- Accessibility fixes
+- Install/startup fixes for Windows, macOS, and Linux
+- Docs that make local setup less painful
+- Tests around prompts, routing, exports, and frontend behaviour
 
-Please open an issue first if you want to add a framework, scaffold generator, large dependency, or major architectural change. Cauldron is meant to stay portable.
+Please open an issue first if you want to add a framework, scaffold generator, large dependency, or major architectural change. Cauldron is meant to stay portable and not turn into a dependency hellscape.
 
 ## Quick start
 
@@ -44,14 +44,14 @@ git checkout -b fix/short-description
 - Tests: `tests/`
 - Docs: `README.md`, `docs/`, `CHANGELOG.md`
 
-Default rule: keep it vanilla unless there is a damn good reason not to.
+Default rule: keep it vanilla unless there's a damn good reason not to.
 
 - Node 18+
 - Express backend
-- vanilla frontend
-- no new dependencies unless necessary
-- clear JSON errors from API routes
-- local-first by default
+- Vanilla frontend
+- No new dependencies unless necessary
+- Clear JSON errors from API routes
+- Local-first by default
 
 ## Testing
 
@@ -61,7 +61,7 @@ Before opening a PR:
 npm test
 ```
 
-Also run the app locally and smoke-test the thing you changed.
+Also run the app locally and smoke-test whatever you changed.
 
 Basic generation route check, with the server running:
 
@@ -79,17 +79,17 @@ curl -X POST http://localhost:3000/api/research-url \
   -d '{"url":"https://tailwindcss.com"}'
 ```
 
-If a test depends on a local Ollama model or BYO cloud key, say so in the PR. Do not pretend a cloud-only path was tested locally.
+If a test depends on a local Ollama model or a BYO cloud key, say so in the PR. Don't pretend a cloud-only path was tested locally.
 
 ## Pull requests
 
 A useful PR includes:
 
-- what changed
-- why it changed
-- screenshots or short screen recordings for UI work
-- test notes, including anything you could not test
-- docs updates if behaviour changed
+- What changed
+- Why it changed
+- Screenshots or short recordings for UI work
+- Test notes, including anything you couldn't test
+- Docs updates if behaviour changed
 
 PR checklist:
 
@@ -101,8 +101,8 @@ PR checklist:
 
 ## Code of conduct
 
-Be useful, be direct, and do not be a dick. See [`CODE_OF_CONDUCT.md`](../.github/CODE_OF_CONDUCT.md) for the actual line in the sand.
+Be useful, be direct, and don't be a dick. See [`CODE_OF_CONDUCT.md`](../.github/CODE_OF_CONDUCT.md) for the actual line in the sand.
 
-## Contact
+## Questions?
 
-Questions or maintainer contact: **witchdaddylabs@proton.me**
+Maintainer contact: **witchdaddylabs@proton.me**

@@ -6,21 +6,16 @@
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
-    "test": "node tests/smoke.js && node tests/cloud-models-smoke.js && node tests/frontend-static-smoke.js && node tests/research-history-smoke.js && node tests/templates-smoke.js"
+    "test": "node tests/smoke.js && node tests/cloud-models-smoke.js && node tests/frontend-static-smoke.js && node tests/research-history-smoke.js && node tests/templates-smoke.js && node tests/handoff-smoke.js"
   },
   "keywords": [
     "ai",
     "ollama",
     "blueprint",
     "design-system",
-    "local-first"
+    "prompt-engineering",
+    "wireframe",
+    "prototype"
   ],
-  "author": "Witch Daddy Labs <witchdaddylabs@proton.me>",
-  "license": "MIT",
-  "type": "commonjs",
-  "dependencies": {
-    "express": "5.2.1",
-    "playwright": "^1.59.1",
-    "sql.js": "^1.14.1"
-  }
+  "license": "MIT"
 }

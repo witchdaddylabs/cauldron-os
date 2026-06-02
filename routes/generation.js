@@ -14,12 +14,12 @@ function registerGenerationRoutes(app, deps) {
     CLARIFY_SYSTEM_PROMPT, CLARIFY_NUM_PREDICT, BLUEPRINT_NUM_PREDICT,
     OLLAMA_BASE_URL, OLLAMA_TAGS_URL, CLOUD_TIMEOUT_MS,
     activeBuildControllers, buildSessions,
-    safeProjectName, getProjectPath, buildResumePrompt, buildOpencodeArgs,
+    safeProjectName, getProjectPath, getProjectsDir, buildResumePrompt, buildOpencodeArgs,
     commandPreview, listImportableProjects, getBuildStatus,
     callOllamaModel, callCloudModel, getCloudModelName,
     extractJsonObject, normaliseClarifyResult,
     scrapeURLFast, scrapeRenderedURL, formatResearchForPrompt,
-    inferProviderFromModel,
+    inferProviderFromModel, rootDir,
   } = deps;
 
   app.post('/api/research-url', async (req, res) => {
@@ -320,7 +320,8 @@ function registerGenerationRoutes(app, deps) {
     }
 
     const safeName = safeProjectName(projectName);
-    const projectPath = path.join(__dirname, 'projects', safeName);
+    const projectsDir = getProjectsDir();
+    const projectPath = path.join(projectsDir, safeName);
 
     if (fs.existsSync(projectPath)) {
       return res.status(409).json({ error: `Project "${safeName}" already exists` });

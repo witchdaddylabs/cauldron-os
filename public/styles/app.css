@@ -349,6 +349,35 @@ h1, h2, h3, .display-title {
   color: var(--text-muted);
 }
 
+.key-health {
+  display: grid;
+  gap: 3px;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.035);
+  font-size: 13px;
+}
+.key-health strong {
+  color: var(--text-strong);
+}
+.key-health span {
+  color: var(--text-muted);
+}
+.key-health.is-ready {
+  border-color: rgba(52, 211, 153, 0.36);
+  background: rgba(52, 211, 153, 0.07);
+}
+.key-health.is-testing {
+  border-color: rgba(251, 191, 36, 0.36);
+  background: rgba(251, 191, 36, 0.07);
+}
+.key-health.is-failed,
+.key-health.is-missing {
+  border-color: rgba(251, 113, 133, 0.36);
+  background: rgba(251, 113, 133, 0.07);
+}
+
 .app-grid {
   min-height: 0;
   display: grid;
@@ -697,6 +726,13 @@ select:focus {
 }
 .empty-preview h3 { font-size: clamp(30px, 3vw, 54px); }
 .empty-preview p { max-width: 520px; color: var(--text-muted); font-size: 18px; line-height: 1.45; }
+.empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 18px;
+}
 
 .statusbar {
   min-height: var(--statusbar);
@@ -739,6 +775,10 @@ select:focus {
   width: min(420px, calc(100vw - 40px));
 }
 .toast {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
   border: 1px solid rgba(193,255,0,0.26);
   background: rgba(7,8,13,0.92);
   box-shadow: var(--shadow-pop);
@@ -746,8 +786,32 @@ select:focus {
   color: var(--text);
 }
 .toast strong { display: block; margin-bottom: 4px; color: var(--acid-500); }
+.toast.success { border-color: rgba(52, 211, 153, 0.38); }
+.toast.success strong { color: #34d399; }
+.toast.warn { border-color: rgba(251, 191, 36, 0.42); }
+.toast.warn strong { color: #fbbf24; }
 .toast.error { border-color: rgba(251, 113, 133, 0.38); }
 .toast.error strong { color: var(--danger); }
+.toast-close {
+  min-height: 28px;
+  padding: 0 8px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: var(--text-muted);
+  background: transparent;
+  font-family: var(--font-code);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.toast-close:hover {
+  color: var(--text-strong);
+  border-color: rgba(255,255,255,0.26);
+}
+
+.pipeline-empty {
+  color: #72727d;
+  font-style: italic;
+  font-size: 12px;
+}
 
 .loading-sheen {
   position: relative;

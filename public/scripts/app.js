@@ -25,6 +25,9 @@ function cauldronApp() {
     pendingActionAfterKey: '',
     savedKeyVersion: 0,
     keyStatus: 'No saved key loaded.',
+    keyHealth: 'unknown',
+    keyHealthMessage: 'Not tested yet.',
+    keyTestBusy: false,
     generatedAt: null,
     savedDraftId: null,
     handoffResult: null,
@@ -83,6 +86,13 @@ function cauldronApp() {
     pipelineLog: [],
     pipelineView: 'preview',
     pipelineComplete: null,
+    pipelineProgress: null,
+    pipelineStartedAt: 0,
+    progressTimer: null,
+    progressEstimates: {
+      blueprint: 120,
+      prototype: 180,
+    },
 
     get activeIndex() {
       return this.stages.findIndex(stage => stage.id === this.activeStage);
@@ -141,14 +151,33 @@ function cauldronApp() {
       return this.prototypeIterations.slice(-5).reverse();
     },
 
+    get pipelineProgressPercent() {
+      return Math.max(0, Math.min(100, Number(this.pipelineProgress?.percent) || 0));
+    },
+
+    get pipelineProgressLabel() {
+      if (!this.pipelineProgress) return 'Idle';
+      return `${this.pipelineProgress.label} · ${Math.round(this.pipelineProgressPercent)}%`;
+    },
+
+    get pipelineEmptyMessage() {
+      if (this.busy) return 'Pipeline activity will appear as each stage reports back.';
+      if (!this.blueprint) return 'Generate a blueprint to populate the activity log.';
+      if (!this.prototypeHtml) return 'Generate or critique a prototype to see review activity here.';
+      return 'No recent activity. Run a stage to refresh the log.';
+    },
+
     init() {
       this.loadStageConfig();
       this.loadConfig();
       this.loadRecords();
       this.loadSavedKey(false);
+      this.bindKeyboardShortcuts();
       this.$watch('form.provider', () => {
         this.ensureCloudModel();
         this.loadSavedKey(false);
+        this.keyHealth = 'unknown';
+        this.keyHealthMessage = 'Not tested yet.';
       });
       this.$watch('stageModels', () => this.saveStageConfig(), { deep: true });
       this.$watch('tasteInjectionEnabled', () => this.saveStageConfig());
@@ -158,7 +187,7 @@ function cauldronApp() {
       await Promise.allSettled([
         this.api('/api/design-systems').then(data => { this.designSystems = data.systems || []; }),
         this.api('/api/templates').then(data => { this.templates = data.templates || []; }),
-        this.api('/api/cloud-models').then(data => { this.cloudModels = data || {}; this.ensureCloudModel(); }),
+        this.api('/api/cloud-models').then(data => { this.cloudModels = data.providers || data || {}; this.ensureCloudModel(); }),
         this.loadBuildAgents(),
       ]);
 
@@ -202,6 +231,8 @@ function cauldronApp() {
         localStorage.setItem(this.keyStorageKey, key);
         this.savedKeyVersion += 1;
         this.keyStatus = `Saved ${this.form.provider} key locally in this browser.`;
+        this.keyHealth = 'unknown';
+        this.keyHealthMessage = 'Saved key not tested yet.';
         this.toast('Key saved', `${this.form.provider} key saved locally. The flow can use it now.`);
         const pendingStage = this.pendingStageAfterKey;
         const pendingAction = this.pendingActionAfterKey;
@@ -229,6 +260,8 @@ function cauldronApp() {
         this.keyStatus = saved
           ? `Loaded saved ${this.form.provider} key from this browser.`
           : `No saved ${this.form.provider} key in this browser.`;
+        this.keyHealth = saved ? 'unknown' : 'missing';
+        this.keyHealthMessage = saved ? 'Loaded key not tested yet.' : 'No saved key available.';
         if (showToast) {
           this.toast(saved ? 'Key loaded' : 'No saved key', this.keyStatus, saved ? 'info' : 'error');
         }
@@ -246,6 +279,8 @@ function cauldronApp() {
         this.pendingStageAfterKey = '';
         this.pendingActionAfterKey = '';
         this.keyStatus = `Forgot saved ${this.form.provider} key.`;
+        this.keyHealth = 'missing';
+        this.keyHealthMessage = 'No key saved for this provider.';
         this.toast('Key forgotten', `${this.form.provider} key removed from local browser storage.`);
       } catch (error) {
         this.toast('Could not forget key', error.message, 'error');
@@ -298,6 +333,33 @@ function cauldronApp() {
       this.settingsOpen = false;
     },
 
+    async testApiKey() {
+      if (!this.ensureApiKey('Provider connection test')) return;
+      this.keyTestBusy = true;
+      this.keyHealth = 'testing';
+      this.keyHealthMessage = 'Testing provider route...';
+      try {
+        const data = await this.api('/api/clarify', {
+          method: 'POST',
+          body: JSON.stringify(this.modelPayload('interrogate', {
+            prompt: 'Health check only. Reply with the minimum valid clarification payload.',
+          })),
+        });
+        const count = Array.isArray(data.questions) ? data.questions.length : 0;
+        this.keyHealth = 'ready';
+        this.keyHealthMessage = `Provider responded; ${count} check question${count === 1 ? '' : 's'} parsed.`;
+        this.keyStatus = `${this.form.provider} connection test passed.`;
+        this.toast('Provider ready', this.keyHealthMessage, 'success');
+      } catch (error) {
+        this.keyHealth = 'failed';
+        this.keyHealthMessage = error.message;
+        this.keyStatus = `Connection test failed for ${this.form.provider}.`;
+        this.toast('Connection failed', error.message, 'error');
+      } finally {
+        this.keyTestBusy = false;
+      }
+    },
+
     async loadBuildAgents() {
       this.buildAgentDetecting = true;
       try {
@@ -341,9 +403,15 @@ function cauldronApp() {
       this.clarifyResult = null;
       this.blueprint = '';
       this.prototypeHtml = '';
+      this.critiqueText = '';
+      this.prototypeIterations = [];
+      this.activePrototypeVersion = 0;
       this.buildSession = null;
       this.buildFiles = [];
       this.workspacePreviewUrl = '';
+      this.pipelineLog = [];
+      this.pipelineComplete = null;
+      this.pipelineProgress = null;
       this.previewMode = 'prototype';
       this.status = 'New workspace ready.';
       this.toast('New workspace', 'Cleared the brew without touching saved API keys.');
@@ -357,6 +425,61 @@ function cauldronApp() {
     setStage(stageId) {
       this.activeStage = stageId;
       this.announce(`Stage changed to ${this.activeStageMeta.label}`);
+    },
+
+    goToStageOffset(offset) {
+      const nextIndex = Math.max(0, Math.min(this.stages.length - 1, this.activeIndex + offset));
+      this.setStage(this.stages[nextIndex].id);
+    },
+
+    handleShortcut(event) {
+      const isMod = event.metaKey || event.ctrlKey;
+      if (!isMod) return;
+
+      const tag = String(event.target?.tagName || '').toLowerCase();
+      const isTyping = ['input', 'textarea', 'select'].includes(tag);
+
+      if (event.key === 's') {
+        event.preventDefault();
+        this.saveDraft();
+        return;
+      }
+
+      if (event.key === 'Enter') {
+        if (this.busy) return;
+        if (this.activeStage === 'dump' || this.activeStage === 'interrogate') {
+          event.preventDefault();
+          this.runInterrogate();
+        } else if (this.activeStage === 'blueprint') {
+          event.preventDefault();
+          this.generateBlueprint();
+        } else if (this.activeStage === 'prototype' && this.prototypeHtml && this.critiqueText.trim()) {
+          event.preventDefault();
+          this.submitCritique();
+        }
+        return;
+      }
+
+      if (event.shiftKey && event.key.toLowerCase() === 'p') {
+        event.preventDefault();
+        this.goToStageOffset(-1);
+        return;
+      }
+
+      if (event.shiftKey && event.key.toLowerCase() === 'n') {
+        event.preventDefault();
+        this.goToStageOffset(1);
+        return;
+      }
+
+      if (event.key === 'Tab' && !isTyping) {
+        event.preventDefault();
+        this.switchPipelineView(this.pipelineView === 'preview' ? 'log' : 'preview');
+      }
+    },
+
+    bindKeyboardShortcuts() {
+      window.addEventListener('keydown', event => this.handleShortcut(event));
     },
 
     nextStage() {
@@ -517,6 +640,13 @@ function cauldronApp() {
         : `OpenAI${config.cloudModel ? ' / ' + config.cloudModel : ''}`;
     },
 
+    stageProgressLabel(stage) {
+      if (!stage) return 'Pipeline stage';
+      if (this.activeStage === stage.id) return `${stage.label}, current stage`;
+      if (this.completedStages.has(stage.id)) return `${stage.label}, complete`;
+      return `${stage.label}, not started`;
+    },
+
     buildGenerationPrompt() {
       const answerLines = (this.clarifyResult?.questions || [])
         .map(q => `- ${q.label}\n  Answer: ${this.answers[q.id] || '(not answered)'}`)
@@ -603,6 +733,7 @@ ${this.form.projectType === 'app' ? `
       this.pipelineLog = [];
       this.pipelineComplete = null;
       this.pipelineView = 'log';
+      this.startPipelineProgress('blueprint', 'Generating blueprint');
       this.busy = true;
       this.status = 'Generating blueprint + prototype...';
 
@@ -659,6 +790,7 @@ ${this.form.projectType === 'app' ? `
                   duration: event.duration,
                   steps: event.steps,
                 };
+                this.finishPipelineProgress('Blueprint generated');
               }
             } catch (e) {
               // Not JSON — skip
@@ -680,6 +812,7 @@ ${this.form.projectType === 'app' ? `
       } catch (err) {
         console.error(err);
         this.status = `Failed: ${err.message}`;
+        this.finishPipelineProgress('Blueprint failed', true);
         this.toast('Something went sideways', err.message, 'error');
       } finally {
         this.busy = false;
@@ -699,6 +832,7 @@ ${this.form.projectType === 'app' ? `
       this.pipelineLog = [];
       this.pipelineComplete = null;
       this.pipelineView = 'log';
+      this.startPipelineProgress('prototype', critique ? 'Applying critique' : 'Generating prototype');
       this.busy = true;
       this.status = critique ? 'Regenerating prototype from critique...' : 'Generating prototype from blueprint...';
 
@@ -764,6 +898,7 @@ ${this.form.projectType === 'app' ? `
                   duration: event.duration,
                   steps: 2,
                 };
+                this.finishPipelineProgress(critique ? 'Critique applied' : 'Prototype generated');
               }
             } catch (e) {
               // Not JSON — skip
@@ -785,6 +920,7 @@ ${this.form.projectType === 'app' ? `
       } catch (err) {
         console.error(err);
         this.status = `Failed: ${err.message}`;
+        this.finishPipelineProgress('Prototype failed', true);
         this.toast('Something went sideways', err.message, 'error');
       } finally {
         this.busy = false;
@@ -839,7 +975,7 @@ ${this.form.projectType === 'app' ? `
 
     addPipelineEntry(event) {
       const time = new Date().toLocaleTimeString('en-AU', { hour12: false });
-      const icons = { active: '🔄', complete: '✅', error: '❌', warn: '⚠️' };
+      const icons = { active: '...', complete: 'ok', error: '!', warn: '!' };
       const entry = {
         step: event.step,
         total: event.total,
@@ -850,18 +986,60 @@ ${this.form.projectType === 'app' ? `
         icon: icons[event.status] || '○',
         message: event.message || null,
       };
-      // If active entry for step exists, update it (don't duplicate)
-      const existing = this.pipelineLog.findIndex(e => e.step === event.step && e.status !== 'active');
-      if (event.status === 'active') {
-        // Remove previous same-step entry
-        const prev = this.pipelineLog.findIndex(e => e.step === event.step);
-        if (prev >= 0) this.pipelineLog.splice(prev, 1);
-      }
+      const previousStep = this.pipelineLog.findIndex(e => e.step === event.step);
+      if (previousStep >= 0) this.pipelineLog.splice(previousStep, 1);
       this.pipelineLog.push(entry);
+    },
+
+    startPipelineProgress(kind, label) {
+      this.stopPipelineProgress();
+      const estimateSeconds = this.progressEstimates[kind] || 120;
+      this.pipelineStartedAt = Date.now();
+      this.pipelineProgress = {
+        kind,
+        label,
+        estimateSeconds,
+        elapsedSeconds: 0,
+        percent: 3,
+        status: 'active',
+      };
+      this.progressTimer = window.setInterval(() => {
+        if (!this.pipelineProgress) return;
+        const elapsedSeconds = (Date.now() - this.pipelineStartedAt) / 1000;
+        const percent = Math.min(94, (elapsedSeconds / estimateSeconds) * 100);
+        this.pipelineProgress = {
+          ...this.pipelineProgress,
+          elapsedSeconds,
+          percent,
+        };
+      }, 500);
+    },
+
+    finishPipelineProgress(label = 'Complete', failed = false) {
+      if (!this.pipelineProgress) return;
+      this.pipelineProgress = {
+        ...this.pipelineProgress,
+        label,
+        percent: failed ? this.pipelineProgressPercent : 100,
+        status: failed ? 'error' : 'complete',
+      };
+      this.stopPipelineProgress(false);
+    },
+
+    stopPipelineProgress(clear = true) {
+      if (this.progressTimer) {
+        window.clearInterval(this.progressTimer);
+        this.progressTimer = null;
+      }
+      if (clear) this.pipelineProgress = null;
     },
 
     switchPipelineView(view) {
       this.pipelineView = view;
+    },
+
+    dismissToast(id) {
+      this.toasts = this.toasts.filter(toast => toast.id !== id);
     },
 
     extractHtml(markdown) {
@@ -999,6 +1177,14 @@ ${this.form.projectType === 'app' ? `
       this.toast('Draft loaded', `Loaded ${draft.project_name || 'untitled'}.`);
     },
 
+    async loadRecentDraft(draft) {
+      if (!draft?.id) return;
+      await this.withBusy('Loading latest draft...', async () => {
+        const data = await this.api(`/api/drafts/${draft.id}`);
+        this.loadDraft(data.draft);
+      });
+    },
+
     downloadBlueprint() {
       if (!this.blueprint) return;
       const blob = new Blob([this.blueprint], { type: 'text/markdown' });
@@ -1016,10 +1202,11 @@ ${this.form.projectType === 'app' ? `
 
     toast(title, message, type = 'info') {
       const id = crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random());
-      this.toasts.push({ id, title, message, type });
+      const duration = type === 'error' || type === 'warn' ? 8000 : 3200;
+      this.toasts = [...this.toasts, { id, title, message, type }].slice(-4);
       window.setTimeout(() => {
-        this.toasts = this.toasts.filter(t => t.id !== id);
-      }, 5200);
+        this.dismissToast(id);
+      }, duration);
     },
 
     announce(message) {

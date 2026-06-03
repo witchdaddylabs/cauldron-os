@@ -30,6 +30,7 @@ Important state names:
 | `form.designReference` | selected design-system id |
 | `form.templateId` | selected scaffold/template id |
 | `stageModels` | per-stage provider/model routing stored in localStorage |
+| `keyHealth` | Settings API-key connection health status |
 | `blueprint` | editable generated markdown |
 | `prototypeHtml` | generated HTML preview |
 | `critiqueText` | current natural-language prototype critique |
@@ -37,6 +38,7 @@ Important state names:
 | `buildSession` | active build workspace metadata |
 | `handoffResult` | latest export/handoff response |
 | `pipelineLog` | user-facing activity log |
+| `pipelineProgress` | estimated live progress for model-backed generation |
 
 Frontend agents should preserve these names unless the branch explicitly migrates the contract and updates tests.
 

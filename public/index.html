@@ -66,6 +66,34 @@
 .pipeline-summary .summary-link:hover {
   color: #d9d9dd;
 }
+.pipeline-progress {
+  display: grid;
+  gap: 8px;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(193, 255, 0, 0.14);
+  background: rgba(193, 255, 0, 0.045);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+}
+.pipeline-progress-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #a9b1a9;
+}
+.pipeline-progress-track {
+  height: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+}
+.pipeline-progress-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--acid-500), var(--purple-400));
+  transition: width 260ms var(--ease-out);
+}
 .pipeline-tabs {
   display: flex;
   gap: 4px;
@@ -225,6 +253,10 @@
           <div class="button-row">
             <button class="btn btn-purple" type="button" @click="settingsTab = 'api'">Open API keys</button>
           </div>
+          <div class="callout">
+            <strong>Keyboard shortcuts</strong>
+            <span style="display:block;margin-top:4px;">Cmd/Ctrl+Enter runs the current generation action, Cmd/Ctrl+S saves, Cmd/Ctrl+Shift+P/N moves stages, and Tab toggles Preview/Log when focus is outside a form control.</span>
+          </div>
         </div>
 
         <div class="settings-body" x-show="settingsTab === 'routing'">
@@ -326,11 +358,16 @@
                 <button class="btn btn-ghost" type="button" @click="apiKeyVisible = !apiKeyVisible" x-text="apiKeyVisible ? 'Hide' : 'Show'"></button>
               </div>
               <small><span x-text="keyStatus"></span> Saved keys stay in this browser's localStorage only.</small>
+              <div class="key-health" :class="`is-${keyHealth}`">
+                <strong x-text="keyHealth === 'ready' ? 'Connection ready' : keyHealth === 'testing' ? 'Testing connection' : keyHealth === 'failed' ? 'Connection failed' : keyHealth === 'missing' ? 'Key missing' : 'Connection untested'"></strong>
+                <span x-text="keyHealthMessage"></span>
+              </div>
             </div>
           </div>
 
           <div class="button-row key-actions" aria-label="API key storage controls">
             <button class="btn btn-primary" type="button" @click="saveCurrentKey" :disabled="!form.apiKey.trim()">Save key</button>
+            <button class="btn btn-purple" type="button" @click="testApiKey" :disabled="keyTestBusy || !hasUsableApiKey" x-text="keyTestBusy ? 'Testing...' : 'Test connection'"></button>
             <button class="btn btn-purple" type="button" @click="loadSavedKey">Load saved</button>
             <button class="btn btn-ghost danger" type="button" @click="forgetSavedKey" :disabled="!hasSavedProviderKey">Forget saved key</button>
           </div>
@@ -355,6 +392,7 @@
                 class="stage-tab"
                 type="button"
                 @click="setStage(stage.id)"
+                :aria-label="stageProgressLabel(stage)"
                 :aria-current="activeStage === stage.id ? 'step' : null"
                 :class="{ 'is-complete': completedStages.has(stage.id) && activeStage !== stage.id }"
               >
@@ -510,13 +548,13 @@
                 <div x-show="selectedReferoStyle" style="display:flex;align-items:center;gap:8px;margin-top:6px;padding:6px 10px;background:rgba(183,148,246,0.08);border:1px solid rgba(183,148,246,0.2);border-radius:4px;">
                   <span style="font-size:10px;font-weight:600;color:var(--purple-400);text-transform:uppercase;letter-spacing:0.05em;">Active:</span>
                   <img
-                    x-show="selectedReferoStyle.thumbnailUrl"
-                    :src="selectedReferoStyle.thumbnailUrl"
-                    :alt="selectedReferoStyle.siteName"
+                    x-show="selectedReferoStyle?.thumbnailUrl"
+                    :src="selectedReferoStyle?.thumbnailUrl || ''"
+                    :alt="selectedReferoStyle?.siteName || 'Selected Refero style'"
                     style="width:32px;height:24px;border-radius:2px;object-fit:cover;"
                   />
-                  <span style="font-weight:600;" x-text="selectedReferoStyle.siteName"></span>
-                  <template x-for="(color, idx) in (selectedReferoStyle.colors || []).slice(0, 3)" :key="idx">
+                  <span style="font-weight:600;" x-text="selectedReferoStyle?.siteName || ''"></span>
+                  <template x-for="(color, idx) in (selectedReferoStyle?.colors || []).slice(0, 3)" :key="idx">
                     <span :style="'display:inline-block;width:14px;height:14px;border-radius:2px;background:' + color + ';border:1px solid rgba(255,255,255,0.15);'" :title="color"></span>
                   </template>
                   <button class="btn btn-ghost" type="button" @click="clearReferoSearch" style="margin-left:auto;font-size:11px;padding:2px 8px;">Clear</button>
@@ -769,9 +807,19 @@
         </div>
 
         <div class="output-frame-wrap">
+          <div class="pipeline-progress" x-show="pipelineProgress && pipelineView === 'log'">
+            <div class="pipeline-progress-head">
+              <span x-text="pipelineProgressLabel"></span>
+              <span x-text="`${Math.round(pipelineProgress?.elapsedSeconds || 0)}s / ~${pipelineProgress?.estimateSeconds || 0}s`"></span>
+            </div>
+            <div class="pipeline-progress-track" role="progressbar" :aria-valuenow="Math.round(pipelineProgressPercent)" aria-valuemin="0" aria-valuemax="100">
+              <span :style="`width:${pipelineProgressPercent}%`"></span>
+            </div>
+          </div>
+
           <!-- Pipeline Summary Bar -->
           <div class="pipeline-summary" x-show="pipelineComplete && pipelineView === 'log'">
-            <span>✅</span>
+            <span>OK</span>
             <span>Generated in <span x-text="pipelineComplete?.duration?.toFixed(1)"></span>s · <span x-text="pipelineComplete?.steps"></span> steps</span>
             <span class="summary-link" @click="switchPipelineView('log')">[View Log]</span>
           </div>
@@ -779,7 +827,7 @@
           <!-- Pipeline Log Container -->
           <div class="pipeline-container" x-show="pipelineView === 'log'" :class="{ active: pipelineView === 'log' }">
             <div class="pipeline-log">
-              <template x-for="entry in pipelineLog" :key="entry.step + entry.status">
+              <template x-for="entry in pipelineLog" :key="entry.step">
                 <div class="pipeline-entry">
                   <span class="time" x-text="entry.time"></span>
                   <span class="msg">
@@ -792,32 +840,37 @@
                 </div>
               </template>
               <template x-if="pipelineLog.length === 0">
-                <p style="color:#72727d;font-style:italic;font-size:12px;">Waiting for pipeline activity...</p>
+                <p class="pipeline-empty" x-text="pipelineEmptyMessage"></p>
               </template>
             </div>
           </div>
 
-          <template x-if="!blueprint && !prototypeHtml">
+          <template x-if="pipelineView === 'preview' && !blueprint && !prototypeHtml">
             <div class="empty-preview">
               <div>
-                <p class="kicker">Awaiting smoke</p>
-                <h3>Nothing brewed yet.</h3>
-                <p>Once you generate, this panel becomes the working prototype or the structured blueprint. Until then it is just a pretty sewer grate.</p>
+                <p class="kicker">Ready for a brief</p>
+                <h3>Start with a sharp idea.</h3>
+                <p>Use a sample prompt, open a recent draft, or paste a raw product thought. The preview becomes useful as soon as blueprint or prototype output exists.</p>
+                <div class="empty-actions">
+                  <button class="btn btn-primary" type="button" @click="form.brainDump = 'A premium landing page for an AI research notebook with saved sources, critique history, and a calm editorial interface.'; setStage('dump')">Use sample prompt</button>
+                  <button class="btn btn-purple" type="button" @click="openSettings('routing')">Check routing</button>
+                  <button class="btn btn-ghost" type="button" @click="loadRecentDraft(recentDrafts[0])" :disabled="!recentDrafts.length">Load latest draft</button>
+                </div>
               </div>
             </div>
           </template>
 
           <iframe
-            x-show="(pipelineView === 'preview' || !pipelineLog.length) && previewMode === 'prototype' && prototypeHtml"
+            x-show="pipelineView === 'preview' && previewMode === 'prototype' && prototypeHtml"
             class="preview-iframe"
             title="Generated prototype preview"
             sandbox="allow-scripts allow-forms allow-same-origin"
             :srcdoc="prototypeHtml"
           ></iframe>
 
-          <pre x-show="previewMode === 'blueprint' && blueprint" class="blueprint-output" x-text="blueprint"></pre>
+          <pre x-show="pipelineView === 'preview' && previewMode === 'blueprint' && blueprint" class="blueprint-output" x-text="blueprint"></pre>
 
-          <pre x-show="previewMode === 'prototype' && blueprint && !prototypeHtml" class="output-code">No HTML prototype block found yet. Switch to Blueprint to inspect the response.</pre>
+          <pre x-show="pipelineView === 'preview' && previewMode === 'prototype' && blueprint && !prototypeHtml" class="output-code">No HTML prototype block found yet. Switch to Blueprint to inspect the response.</pre>
         </div>
       </aside>
     </main>
@@ -837,9 +890,12 @@
 
   <div class="toast-stack" aria-live="assertive" aria-label="Notifications">
     <template x-for="toast in toasts" :key="toast.id">
-      <div class="toast" :class="toast.type">
-        <strong x-text="toast.title"></strong>
-        <span x-text="toast.message"></span>
+      <div class="toast" :class="toast.type" :role="toast.type === 'error' ? 'alert' : 'status'">
+        <div>
+          <strong x-text="toast.title"></strong>
+          <span x-text="toast.message"></span>
+        </div>
+        <button class="toast-close" type="button" @click="dismissToast(toast.id)" aria-label="Dismiss notification">Close</button>
       </div>
     </template>
   </div>

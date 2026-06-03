@@ -822,6 +822,7 @@ ${this.form.projectType === 'app' ? `
     async generatePrototype(options = {}) {
       if (options?.target) options = {};
       const critique = String(options.critique || '').trim();
+      const estimatedTokens = options.estimatedTokens || null;
       const previousPrototypeHtml = critique ? this.prototypeHtml : '';
 
       if (!this.blueprint.trim()) {
@@ -834,7 +835,8 @@ ${this.form.projectType === 'app' ? `
       this.pipelineView = 'log';
       this.startPipelineProgress('prototype', critique ? 'Applying critique' : 'Generating prototype');
       this.busy = true;
-      this.status = critique ? 'Regenerating prototype from critique...' : 'Generating prototype from blueprint...';
+      const tokenNote = estimatedTokens ? ` (~${estimatedTokens} tokens)` : '';
+      this.status = critique ? `Regenerating prototype from critique${tokenNote}...` : 'Generating prototype from blueprint...';
 
       try {
         const res = await fetch('/api/generate-prototype', {
@@ -937,7 +939,17 @@ ${this.form.projectType === 'app' ? `
         this.toast('No prototype', 'Generate a prototype before critiquing it.', 'error');
         return;
       }
-      await this.generatePrototype({ critique });
+      const iterationCount = this.prototypeIterations.filter(i => i.critique !== 'Initial prototype').length;
+      if (iterationCount >= 3) {
+        this.toast('Critique limit reached', '3 iterations per session. Start a new draft for more.', 'warn');
+        return;
+      }
+      if (iterationCount === 2) {
+        this.toast('Last critique', 'This is the final iteration for this session (3/3).', 'warn');
+      }
+      const estimatedTokens = Math.round((this.blueprint.length + critique.length) * 0.3);
+      this.critiqueText = '';
+      await this.generatePrototype({ critique, estimatedTokens });
     },
 
     recordPrototypeIteration({ critique = '', previousHtml = '', html = '' } = {}) {

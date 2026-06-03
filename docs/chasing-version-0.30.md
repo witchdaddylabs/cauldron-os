@@ -2,7 +2,7 @@
 
 > **Author:** Claudia (COO, Witch Daddy Labs)
 > **Context:** Competitive research against Open Design, Dyad, Taste-Skill, and the broader AI-prototyping landscape (June 2026).
-> **Goal:** A structured, autonomous-ready plan that gets Cauldron OS from v0.260 to v0.30 — a compelling open-source design-to-prototype pipeline.
+> **Goal:** A structured, autonomous-ready plan that gets Cauldron OS from v0.30 to v0.30 — a compelling open-source design-to-prototype pipeline.
 
 ---
 

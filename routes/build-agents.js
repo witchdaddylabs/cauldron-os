@@ -31,6 +31,7 @@ function registerBuildAgentRoutes(app, deps) {
       projectType = 'app',
       sessionId = '',
       dryRun = false,
+      bootstrap = false,
     } = req.body || {};
 
     if (!projectName || (!blueprint && !sessionId)) {
@@ -46,7 +47,8 @@ function registerBuildAgentRoutes(app, deps) {
 
     try {
       const designSystemContent = await ensureDesignSystem(designReference);
-      const handoff = createHandoffPackage({
+      const shouldBootstrap = Boolean(req.body.bootstrap);
+      const handoff = await createHandoffPackage({
         projectPath,
         projectName,
         safeName,
@@ -60,6 +62,7 @@ function registerBuildAgentRoutes(app, deps) {
         sessionId,
         workspace,
         agentId,
+        bootstrap: shouldBootstrap,
       });
 
       const launch = launchBuildAgent({ agentId, projectPath, dryRun });
@@ -109,6 +112,7 @@ function registerBuildAgentRoutes(app, deps) {
         draftId,
         files: handoff.files,
         filesCopied: handoff.filesCopied,
+        bootstrap: handoff.bootstrap || null,
       });
     } catch (err) {
       console.error('[Cauldron] Build agent run error:', err);

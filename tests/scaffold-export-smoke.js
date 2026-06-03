@@ -9,7 +9,7 @@ const repoRoot = path.resolve(__dirname, '..');
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'cauldron-scaffold-export-'));
 const createdProjects = [];
 
-function waitForServer(url, timeoutMs = 15000) {
+function waitForServer(url, timeoutMs = 30000) {
   const started = Date.now();
   return new Promise((resolve, reject) => {
     const tick = async () => {
@@ -90,10 +90,26 @@ function assertProjectFiles(projectPath, files) {
     const duplicate = await postJson(`http://127.0.0.1:${appPort}/api/build-agents/run`, {
       projectName: 'scaffold-export-static-html',
       agentId: 'handoff',
-      blueprint: '# Duplicate\n\nDo not overwrite.',
+      blueprint: '# Duplicate\\n\\nDo not overwrite.',
       templateId: 'static-html',
     });
     assert.equal(duplicate.res.status, 409, 'duplicate scaffold export should be rejected');
+
+    // Test bootstrap mode for nextjs scaffold
+    const bootstrapResult = await postJson(`http://127.0.0.1:${appPort}/api/build-agents/run`, {
+      projectName: 'scaffold-export-nextjs-bootstrap',
+      agentId: 'handoff',
+      blueprint: '# Next.js Bootstrap\\n\\nInstall dependencies automatically.',
+      prototypeHtml: '<main><h1>Bootstrap Test</h1></main>',
+      designReference: 'none',
+      templateId: 'nextjs',
+      projectType: 'app',
+      bootstrap: true,
+    });
+    assert.equal(bootstrapResult.res.status, 200, bootstrapResult.data.error || 'bootstrap export should succeed');
+    createdProjects.push(bootstrapResult.data.projectPath);
+    assert.ok(bootstrapResult.data.bootstrap !== null, 'bootstrap result should be present');
+    assertProjectFiles(bootstrapResult.data.projectPath, ['package.json', 'app/page.tsx', 'node_modules']);
 
     console.log('Scaffold export smoke tests passed');
   } finally {

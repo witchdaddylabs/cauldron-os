@@ -1,7 +1,7 @@
 # Cauldron OS
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.260-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.30-blue.svg)](CHANGELOG.md)
 [![Node](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org)
 [![GitHub](https://img.shields.io/badge/github-witchdaddylabs-181717.svg)](https://github.com/witchdaddylabs)
 
@@ -11,11 +11,11 @@
 
 </div>
 
-> **Bring the messy idea. Cauldron OS 0.260 brings the structure, taste, and next steps.**
+> **Bring the messy idea. Cauldron OS 0.30 brings the structure, taste, build agent, and next steps.**
 
-Cauldron OS 0.260 is a local-first workshop for AI-assisted builders. Drop in a rough app or website idea, choose a model or design reference, and Cauldron turns the mess into a structured product blueprint with architecture notes, schema ideas, exportable docs, and a live HTML + AlpineJS prototype preview.
+Cauldron OS 0.30 is a local-first workshop for AI-assisted builders. Drop in a rough app or website idea, choose a model or design reference, and Cauldron turns the mess into a structured product blueprint with architecture notes, schema ideas, exportable docs, a live HTML + AlpineJS prototype preview, critique-driven iteration, and build-agent handoff with real scaffold generation.
 
-New in **0.260** (Sprint 5): Blueprint/Prototype split, route extraction refactor, Refero deep search integration, comprehensive smoke tests, and pipeline activity logging.
+New in **0.30** (5-Phase Codex Sprint): 150+ design systems from Open Design, BYOK build-agent handoff (Cursor, Claude Code, Codex, Hermes, OpenCode), critique & review loop with iteration history, scaffold export (Next.js, Astro, static HTML, AlpineJS), UI polish (progress bars, keyboard shortcuts, responsive layout, settings modal, toast notifications).
 
 It is built for hobbyists, indie builders, designers, enthusiasts, and developers who want better AI output than "make me a nice dashboard".
 
@@ -40,7 +40,7 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 
 ---
 
-## What Cauldron does (v0.260 — 7-Stage Pipeline)
+## What Cauldron does (v0.30 — 8-Stage Pipeline)
 
 1. **You brain-dump the idea**<br>
    Write naturally. Messy is fine. Paste reference URLs if you have them.
@@ -54,14 +54,17 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 4. **The model creates a blueprint**<br>
    You get product notes, architecture direction, schema ideas, security considerations, and implementation guidance.
 
-5. **You get a live prototype preview**<br>
-   Cauldron generates an HTML + AlpineJS prototype so you can see and click through the shape of the idea, not just read about it.
+5. **You get a live prototype preview + critique loop**<br>
+   Cauldron generates an HTML + AlpineJS prototype so you can see and click through the shape of the idea. Give natural-language feedback ("make the header bolder", "tighter spacing") and Cauldron regenerates the prototype in-place. Up to 3 critique iterations per session, with full iteration history and restore.
 
-6. **Build mode**<br>
-   Sandboxed workspace with file listing, live preview, and XML tool agent. Iterate on the generated prototype directly in the browser.
+6. **Build-agent handoff**<br>
+   Generate a handoff package with blueprint, prototype, design tokens, and a `cauldron.project.json` manifest — then launch it in your preferred agent CLI (Cursor, Claude Code, Codex, Hermes, OpenCode) or save it for later.
 
-7. **Export and handoff**<br>
-   Drafts and history are stored locally. Export Markdown/JSON, download the prototype HTML, or hand the blueprint to a coding agent like OpenCode.
+7. **Scaffold export**<br>
+   Export as a real project scaffold: Next.js (TypeScript), Astro, static HTML, or AlpineJS. Each scaffold includes a runnable project skeleton with package.json, layout, and starter content wired to your blueprint and design system.
+
+8. **Export and handoff**<br>
+   Drafts and history are stored locally. Export Markdown/JSON, download the prototype HTML, or hand the blueprint to a coding agent.
 
 ---
 
@@ -84,30 +87,34 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 
 - Turn rough ideas into structured build blueprints
 - **Annoying PM Mode**: interrogate rough ideas with a product-manager question pass before generation, then fold the answers into the final blueprint prompt
+- **Critique loop**: Give natural-language feedback on prototypes and regenerate in-place, with iteration history (v0.30)
 - **Iterative Refinement**: Tweak generated blueprints with conversational prompts instead of starting from scratch
 - Run locally with Ollama — no API costs and no data leaving your machine
 - Optional cloud fallback using your own OpenAI or Google AI Studio API key
 - Save/load drafts locally with searchable history
 - Export blueprints as Markdown or JSON
 - Save and download blueprints with one click
-- **One-Click Downloads**: Download the generated raw HTML + AlpineJS `prototype.html` directly to your machine (v0.260: separate prototype from blueprint for clearer handoff)
-- Create project folders with blueprint + OpenCode stub for your preferred coding tool
+- **One-Click Downloads**: Download the generated raw HTML + AlpineJS `prototype.html` directly to your machine
+- Create project folders with blueprint + agent stub for your preferred coding tool
+- **Keyboard shortcuts**: Cmd/Ctrl+Enter to generate, Cmd/Ctrl+S to save, Cmd/Ctrl+Shift+P/N to move stages (v0.30)
 
 ### For design-conscious builders
 
 - Expanded Design Reference dropdown with 150+ local `DESIGN.md` systems imported from Open Design, plus Refero style search for live inspiration
 - **Refero Style Search** — Search the live Refero design directory for inspiration (results cached for 5 minutes)
 - Dedicated one-URL cloner target field plus Brain Dump URL detection
-- **Deep URL research mode** — Uses Playwright to extract CSS variables, fonts, colours, and layout hints from reference sites
+- **Deep URL research mode** — Uses Playwright to extract CSS variables, fonts, colours, and layout patterns from reference sites
 - Taste guardrails that avoid generic AI UI sludge: default Inter/Roboto, pure black, nested cards, and tired blue gradients
 - Prompts for stronger spacing, typography, component states, and micro-interactions
 
 ### For power users
 
+- **BYOK Build Agent Handoff** — Detect installed agent CLIs (Cursor, Claude Code, Codex, Hermes, OpenCode) and launch builds directly from the pipeline. Handoff includes blueprint, prototype, design tokens, and a `cauldron.project.json` manifest (v0.30)
+- **Scaffold Export** — Generate real project scaffolds: Next.js with TypeScript, Astro, static HTML, or AlpineJS. Each scaffold is a runnable project skeleton wired to your blueprint (v0.30)
 - **XML Tool Agent System** — Multi-turn build agent that writes, edits, and runs code in a sandboxed workspace
 - **Workspace preview** — Live HTML preview of built files via `/workspace-preview/`
-- **Pipeline Activity Log** — Real-time NDJSON streaming showing each stage's progress (v0.260)
-- **7-stage pipeline** — Brain Dump → Interrogate → Design System → Blueprint → Prototype → Build → Export
+- **Pipeline Activity Log** — Real-time NDJSON streaming showing each stage's progress
+- **8-stage pipeline** — Brain Dump → Interrogate → Design System → Blueprint → Prototype → Build → Scaffold Export → Handoff
 - **Build mode** — Sandboxed workspace with file listing and agent-driven project generation
 - Public-safe local records layer using `sql.js`
 - Clear extension points for prompts, design systems, URL research, templates, and exporters
@@ -127,7 +134,9 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 8. Answer what you can in the pop-up. Blank answers are allowed and treated as unresolved assumptions.
 9. Click **Generate Blueprint** or press **Cmd/Ctrl + Enter**.
 10. Review the blueprint and HTML + AlpineJS preview.
-11. Save/download, export, or click **Save Prototype & Blueprint** to save a blueprint + OpenCode stub for your preferred tool.
+11. **Give critique**: type feedback in the critique box ("make the CTA more aggressive") or use quick buttons ("Make it bolder", "Tighter spacing", "Warmer palette", "More accessible"). Up to 3 iterations per session.
+12. Save/download, export, or click **Build with [Your Agent]** to generate a handoff package and launch it in Cursor, Claude Code, Codex, Hermes, or OpenCode.
+13. Or click **Export Scaffold** to generate a runnable Next.js, Astro, or static HTML project.
 
 ---
 
@@ -178,16 +187,17 @@ This means the model gets more than "build me an app". It gets taste, constraint
 ```text
 cauldron-os/
 ├── server.js               # Express backend, model proxy, prompt builder, research scraper
-├── routes/                 # Route barrel (build, drafts, generation, history, models, etc.)
-├── lib/                    # Core modules (model-client, research, agent-loop, workspace)
+├── routes/                 # Route barrel (build, build-agents, drafts, generation, history, models, etc.)
+├── lib/                    # Core modules (model-client, research, agent-loop, workspace, scaffold-generator, handoff-package, build-agents, design-system-catalog)
 ├── db/                     # Local sql.js records backend
 ├── public/
 │   └── index.html          # Frontend cockpit with HTML + AlpineJS preview
 ├── projects/               # Generated handoff projects (gitignored)
 ├── data/                   # Local runtime DB/drafts (gitignored)
-├── docs/                   # Architecture, install, contributing, and upgrade notes
+├── design-systems/         # 150+ imported Open Design DESIGN.md systems
+├── docs/                   # Architecture, contributing, BYOK contract, public interfaces, and upgrade notes
 ├── examples/               # Example blueprints/design references
-├── scripts/                # Validation/support scripts
+├── scripts/                # Validation/support scripts (import-design-systems, validate-design-systems)
 ├── assets/                 # Branding and screenshots
 ├── start-cauldron.bat      # Windows launcher
 ├── start-cauldron.ps1      # PowerShell launcher
@@ -237,10 +247,10 @@ Please read [CONTRIBUTING.md](docs/CONTRIBUTING.md) before opening a PR.
 
 Near-term public roadmap candidates:
 
-- Templates library
 - Blueprint diffing
 - Blueprint gallery
-- Basic scaffold generator
+- Multi-agent build orchestration
+- Plugin marketplace for community scaffolds
 
 ---
 

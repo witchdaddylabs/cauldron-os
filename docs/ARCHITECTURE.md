@@ -1,6 +1,6 @@
 # Cauldron OS Architecture
 
-**Version:** v0.260  
+**Version:** v0.30  
 **Core Principle:** Local-first, design-aware, multi-agent build pipeline.  
 **Tagline:** Sewer-to-ship. Brain dump to handoff. One OS.
 
@@ -107,7 +107,7 @@ db, xml-parser, workspace, tools, agent-loop
 | `/api/clarify` | POST | Annoying PM Mode — generates clarifying questions |
 | `/api/research-url` | POST | URL research (fast=regex, deep=Playwright) |
 | `/api/handoff` | POST | Save blueprint + prototype + OpenCode stub to `projects/` |
-| `/api/health` | GET | `{ status: 'ok', service: 'Cauldron OS v0.260' }` |
+| `/api/health` | GET | `{ status: 'ok', service: 'Cauldron OS v0.30' }` |
 
 #### Build API (XML Agent System)
 
@@ -796,7 +796,7 @@ erDiagram
 ```
 cauldron-os/
 ├── server.js                    # Express API server (~2,200 LOC)
-├── package.json                 # v0.260
+├── package.json                 # v0.30
 ├── lib/
 │   ├── agent-loop.js            # Multi-turn agent controller (MAX_ROUNDS=40)
 │   ├── tools.js                 # 7 tool definitions + execution engine
@@ -857,4 +857,4 @@ cauldron-os/
 
 ---
 
-*Architecture document version: v0.260 — Written by Hermes Agent for Witch Daddy Labs*
+*Architecture document version: v0.30 — Written by Hermes Agent for Witch Daddy Labs*

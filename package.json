@@ -1,6 +1,6 @@
 {
   "name": "cauldron-os",
-  "version": "0.260.0",
+  "version": "0.30.0",
   "description": "Local-first, design-aware blueprint generator with Annoying PM Mode for sharper AI-assisted development",
   "main": "server.js",
   "scripts": {

@@ -25,7 +25,7 @@ Initial target agents:
 
 Detection must be capability-based. If a command is missing, return `available: false`; do not fail the app.
 
-Current implementation note: `/api/build-agents` detects Cursor, Claude Code, Codex, Hermes, and OpenCode. `/api/build-agents/run` always creates the handoff package. Cursor and OpenCode support automated launch when detected; Claude Code, Codex, and Hermes are exposed as detected/manual fallback options until their invocation contracts are hardened.
+Current implementation note: `/api/build-agents` detects Cursor, Claude Code, Codex, Hermes, and OpenCode. `/api/build-agents/run` always creates the handoff package. All detected agents support automated launch; Cursor and OpenCode open the project directory directly, while Claude Code, Codex, and Hermes run the agent prompt in the project directory.
 
 ## Handoff Bundle
 

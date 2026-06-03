@@ -491,7 +491,7 @@ function registerGenerationRoutes(app, deps) {
 
     try {
       const designSystemContent = await ensureDesignSystem(designReference);
-      const handoff = createHandoffPackage({
+      const handoff = await createHandoffPackage({
         projectPath,
         projectName,
         safeName,

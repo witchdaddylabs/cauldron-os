@@ -23,7 +23,7 @@ function registerStatusRoutes(app, deps) {
   } = deps;
 
   app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok', service: 'Cauldron OS v0.260' });
+    res.json({ status: 'ok', service: 'Cauldron OS v0.30' });
   });
 }
 

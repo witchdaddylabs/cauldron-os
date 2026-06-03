@@ -1,4 +1,4 @@
-# Cauldron OS — Pipeline Activity Log (v0.260 Integration Spec)
+# Cauldron OS — Pipeline Activity Log (v0.30 Integration Spec)
 
 > **Author:** Camillo (Design Director, Witch Daddy Labs)
 > **Date:** 2026-05-18

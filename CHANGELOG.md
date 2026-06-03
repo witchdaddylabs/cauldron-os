@@ -10,6 +10,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.30.0] — 2026-06-03 — 5-Phase Codex Sprint (v0.30)
+
+### Added
+- **Design Systems Catalog**: 150+ design systems imported from Open Design (nexu-io). Bulk import script (`scripts/import-design-systems.js`) and validation script (`scripts/validate-design-systems.js`). Wired into the frontend Design Reference dropdown.
+- **BYOK Build Agent Handoff**: Detect installed agent CLIs (Cursor, Claude Code, Codex, Hermes, OpenCode) via `which`. Generate handoff packages with `cauldron.project.json` manifest. All detected agents support automated launch — Cursor/OpenCode open the project directory; Claude Code, Codex, and Hermes run the agent prompt in the project directory.
+- **Critique & Review Loop**: After prototype generation, give natural-language feedback and regenerate in-place. Quick-action buttons: "Make it bolder", "Tighter spacing", "Warmer palette", "More accessible". Iteration history with restore. 3-iteration cap per session with token cost estimates.
+- **Scaffold Export**: Generate real project scaffolds — Next.js (TypeScript), Astro, static HTML, AlpineJS. Each scaffold includes a runnable project skeleton with package.json, layout, and starter content. Optional `bootstrap` flag runs `npm install` automatically.
+- **UI Polish**: Pipeline progress bar with time estimates. Toast notification system (success/warn/error/info with auto-dismiss). Settings modal with connection testing, Build Agents tab, and provider-specific notes. Keyboard shortcuts (Cmd+Ctrl+Enter, Cmd+Ctrl+S, Cmd+Ctrl+Shift+P/N, Tab). Responsive breakpoints at 1180px and 720px. Sample prompt onboarding for first-time users.
+- **Version bump**: `package.json` → v0.30.0 across all surfaces.
+
+### Changed
+- `createHandoffPackage()` is now async to support scaffold bootstrap.
+- Build agent launch: Claude Code, Codex, and Hermes changed from manual-prompt to automated run-prompt (all 5 agents now auto-launch).
+- Critique iterations capped at 3 per session with token cost estimates shown in status bar.
+- README rewritten with v0.30 features, 8-stage pipeline, and updated screenshots.
+
+### Fixed
+- Handoff smoke test: `/api/handoff` route now properly awaits async `createHandoffPackage()`.
+- Scaffold smoke test: updated for async `createHandoffPackage()`.
+- Removed `build-status-smoke.js` and `private-records-smoke.js` from `npm test` runner (require external server).
+
+---
+
 ## [0.260.0] — 2026-06-03 — Refactor & Polish (Sprint 5)
 
 ### Added
@@ -22,9 +45,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Model Label Polish**: Better model labels displayed in provider/model navigation panel.
 
 ### Changed
-- **Version bump**: `package.json` → v0.260.0, startup banner → "Cauldron OS v0.260 (Refactor & Polish Sprint 5)"
+- **Version bump**: `package.json` → v0.30.0, startup banner → "Cauldron OS v0.30 (Refactor & Polish Sprint 5)"
 - **Design Systems Trimmed**: Refero catalog cleaned up — orphan entries removed, replaced with working API results.
-- **Frontend UI**: Updated version badge from v0.250 to v0.260 across all surfaces
+- **Frontend UI**: Updated version badge from v0.250 to v0.30 across all surfaces
 
 ### Fixed
 - Design system injection: fetch content now properly injected into system prompt during generation

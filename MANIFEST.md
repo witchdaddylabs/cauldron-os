@@ -1,6 +1,6 @@
 # Cauldron OS — Repository Manifest
 
-**Version:** 0.260.0 (pre-1.0 semver)
+**Version:** 0.30.0 (pre-1.0 semver)
 **License:** MIT
 **Org:** Witch Daddy Labs
 **Stack:** Node.js/Express, AlpineJS, sql.js, Playwright
@@ -16,7 +16,7 @@ This is what's in the box. No fluff. No corporate. Just the files and what they 
 ```
 server.js                — Express 5.x server (~2244 lines). Routes, model proxy, prompt builder,
                            Deep Playwright research, build pipeline, handoff. All of it.
-package.json             — v0.260.0. Dependencies: express ^5.2.1, playwright ^1.59.1, sql.js ^1.14.1
+package.json             — v0.30.0. Dependencies: express ^5.2.1, playwright ^1.59.1, sql.js ^1.14.1
 README.md                — Public docs with hero image and feature walkthrough
 LICENSE                  — MIT. Witch Daddy Labs.
 CHANGELOG.md             — Keep a Changelog format release history

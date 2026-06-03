@@ -72,8 +72,12 @@ function waitForServer(url, timeoutMs = 15000) {
     assert.strictEqual(manifest.designReference, 'cursor');
     assert.strictEqual(manifest.agent.mode, 'handoff-only');
     assert.strictEqual(manifest.files.agentPrompt, 'agent-prompt.md');
+    assert.strictEqual(manifest.scaffold.templateId, 'html-alpine');
+    assert.strictEqual(manifest.scaffold.entrypoint, 'index.html');
+    assert.ok(manifest.scaffold.files.some(file => file.path === 'index.html' && file.role === 'entry'), 'scaffold should include index.html entry metadata');
+    assert.ok(manifest.scaffold.files.some(file => file.path === 'app.js' && file.role === 'script'), 'html-alpine scaffold should include app.js script metadata');
 
-    for (const file of ['blueprint.md', 'prototype.html', 'design-system.md', 'README.md', 'agent-prompt.md', '.cursorrules']) {
+    for (const file of ['blueprint.md', 'prototype.html', 'design-system.md', 'README.md', 'agent-prompt.md', '.cursorrules', 'index.html', 'styles.css', 'app.js']) {
       assert.ok(fs.existsSync(path.join(runData.projectPath, file)), `${file} should be written`);
     }
 

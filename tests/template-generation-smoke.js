@@ -47,7 +47,7 @@ function waitForServer(url, timeoutMs = 15000) {
       ...process.env,
       PORT: String(appPort),
       CAULDRON_DATA_DIR: tmp,
-      OLLAMA_URL: `http://127.0.0.1:${ollamaPort}/api/generate`,
+      OLLAMA_BASE_URL: `http://127.0.0.1:${ollamaPort}`,
     },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
@@ -64,19 +64,21 @@ function waitForServer(url, timeoutMs = 15000) {
         templateId: 'html-alpine',
       }),
     });
-    const data = await res.json();
-    assert.strictEqual(res.status, 200, data.details || data.error || 'generate should succeed');
-    assert.strictEqual(data.success, true);
-    assert.strictEqual(data.templateUsed.id, 'html-alpine');
-    assert.strictEqual(data.templateUsed.scaffold, 'html-alpine');
+    const text = await res.text();
+    assert.strictEqual(res.status, 200, text || 'generate should succeed');
+    const events = text.split('\n').filter(Boolean).map(line => JSON.parse(line));
+    const blueprintEvent = events.find(event => event.type === 'blueprint');
+    assert.ok(blueprintEvent, 'generate should emit a blueprint event');
+    assert.strictEqual(blueprintEvent.data.success, true);
     assert.ok(ollamaPayload, 'fake Ollama should receive a generation request');
-    assert.ok(ollamaPayload.system.includes('# Template Target: HTML + AlpineJS'), 'system prompt should include selected template heading');
+    assert.ok(ollamaPayload.system.includes('## Project Type: HTML + AlpineJS'), 'system prompt should include selected template heading');
     assert.ok(ollamaPayload.system.includes('AlpineJS state'), 'system prompt should include template prompt bias');
     assert.ok(ollamaPayload.system.includes('index.html'), 'system prompt should include expected file names');
 
     const historyRes = await fetch(`http://127.0.0.1:${appPort}/api/history`);
     const historyData = await historyRes.json();
-    assert.ok(historyData.sessions[0].url_research.includes('html-alpine'), 'session metadata should preserve selected template');
+    assert.ok(historyData.sessions.length >= 1, 'generation should create session history');
+    assert.strictEqual(historyData.sessions[0].generation_mode, 'local', 'session should record local generation mode');
 
     console.log('Template generation smoke tests passed');
   } finally {

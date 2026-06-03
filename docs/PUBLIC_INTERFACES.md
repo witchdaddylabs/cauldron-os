@@ -129,8 +129,29 @@ Current `/api/handoff` and `/api/build-agents/run` output may include:
 | `agent-prompt.md` | prompt for a local build-agent CLI |
 | `.cursorrules` | Cursor-oriented project rules |
 | `.opencode/config.md` | OpenCode-oriented instructions |
+| template scaffold files | deterministic starter project files for the selected template |
 
 `/api/handoff` creates package files only. `/api/build-agents/run` creates the same package and may launch a detected CLI when the selected agent supports automated launch. Responses distinguish `mode: "handoff-only"`, `mode: "dry-run"`, and `mode: "launched"`.
+
+`cauldron.project.json.scaffold` is the generated scaffold contract:
+
+| Field | Meaning |
+| --- | --- |
+| `templateId` | selected public template id |
+| `scaffold` | scaffold writer id used by Cauldron |
+| `entrypoint` | primary file to open or edit first |
+| `packageManager` | `npm` for package-based templates, otherwise `null` |
+| `commands` | run/build command map when package-based |
+| `files[]` | generated scaffold files with `{ path, role, kind, generated }` metadata |
+
+Current scaffold outputs:
+
+| Template | Entrypoint | Files |
+| --- | --- | --- |
+| `static-html` | `index.html` | `index.html`, `styles.css` |
+| `html-alpine` | `index.html` | `index.html`, `styles.css`, `app.js` |
+| `nextjs` | `app/page.tsx` | `package.json`, `next.config.mjs`, `tsconfig.json`, `next-env.d.ts`, `app/layout.tsx`, `app/page.tsx`, `app/globals.css` |
+| `astro` | `src/pages/index.astro` | `package.json`, `astro.config.mjs`, `src/pages/index.astro`, `src/styles/global.css` |
 
 ## Template Contract
 
@@ -146,7 +167,7 @@ Each template has:
 - `files`
 - `promptBias`
 
-Phase 5 should add real scaffold generation without breaking this public response.
+The handoff response `files.scaffold` remains a simple array of generated scaffold paths for frontend display compatibility; use `cauldron.project.json.scaffold.files` for richer metadata.
 
 ## Test Expectations
 

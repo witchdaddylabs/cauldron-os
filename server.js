@@ -372,7 +372,10 @@ function getTemplate(templateId = '') {
 
 function formatTemplateForPrompt(template) {
   if (!template) return '';
-  return `## Project Type: ${template.name}\n${template.promptBias}`;
+  const files = Array.isArray(template.files) && template.files.length
+    ? `\n\nExpected scaffold files:\n${template.files.map(file => `- ${file}`).join('\n')}`
+    : '';
+  return `## Project Type: ${template.name}\n${template.promptBias}${files}`;
 }
 
 // ─── Cloud Agent Build Helper ──────────────────────────────────────────────

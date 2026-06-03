@@ -177,6 +177,9 @@ A test project for smoke testing handoff.
     assert.equal(manifest.files.prototype, 'prototype.html', 'manifest missing prototype file');
     assert.equal(manifest.files.designSystem, 'design-system.md', 'manifest missing design-system file');
     assert.equal(manifest.files.readme, 'README.md', 'manifest missing README file');
+    assert.equal(manifest.scaffold.templateId, 'html-alpine', 'manifest missing scaffold template id');
+    assert.equal(manifest.scaffold.entrypoint, 'index.html', 'manifest missing scaffold entrypoint');
+    assert(manifest.scaffold.files.some(file => file.path === 'index.html' && file.role === 'entry'), 'manifest missing scaffold index metadata');
 
     const readme = fs.readFileSync(path.join(projectPath, 'README.md'), 'utf8');
     assert(readme.includes('handoff package'), 'README should describe package creation');

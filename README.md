@@ -49,7 +49,7 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
    Cauldron pops up a short set of annoying product-manager questions before generation. Answer what you can; the Q&A gets folded into the final blueprint prompt so the model has firmer scope, risks, users, and assumptions.
 
 3. **Design System & Taste Engine**<br>
-   Pick a design reference from 22 curated brands (Cursor, Vercel, Raycast, Stripe, Linear, Notion, Figma, etc.) or search Refero's live catalog for style inspiration. Add a reference URL for deep research — Cauldron extracts CSS variables, fonts, colours, and layout patterns via Playwright.
+   Pick a design reference from 150+ imported Open Design systems (Cursor, Vercel, Raycast, Stripe, Linear, Notion, Figma, etc.) or search Refero's live catalog for style inspiration. Add a reference URL for deep research — Cauldron extracts CSS variables, fonts, colours, and layout patterns via Playwright.
 
 4. **The model creates a blueprint**<br>
    You get product notes, architecture direction, schema ideas, security considerations, and implementation guidance.
@@ -95,7 +95,7 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 
 ### For design-conscious builders
 
-- Expanded Design Reference dropdown for Cursor, Vercel, Lovable, Raycast, Linear, Stripe, Notion, Apple, Figma, Supabase, Resend, Webflow, and OpenCode-style visual direction
+- Expanded Design Reference dropdown with 150+ local `DESIGN.md` systems imported from Open Design, plus Refero style search for live inspiration
 - **Refero Style Search** — Search the live Refero design directory for inspiration (results cached for 5 minutes)
 - Dedicated one-URL cloner target field plus Brain Dump URL detection
 - **Deep URL research mode** — Uses Playwright to extract CSS variables, fonts, colours, and layout hints from reference sites
@@ -166,7 +166,7 @@ Cauldron's prompt builder adds three design-aware upgrades before generation:
 | Module | What it does |
 |--------|--------------|
 | Impeccable Taste | Adds design anti-patterns and premium UI mandates |
-| Design Reference Selector | Pulls brand DNA from `awesome-design-md` style references |
+| Design Reference Selector | Pulls brand DNA from local Open Design `DESIGN.md` systems and Refero style references |
 | URL Research Sweep | Scrapes the dedicated reference URL or first Brain Dump URL for CSS variables, fonts, colours, and layout patterns |
 
 This means the model gets more than "build me an app". It gets taste, constraints, references, and context.
@@ -250,6 +250,7 @@ Near-term public roadmap candidates:
 - [taste-skill](https://github.com/Leonxlnx/taste-skill) by Leonxlnx — high-agency frontend taste patterns
 - [ai-website-cloner-template](https://github.com/JCodesMore/ai-website-cloner-template) by JCodesMore — reconnaissance inspiration for URL research
 - [VoltAgent/awesome-design-md](https://github.com/VoltAgent/awesome-design-md) — DESIGN.md concept and design-system references
+- [Open Design](https://github.com/nexu-io/open-design) — imported Apache-2.0 `DESIGN.md` catalog used for the expanded design-system library
 - [Refero.design](https://refero.design) — design style discovery API
 
 ---

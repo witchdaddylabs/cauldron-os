@@ -1,12 +1,12 @@
-# Contributing a Design System to Cauldron OS
+# Design System Catalog
 
-The Design Reference Selector fetches brand DNA from the `awesome-design-md` collection. You can add your own brand's design system by creating a `DESIGN.md` file and including it in the repository under `design-systems/{handle}/`.
+The Design Reference Selector reads local `DESIGN.md` files from `design-systems/{handle}/`. Cauldron ships with an imported Open Design catalog indexed by `design-systems/catalog.json`, plus Refero style search for live inspiration.
 
 ---
 
 ## File Format
 
-Your DESIGN.md must follow the [awesome-design-md spec](https://github.com/VoltAgent/awesome-design-md). Minimal required sections:
+Your DESIGN.md should follow the portable `DESIGN.md` pattern used by Open Design and awesome-design-md. Minimal recommended sections:
 
 ```markdown
 ---
@@ -77,12 +77,14 @@ Include 1–2 code snippets:
 ## Submission Process
 
 1. **Create your DESIGN.md** in a local branch under `design-systems/{handle}/`
-2. **Test locally** by selecting it from the Cauldron UI dropdown (you may need to add your brand to the `DESIGN_SYSTEMS` mapping in `server.js`)
-3. **Verify fetch works:** `curl http://localhost:3000/api/design-reference -X POST -H "Content-Type: application/json" -d '{"system":"{handle}"}'`
-4. **Submit PR** with:
+2. **Add an entry** to `design-systems/catalog.json` with `id`, `name`, `path`, and `source`
+3. **Validate locally:** `node scripts/validate-design-systems.js`
+4. **Test locally** by selecting it from the Cauldron UI dropdown
+5. **Verify fetch works:** `curl http://localhost:3000/api/design-reference -X POST -H "Content-Type: application/json" -d '{"system":"{handle}"}'`
+6. **Submit PR** with:
    - New folder `design-systems/{handle}/DESIGN.md`
-   - (Optional) Example `examples/brand-blueprint.md` showing output
-   - Updated `server.js` (DESIGN_SYSTEMS entry) and `public/index.html` (option)
+   - Updated `design-systems/catalog.json`
+   - Updated tests if the route contract changes
 
 We will review for completeness, clarity, and adherence to spec. Once merged, your design system will be available in the Cauldron UI dropdown for all users.
 
@@ -95,7 +97,7 @@ We will review for completeness, clarity, and adherence to spec. Once merged, yo
 - **Provide rationale** briefly (e.g., "dark mode preferred; preserves eye comfort in long sessions").
 - **License:** By submitting, you agree to license your DESIGN.md under MIT (compatible with Cauldron OS's license). You retain copyright.
 - **No proprietary assets.** Do not include trademarked logos or proprietary brand assets. Only typography + color + spacing rules.
-- Test the fetch — ensure raw GitHub URL resolves correctly: `https://raw.githubusercontent.com/witchdaddylabs/cauldron-os/main/design-systems/{handle}/DESIGN.md`
+- Test the fetch with `/api/design-reference`; local catalog entries are read from the checked-out repo, not from a remote raw URL.
 
 ---
 
@@ -103,7 +105,7 @@ We will review for completeness, clarity, and adherence to spec. Once merged, yo
 
 See existing brands for structure:
 
-- `design-systems/cursor/DESIGN.md` (not yet in repo — be the first!)
+- `design-systems/cursor/DESIGN.md`
 - `design-systems/vercel/DESIGN.md`
 - `design-systems/lovable/DESIGN.md`
 - `design-systems/raycast/DESIGN.md`

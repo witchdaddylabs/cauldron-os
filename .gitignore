@@ -24,8 +24,14 @@ Thumbs.db
 *.swo
 
 # Cauldron-specific
-design-systems/*/
+design-systems/*
 !design-systems/.gitkeep
+!design-systems/README.md
+!design-systems/NOTICE.md
+!design-systems/LICENSE-OPEN-DESIGN.txt
+!design-systems/catalog.json
+!design-systems/*/
+!design-systems/*/DESIGN.md
 cauldron-os.code-workspace
 
 # Local runtime data (never publish user drafts/history)

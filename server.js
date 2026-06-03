@@ -36,6 +36,10 @@ const {
   scrapeRenderedURL,
   formatResearchForPrompt,
 } = require('./lib/research');
+const {
+  createDesignSystems,
+  createDesignSystemService,
+} = require('./lib/design-system-catalog');
 const registerAllRoutes = require('./routes');
 
 const app = express();
@@ -170,9 +174,8 @@ const REFERO_STYLES = {
 };
 
 // Cache for design system references (avoid re-fetching)
-const designSystemCache = new Map();
 const DESIGN_SYSTEM_SOURCE = 'https://raw.githubusercontent.com/Meliwat/awesome-design-md-pre-paywall/main/design-md';
-const DESIGN_SYSTEMS = {
+const LEGACY_DESIGN_SYSTEMS = {
   none: { name: 'None', repo: null, path: null },
   cursor: { name: 'Cursor (Sleek Dark)', repo: 'cursor', path: 'DESIGN.md' },
   vercel: { name: 'Vercel (Precision Geist)', repo: 'vercel', path: 'DESIGN.md' },
@@ -184,10 +187,21 @@ const DESIGN_SYSTEMS = {
   supabase: { name: 'Supabase (Developer Emerald)', repo: 'supabase', path: 'DESIGN.md' },
   webflow: { name: 'Webflow (Visual Builder Polish)', repo: 'webflow', path: 'DESIGN.md' },
   opencode: { name: 'OpenCode (Terminal-native Builder)', repo: 'opencode.ai', path: 'DESIGN.md' },
-  ...Object.fromEntries(
-    Object.entries(REFERO_STYLES).map(([id, val]) => [id, { name: val.name, __refero: true, uuid: val.uuid, promptGuidance: val.promptGuidance, colors: val.colors, fonts: val.fonts, scheme: val.scheme }])
-  ),
 };
+const DESIGN_SYSTEMS = createDesignSystems({
+  rootDir: __dirname,
+  legacySystems: LEGACY_DESIGN_SYSTEMS,
+  referoStyles: REFERO_STYLES,
+});
+const {
+  cache: designSystemCache,
+  fetchDesignSystem,
+  ensureDesignSystem,
+} = createDesignSystemService({
+  rootDir: __dirname,
+  systems: DESIGN_SYSTEMS,
+  remoteBaseUrl: DESIGN_SYSTEM_SOURCE,
+});
 
 // ─── TEMPLATES ───────────────────────────────────────────────────────────────
 const TEMPLATES = [
@@ -358,40 +372,6 @@ function getTemplate(templateId = '') {
 function formatTemplateForPrompt(template) {
   if (!template) return '';
   return `## Project Type: ${template.name}\n${template.promptBias}`;
-}
-
-// ─── Design System Fetcher ─────────────────────────────────────────────────
-function fetchDesignSystem(repo, callback) {
-  const url = `${DESIGN_SYSTEM_SOURCE}/${repo}/DESIGN.md`;
-
-  https.get(url, (res) => {
-    let data = '';
-    res.on('data', chunk => data += chunk);
-    res.on('end', () => {
-      if (res.statusCode === 200) {
-        callback(null, data);
-      } else {
-        callback(new Error(`HTTP ${res.statusCode}`), null);
-      }
-    });
-  }).on('error', callback);
-}
-
-function ensureDesignSystem(system) {
-  if (!system || system === 'none' || !DESIGN_SYSTEMS[system]) return Promise.resolve('');
-  if (designSystemCache.has(system)) return Promise.resolve(designSystemCache.get(system));
-  const { repo } = DESIGN_SYSTEMS[system];
-  if (!repo) return Promise.resolve('');
-  return new Promise((resolve) => {
-    fetchDesignSystem(repo, (err, content) => {
-      if (err) {
-        console.warn(`[Cauldron] Design reference ${system} unavailable:`, err.message);
-        return resolve('');
-      }
-      designSystemCache.set(system, content);
-      resolve(content);
-    });
-  });
 }
 
 // ─── Cloud Agent Build Helper ──────────────────────────────────────────────
@@ -744,6 +724,7 @@ const deps = {
   DESIGN_SYSTEMS,
   workspace,
   designSystemCache,
+  fetchDesignSystem,
   getSystemPrompt,
   getTemplate,
   formatTemplateForPrompt,

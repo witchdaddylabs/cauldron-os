@@ -60,7 +60,8 @@ function registerModelsDesignRoutes(app, deps) {
   app.get('/api/design-systems', (req, res) => {
     const list = Object.entries(DESIGN_SYSTEMS)
       .filter(([key]) => key !== 'none')
-      .map(([key, val]) => ({ id: key, name: val.name }));
+      .map(([key, val]) => ({ id: key, name: val.name, source: val.source || (val.__refero ? 'refero' : 'remote') }))
+      .sort((a, b) => a.name.localeCompare(b.name));
     res.json({ systems: list });
   });
 
@@ -75,20 +76,8 @@ function registerModelsDesignRoutes(app, deps) {
       return res.json({ cached: true, system });
     }
   
-    const { repo, path: filePath } = DESIGN_SYSTEMS[system];
-    if (!repo) {
-      return res.json({ cached: false, system, content: '' });
-    }
-  
-    fetchDesignSystem(repo, (err, content) => {
-      if (err) {
-        console.error(`Failed to fetch ${repo}:`, err.message);
-        return res.status(500).json({ error: `Failed to fetch design system: ${err.message}` });
-      }
-    
-      designSystemCache.set(system, content);
-      res.json({ cached: false, system, content });
-    });
+    const content = await ensureDesignSystem(system);
+    res.json({ cached: false, system, content });
   });
 
   /**

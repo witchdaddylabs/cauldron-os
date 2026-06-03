@@ -66,6 +66,8 @@ Known v0.30 gap: the v0.30 plan refers to handoff as living in `routes/projects.
 | `/api/build/files/:sessionId` | GET | list workspace files |
 | `/api/build/file/:sessionId` | GET | read one workspace file |
 | `/api/build/status/:sessionId` | GET | inspect build session metadata |
+| `/api/build-agents` | GET | detect BYOK build-agent CLIs |
+| `/api/build-agents/run` | POST | create a handoff package and optionally launch the selected detected CLI |
 
 The v0.30 BYOK/CLI work should treat this as an existing local-agent path, not assume the build stage is empty.
 
@@ -99,24 +101,20 @@ Imported catalog entries live under `design-systems/<id>/DESIGN.md` and are inde
 
 ## Generated Handoff Files
 
-Current `/api/handoff` output may include:
+Current `/api/handoff` and `/api/build-agents/run` output may include:
 
 | File | Purpose |
 | --- | --- |
 | `blueprint.md` | source product/build specification |
 | `prototype.html` | standalone generated prototype |
+| `design-system.md` | selected design reference content |
+| `cauldron.project.json` | machine-readable handoff manifest |
+| `README.md` | human run/build instructions |
+| `agent-prompt.md` | prompt for a local build-agent CLI |
+| `.cursorrules` | Cursor-oriented project rules |
 | `.opencode/config.md` | OpenCode-oriented instructions |
 
-Current `/api/handoff` does not launch OpenCode and does not return a `logPath`. Frontend copy and future status UI should distinguish "package created" from "agent launched".
-
-Target v0.30 handoff packages should add:
-
-| File | Purpose |
-| --- | --- |
-| `cauldron.project.json` | machine-readable project manifest |
-| `design-system.md` | selected design reference and extracted tokens |
-| `README.md` | human run/build instructions |
-| agent-specific rule files | optional `.cursorrules`, Claude/Codex instructions, or equivalent |
+`/api/handoff` creates package files only. `/api/build-agents/run` creates the same package and may launch a detected CLI when the selected agent supports automated launch. Responses distinguish `mode: "handoff-only"`, `mode: "dry-run"`, and `mode: "launched"`.
 
 ## Template Contract
 

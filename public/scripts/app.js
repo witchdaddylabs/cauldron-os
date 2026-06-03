@@ -41,6 +41,12 @@ function cauldronApp() {
     buildSession: null,
     buildFiles: [],
     workspacePreviewUrl: '',
+    buildAgents: [],
+    selectedBuildAgentId: 'handoff',
+    buildAgentsLoaded: false,
+    buildAgentDetecting: false,
+    buildAgentRunResult: null,
+    buildAgentStatus: 'Build agents not checked yet.',
     tasteInjectionEnabled: true,
     stageModels: {
       interrogate: { provider: 'gemini', cloudModel: '', label: 'Interrogate', stage: 'interrogate' },
@@ -114,6 +120,14 @@ function cauldronApp() {
       return Boolean(this.form.apiKey.trim() || this.hasSavedProviderKey);
     },
 
+    get selectedBuildAgent() {
+      return this.buildAgents.find(agent => agent.id === this.selectedBuildAgentId) || null;
+    },
+
+    get selectedBuildAgentAvailable() {
+      return this.selectedBuildAgent?.available === true;
+    },
+
     init() {
       this.loadStageConfig();
       this.loadConfig();
@@ -132,6 +146,7 @@ function cauldronApp() {
         this.api('/api/design-systems').then(data => { this.designSystems = data.systems || []; }),
         this.api('/api/templates').then(data => { this.templates = data.templates || []; }),
         this.api('/api/cloud-models').then(data => { this.cloudModels = data || {}; this.ensureCloudModel(); }),
+        this.loadBuildAgents(),
       ]);
 
       const desiredReference = this.designSystems.some(system => system.id === this.form.designReference)
@@ -268,6 +283,28 @@ function cauldronApp() {
 
     closeSettings() {
       this.settingsOpen = false;
+    },
+
+    async loadBuildAgents() {
+      this.buildAgentDetecting = true;
+      try {
+        const data = await this.api('/api/build-agents');
+        this.buildAgents = data.agents || [];
+        this.buildAgentsLoaded = true;
+        if (!this.buildAgents.some(agent => agent.id === this.selectedBuildAgentId)) {
+          this.selectedBuildAgentId = this.buildAgents.find(agent => agent.id === 'handoff')?.id || this.buildAgents[0]?.id || 'handoff';
+        }
+        const available = this.buildAgents.filter(agent => agent.available && agent.id !== 'handoff').length;
+        this.buildAgentStatus = available
+          ? `${available} build agent${available === 1 ? '' : 's'} detected.`
+          : 'No launchable build-agent CLIs detected. Handoff package mode is available.';
+      } catch (error) {
+        this.buildAgents = [{ id: 'handoff', name: 'Generate handoff package', available: true, command: null, notes: 'Always available' }];
+        this.selectedBuildAgentId = 'handoff';
+        this.buildAgentStatus = `Build-agent detection failed: ${error.message}`;
+      } finally {
+        this.buildAgentDetecting = false;
+      }
     },
 
     ensureApiKey(actionLabel = 'This action', pendingStage = '', pendingAction = '') {
@@ -783,25 +820,45 @@ ${this.form.projectType === 'app' ? `
       this.status = `Draft saved: #${data.draftId}`;
     },
 
-    async handoffToOpenCode() {
+    async runBuildAgent({ fromBuild = false } = {}) {
       if (!this.blueprint.trim()) {
-        this.toast('No blueprint', 'Generate a blueprint before handing off.', 'error');
+        this.toast('No blueprint', 'Generate a blueprint before creating a handoff package.', 'error');
         return;
       }
-      await this.withBusy('Creating project folder + OpenCode handoff...', async () => {
-        const data = await this.api('/api/handoff', {
+      if (!this.buildAgentsLoaded) await this.loadBuildAgents();
+
+      await this.withBusy('Creating build-agent handoff package...', async () => {
+        const data = await this.api('/api/build-agents/run', {
           method: 'POST',
           body: JSON.stringify({
             projectName: this.form.projectName || 'cauldron-project',
+            agentId: this.selectedBuildAgentId || 'handoff',
             blueprint: this.blueprint,
             prototypeHtml: this.prototypeHtml,
+            designReference: this.form.designReference || 'none',
+            templateId: this.form.templateId,
+            projectType: this.form.projectType,
+            sessionId: fromBuild ? this.buildSession?.sessionId : '',
           }),
         });
+        this.buildAgentRunResult = data;
         this.handoffResult = data;
-        this.status = 'Project exported and OpenCode handoff launched.';
-        this.toast('OpenCode dispatched', data.projectPath || 'Project folder created.');
+        if (data.mode === 'launched') {
+          this.status = `Handoff package created and ${data.agentName || data.agentId} launched.`;
+          this.toast('Build agent launched', data.projectPath || 'Project folder created.');
+        } else if (data.fallback) {
+          this.status = 'Handoff package created. Launch it manually from the project folder.';
+          this.toast('Package created', data.error || 'Selected agent was not launched.', 'info');
+        } else {
+          this.status = 'Handoff package created.';
+          this.toast('Handoff package created', data.projectPath || 'Project folder created.');
+        }
         this.setStage('export');
       });
+    },
+
+    async handoffToOpenCode() {
+      return this.runBuildAgent({ fromBuild: false });
     },
 
     async startBuild() {
@@ -844,21 +901,7 @@ ${this.form.projectType === 'app' ? `
         this.toast('No build session', 'Start a build first.', 'error');
         return;
       }
-      await this.withBusy('Handing off build to export...', async () => {
-        const data = await this.api('/api/handoff', {
-          method: 'POST',
-          body: JSON.stringify({
-            projectName: this.form.projectName || 'cauldron-project',
-            sessionId: this.buildSession.sessionId,
-            blueprint: this.blueprint,
-            prototypeHtml: this.prototypeHtml,
-          }),
-        });
-        this.handoffResult = data;
-        this.status = 'Build exported to project folder.';
-        this.toast('Build handed off', `${data.message || 'Project folder created.'}`);
-        this.setStage('export');
-      });
+      return this.runBuildAgent({ fromBuild: true });
     },
 
     previewWorkspaceFile(filePath) {

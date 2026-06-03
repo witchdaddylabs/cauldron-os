@@ -203,8 +203,8 @@
         <div class="settings-head">
           <div>
             <p class="kicker">Settings</p>
-            <h2 id="settingsTitle" x-text="settingsTab === 'api' ? 'API keys' : settingsTab === 'routing' ? 'Stage routing' : 'Cauldron settings'"></h2>
-            <p class="panel-note">Global setup lives here. No hunting through later pipeline steps like a sad little goblin.</p>
+            <h2 id="settingsTitle" x-text="settingsTab === 'api' ? 'API keys' : settingsTab === 'routing' ? 'Stage routing' : settingsTab === 'agents' ? 'Build agents' : 'Cauldron settings'"></h2>
+            <p class="panel-note">Global setup lives here so later pipeline steps stay focused.</p>
           </div>
           <button class="btn btn-ghost" type="button" @click="closeSettings" aria-label="Close settings">Close</button>
         </div>
@@ -212,6 +212,7 @@
         <div class="settings-tabs" role="tablist" aria-label="Settings sections">
           <button class="btn" type="button" :class="{ active: settingsTab === 'general' }" @click="settingsTab = 'general'">General</button>
           <button class="btn" type="button" :class="{ active: settingsTab === 'routing' }" @click="settingsTab = 'routing'">Stage Routing</button>
+          <button class="btn" type="button" :class="{ active: settingsTab === 'agents' }" @click="settingsTab = 'agents'; loadBuildAgents()">Build Agents</button>
           <button class="btn" type="button" :class="{ active: settingsTab === 'api' }" @click="settingsTab = 'api'">API keys</button>
         </div>
 
@@ -269,6 +270,39 @@
               <button class="btn" :class="!tasteInjectionEnabled ? 'btn-ghost danger' : ''" type="button" @click="tasteInjectionEnabled = false">Off</button>
             </div>
             <p style="margin:8px 0 0;color:var(--text-muted);font-size:14px;line-height:1.4;">When on, the Impeccable Taste Mandate (anti-patterns + accessibility + colour roles) is injected into every blueprint prompt.</p>
+          </div>
+        </div>
+
+        <div class="settings-body" x-show="settingsTab === 'agents'">
+          <div class="callout" style="margin-bottom:14px;">
+            <strong>Build agent</strong>
+            <span style="display:block;margin-top:4px;" x-text="buildAgentStatus"></span>
+          </div>
+
+          <div class="field">
+            <label for="buildAgentSelect">Selected build agent</label>
+            <select id="buildAgentSelect" x-model="selectedBuildAgentId" :disabled="busy || buildAgentDetecting">
+              <template x-for="agent in buildAgents" :key="agent.id">
+                <option :value="agent.id" :disabled="!agent.available && agent.id !== 'handoff'" x-text="`${agent.name}${agent.available ? '' : ' (not detected)'}`"></option>
+              </template>
+            </select>
+            <small x-text="selectedBuildAgent?.notes || 'Choose handoff package mode when no CLI is available.'"></small>
+          </div>
+
+          <div class="button-row">
+            <button class="btn btn-purple" type="button" @click="loadBuildAgents" :disabled="buildAgentDetecting" x-text="buildAgentDetecting ? 'Checking...' : 'Refresh build agents'"></button>
+          </div>
+
+          <div class="stage-route-list" x-show="buildAgents.length" style="margin-top:12px;">
+            <template x-for="agent in buildAgents" :key="agent.id">
+              <div class="stage-route-card">
+                <div class="route-stage">
+                  <span class="kicker" x-text="agent.name"></span>
+                  <span class="route-status" x-text="agent.available ? 'Available' : 'Unavailable'"></span>
+                </div>
+                <p style="margin:8px 0 0;color:var(--text-muted);font-size:13px;" x-text="agent.command || agent.notes"></p>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -582,11 +616,25 @@
 
           <section class="stage-card" x-show="activeStage === 'build'" x-transition.opacity>
             <h3>Build.</h3>
-            <p class="stage-intro">Spin up a sandboxed workspace and let the agent build the actual project. Review files, preview output, then hand off to export.</p>
+            <p class="stage-intro">Create a handoff package for a detected local build agent, or keep using the legacy local XML workspace for direct file iteration.</p>
+
+            <div class="callout" style="margin-bottom: 16px;">
+              <strong>Build agent:</strong>
+              <span x-text="selectedBuildAgent?.name || 'Generate handoff package'"></span><br />
+              <span x-text="selectedBuildAgent?.notes || buildAgentStatus"></span>
+              <div class="button-row compact" style="margin-top:10px;">
+                <select x-model="selectedBuildAgentId" @focus="!buildAgentsLoaded && loadBuildAgents()" :disabled="busy || buildAgentDetecting" class="route-select">
+                  <template x-for="agent in buildAgents" :key="agent.id">
+                    <option :value="agent.id" :disabled="!agent.available && agent.id !== 'handoff'" x-text="`${agent.name}${agent.available ? '' : ' (not detected)'}`"></option>
+                  </template>
+                </select>
+                <button class="btn btn-ghost" type="button" @click="openSettings('agents')">Agent settings</button>
+              </div>
+            </div>
 
             <template x-if="!buildSession">
               <div class="callout pink">
-                Ready to build? The blueprint will be used as the spec for the agent to create real files in an isolated workspace.
+                Ready to build? Create the handoff package first, then launch a detected CLI when available.
               </div>
             </template>
 
@@ -600,7 +648,8 @@
             </template>
 
             <div class="button-row">
-              <button class="btn btn-primary" type="button" @click="startBuild" :disabled="busy || !blueprint" x-show="!buildSession">Start build workspace</button>
+              <button class="btn btn-primary" type="button" @click="runBuildAgent()" :disabled="busy || !blueprint">Create handoff package</button>
+              <button class="btn btn-ghost" type="button" @click="startBuild" :disabled="busy || !blueprint" x-show="!buildSession">Start local XML workspace</button>
               <button class="btn btn-purple" type="button" @click="loadBuildFiles" :disabled="busy || !buildSession" x-show="buildSession">Refresh file list</button>
             </div>
 
@@ -635,17 +684,18 @@
             </div>
 
             <div class="button-row" x-show="buildSession" style="margin-top: 16px;">
-              <button class="btn btn-primary" type="button" @click="handoffFromBuild" :disabled="busy">Handoff to export</button>
+              <button class="btn btn-primary" type="button" @click="handoffFromBuild" :disabled="busy">Package workspace for export</button>
               <button class="btn btn-ghost" type="button" @click="setStage('prototype')">Back to prototype</button>
             </div>
           </section>
 
           <section class="stage-card" x-show="activeStage === 'export'" x-transition.opacity>
             <h3>Export.</h3>
-            <p class="stage-intro">Save the artefact, download it, or hand the folder to OpenCode. The old auto-build loop is dead; this is a deliberate handoff.</p>
+            <p class="stage-intro">Save the artefact, download it, create a handoff package, or explicitly launch a detected build-agent CLI.</p>
 
             <div class="button-row">
-              <button class="btn btn-primary" type="button" @click="handoffToOpenCode" :disabled="!blueprint || busy">Create project + OpenCode handoff</button>
+              <button class="btn btn-primary" type="button" @click="handoffToOpenCode" :disabled="!blueprint || busy">Create handoff package</button>
+              <button class="btn btn-ghost" type="button" @click="openSettings('agents')">Choose build agent</button>
               <button class="btn btn-purple" type="button" @click="downloadBlueprint" :disabled="!blueprint">Download blueprint.md</button>
               <button class="btn btn-ghost" type="button" @click="saveDraft" :disabled="!blueprint || busy">Save draft</button>
             </div>
@@ -653,8 +703,16 @@
             <div class="callout" x-show="handoffResult" style="margin-top: 16px;">
               <strong>Project folder:</strong>
               <span x-text="handoffResult?.projectPath"></span><br />
-              <strong>Log:</strong>
-              <span x-text="handoffResult?.logPath"></span>
+              <strong>Manifest:</strong>
+              <span x-text="handoffResult?.manifestPath || 'cauldron.project.json'"></span><br />
+              <strong>Mode:</strong>
+              <span x-text="handoffResult?.mode || 'handoff-only'"></span><br />
+              <template x-if="handoffResult?.command">
+                <span><strong>Command:</strong> <span x-text="handoffResult.command"></span><br /></span>
+              </template>
+              <template x-if="handoffResult?.error">
+                <span><strong>Note:</strong> <span x-text="handoffResult.error"></span></span>
+              </template>
             </div>
           </section>
         </div>

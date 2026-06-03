@@ -32,6 +32,8 @@ Important state names:
 | `stageModels` | per-stage provider/model routing stored in localStorage |
 | `keyHealth` | Settings API-key connection health status |
 | `blueprint` | editable generated markdown |
+| `blueprintVersions` | saved blueprint snapshots for version history |
+| `blueprintDiff` | structured diff rows for the selected blueprint version |
 | `prototypeHtml` | generated HTML preview |
 | `critiqueText` | current natural-language prototype critique |
 | `prototypeIterations` | latest prototype snapshots and critique history |
@@ -50,6 +52,7 @@ Frontend agents should preserve these names unless the branch explicitly migrate
 | --- | --- | --- | --- |
 | `/api/research-url` | POST | `{ url, projectName?, brainDump?, mode? }` | `{ success, findings, formatted, researchId?, reuseCount? }` |
 | `/api/clarify` | POST | `{ prompt, model, projectType?, apiKey?, cloudModel? }` | clarify question payload |
+| `/api/blueprint-diff` | POST | `{ previous, next }` | `{ success, rows, summary }` line diff |
 | `/api/generate` | POST | blueprint generation payload | generated blueprint/session payload |
 | `/api/generate-prototype` | POST SSE | `{ blueprint, model, cloudModel?, apiKey?, critique?, previousPrototypeHtml?, iterationIndex?, ... }` | `progress`, `prototype`, `error` events |
 | `/api/refine` | POST | `{ prompt, existingBlueprint, ... }` | refined blueprint payload |
@@ -69,7 +72,7 @@ Frontend agents should preserve these names unless the branch explicitly migrate
 | `/api/drafts/:id/export.md` | GET | download blueprint markdown |
 | `/api/drafts/:id` | DELETE | remove a draft |
 
-Draft saves accept optional `prototypeHtml` and `prototypeIterations`. These fields support the Phase 3 critique loop without mixing prototype snapshots into the editable blueprint markdown.
+Draft saves accept optional `blueprintVersions`, `prototypeHtml`, and `prototypeIterations`. `blueprintVersions` stores capped blueprint snapshots for v0.40 diff/history UI. Prototype fields support the critique loop without mixing prototype snapshots into the editable blueprint markdown.
 
 ### Build Workspace
 

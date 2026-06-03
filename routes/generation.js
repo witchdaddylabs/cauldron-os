@@ -11,6 +11,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { buildLineDiff } = require("../lib/blueprint-diff");
 const { createHandoffPackage } = require("../lib/handoff-package");
 const { normaliseLimitOffset, sendMarkdownDownload } = require("./_helpers");
 
@@ -110,6 +111,17 @@ function registerGenerationRoutes(app, deps) {
     } catch (err) {
       console.error('Clarify error:', err);
       res.status(500).json({ error: 'Clarification failed', details: err.message });
+    }
+  });
+
+  app.post('/api/blueprint-diff', (req, res) => {
+    try {
+      const { previous = '', next = '' } = req.body || {};
+      const diff = buildLineDiff(previous, next);
+      res.json({ success: true, ...diff });
+    } catch (err) {
+      console.error('[Cauldron] Blueprint diff error:', err);
+      res.status(500).json({ success: false, error: 'Blueprint diff failed', details: err.message });
     }
   });
 

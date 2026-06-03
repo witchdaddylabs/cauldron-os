@@ -712,6 +712,114 @@ select:focus {
   white-space: pre-wrap;
 }
 
+.blueprint-history {
+  border: 1px solid rgba(183, 148, 246, 0.22);
+  border-radius: var(--radius-sm);
+  background: rgba(13, 13, 15, 0.5);
+  padding: 12px;
+}
+
+.blueprint-history-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.blueprint-history-head label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--acid-400);
+  font-weight: 700;
+}
+
+.blueprint-history-head small {
+  display: block;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.blueprint-history select {
+  min-height: 38px;
+  min-width: 190px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-sm);
+  background: rgba(2, 3, 6, 0.78);
+  color: var(--text);
+  padding: 8px 10px;
+}
+
+.blueprint-diff-mini {
+  margin-top: 10px;
+  max-height: 180px;
+  overflow: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 10px;
+}
+
+.blueprint-diff-output {
+  display: block;
+  white-space: normal;
+}
+
+.diff-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-code);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.diff-toolbar strong {
+  color: var(--acid-400);
+}
+
+.diff-line {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  min-height: 24px;
+  border-left: 2px solid transparent;
+  padding: 2px 8px;
+  font-family: var(--font-code);
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.diff-line code {
+  color: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.diff-marker {
+  color: rgba(255, 255, 255, 0.45);
+  text-align: center;
+}
+
+.diff-line.is-add {
+  border-left-color: rgba(52, 211, 153, 0.75);
+  background: rgba(52, 211, 153, 0.12);
+  color: #bbf7d0;
+}
+
+.diff-line.is-remove {
+  border-left-color: rgba(251, 113, 133, 0.8);
+  background: rgba(251, 113, 133, 0.12);
+  color: #fecdd3;
+}
+
+.diff-line.is-context {
+  color: rgba(223, 247, 217, 0.72);
+}
+
 .empty-preview {
   height: 100%;
   min-height: 420px;

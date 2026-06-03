@@ -638,6 +638,34 @@
               ></textarea>
             </div>
 
+            <div class="blueprint-history" x-show="blueprintVersions.length" style="margin-top: 14px;">
+              <div class="blueprint-history-head">
+                <div>
+                  <label for="blueprintVersionSelect">Version history</label>
+                  <small x-text="blueprintDiffSummaryText"></small>
+                </div>
+                <div class="button-row compact">
+                  <select id="blueprintVersionSelect" x-model.number="selectedBlueprintVersion" @change="selectBlueprintVersion()" aria-label="Select blueprint version">
+                    <template x-for="version in blueprintVersions" :key="version.id">
+                      <option :value="version.version" x-text="`v${version.version} · ${version.summary || 'Blueprint update'}`"></option>
+                    </template>
+                  </select>
+                  <button class="btn btn-ghost" type="button" @click="restoreBlueprintVersion()" :disabled="!selectedBlueprintVersionEntry">Restore selected</button>
+                  <button class="btn btn-purple" type="button" @click="previewMode = 'blueprint-diff'; pipelineView = 'preview'; refreshBlueprintDiff()" :disabled="blueprintVersions.length < 2">View diff</button>
+                </div>
+              </div>
+              <div class="blueprint-diff-mini" x-show="selectedBlueprintPreviousEntry">
+                <template x-for="(row, index) in blueprintDiffRows.slice(0, 12)" :key="`${row.type}-${index}`">
+                  <div class="diff-line" :class="`is-${row.type}`">
+                    <span class="diff-marker" x-text="row.marker"></span>
+                    <code x-text="row.text || ' '"></code>
+                  </div>
+                </template>
+                <p class="pipeline-empty" x-show="!blueprintDiffLoading && selectedBlueprintPreviousEntry && blueprintDiffRows.length === 0">No line-level changes in this version.</p>
+                <p class="pipeline-empty" x-show="blueprintDiffLoading">Calculating diff...</p>
+              </div>
+            </div>
+
             <div class="button-row">
               <button class="btn btn-primary" type="button" @click="generateBlueprint" :disabled="busy">Generate Blueprint</button>
               <button class="btn btn-accent" type="button" @click="generatePrototype()" :disabled="busy || !blueprint.trim()" x-show="blueprint.trim()" style="background:var(--acid-500);color:var(--text-dark);font-weight:700;">Generate Prototype from this Blueprint</button>
@@ -877,6 +905,22 @@
           ></iframe>
 
           <pre x-show="pipelineView === 'preview' && previewMode === 'blueprint' && blueprint" class="blueprint-output" x-text="blueprint"></pre>
+
+          <div x-show="pipelineView === 'preview' && previewMode === 'blueprint-diff'" class="blueprint-output blueprint-diff-output">
+            <div class="diff-toolbar">
+              <strong>Blueprint diff</strong>
+              <span x-text="blueprintDiffSummaryText"></span>
+            </div>
+            <template x-if="!selectedBlueprintPreviousEntry">
+              <p class="pipeline-empty">Choose v2 or later to compare against the previous blueprint.</p>
+            </template>
+            <template x-for="(row, index) in blueprintDiffRows" :key="`${row.type}-${index}`">
+              <div class="diff-line" :class="`is-${row.type}`">
+                <span class="diff-marker" x-text="row.marker"></span>
+                <code x-text="row.text || ' '"></code>
+              </div>
+            </template>
+          </div>
 
           <pre x-show="pipelineView === 'preview' && previewMode === 'prototype' && blueprint && !prototypeHtml" class="output-code">No HTML prototype block found yet. Switch to Blueprint to inspect the response.</pre>
         </div>

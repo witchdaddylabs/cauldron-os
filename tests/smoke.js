@@ -92,6 +92,15 @@ function createFakeOllamaServer() {
         projectName: 'Smoke Test App',
         brainDump: 'A tiny app for smoke testing',
         blueprint: '# Project Blueprint\n\n## PRD\n- Smoke test',
+        blueprintVersions: [
+          {
+            id: 'blueprint-version-1',
+            version: 1,
+            blueprint: '# Project Blueprint\n\n## PRD\n- Smoke test',
+            summary: 'Baseline blueprint',
+            createdAt: '2026-06-03T00:00:00.000Z',
+          },
+        ],
         designReference: 'none',
         generationMode: 'test',
         modelUsed: 'smoke-model',
@@ -107,6 +116,22 @@ function createFakeOllamaServer() {
     assert.equal(r.body.success, true);
     assert.equal(r.body.draft.project_name, 'Smoke Test App');
     assert.match(r.body.draft.blueprint, /Project Blueprint/);
+    assert.equal(r.body.draft.blueprint_versions.length, 1);
+    assert.equal(r.body.draft.blueprint_versions[0].version, 1);
+    assert.match(r.body.draft.blueprint_versions[0].blueprint, /Smoke test/);
+
+    r = await request('/api/blueprint-diff', {
+      method: 'POST',
+      body: JSON.stringify({
+        previous: '# Project Blueprint\n\n- Old line\n- Keep me',
+        next: '# Project Blueprint\n\n- New line\n- Keep me',
+      }),
+    });
+    assert.equal(r.res.status, 200);
+    assert.equal(r.body.success, true);
+    assert.equal(r.body.summary.additions, 1);
+    assert.equal(r.body.summary.deletions, 1);
+    assert.ok(r.body.rows.some(row => row.type === 'add' && /New line/.test(row.text)));
 
     r = await request(`/api/drafts/${id}/export.md`);
     assert.equal(r.res.status, 200);

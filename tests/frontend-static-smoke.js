@@ -23,6 +23,8 @@ assert.match(html, /stageProgressLabel\(stage\)/, 'Stage tabs should expose prog
 assert.match(html, /dismissToast\(toast\.id\)/, 'Toasts should be dismissible');
 assert.match(html, /toast\.type === 'error' \? 'alert' : 'status'/, 'Toast roles should be accessible');
 assert.match(html, /pipelineView === 'preview' && previewMode === 'blueprint' && blueprint/, 'Blueprint preview should be gated to preview mode');
+assert.match(html, /Version history/, 'Blueprint version history controls should exist');
+assert.match(html, /blueprint-diff/, 'Blueprint diff preview mode should be wired');
 assert.match(html, /stageModels/, 'Stage model routing should be configured');
 assert.match(html, /Brain dump →/, 'Pipeline subtitle should reference brain dump');
 assert.match(html, /selectedBuildAgentId/, 'Build agent selection state should be wired');
@@ -37,6 +39,8 @@ assert.match(appJs, /handleShortcut/, 'Keyboard shortcut handler should be wired
 assert.match(appJs, /pipelineProgress/, 'Pipeline progress state should be wired');
 assert.match(appJs, /loadRecentDraft/, 'Latest draft empty-state action should fetch full draft');
 assert.match(appJs, /previousStep >= 0/, 'Pipeline entries should replace same-step rows');
+assert.match(appJs, /\/api\/blueprint-diff/, 'Blueprint diff API should be called');
+assert.match(appJs, /blueprintVersions/, 'Blueprint versions should be wired');
 assert.match(appJs, /this\.toasts = \[\.\.\.this\.toasts/, 'Toast stack should be capped through reassignment');
 assert.match(appJs, /data\.providers \|\| data/, 'Cloud model response should normalize providers');
 

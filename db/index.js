@@ -67,6 +67,7 @@ function runMigrations() {
   `);
   ensureColumn('drafts', 'prototype_html', 'TEXT DEFAULT \'\'');
   ensureColumn('drafts', 'prototype_iterations_json', 'TEXT DEFAULT \'[]\'');
+  ensureColumn('drafts', 'blueprint_versions_json', 'TEXT DEFAULT \'[]\'');
 
   db.run(`
     CREATE TABLE IF NOT EXISTS sessions (
@@ -210,6 +211,48 @@ function normalisePrototypeIterations(iterations = []) {
   }));
 }
 
+function normaliseBlueprintVersions(versions = [], currentBlueprint = '') {
+  const seen = new Set();
+  const normalised = Array.isArray(versions) ? versions : [];
+  const mapped = normalised
+    .filter(version => version && typeof version === 'object')
+    .map((version, index) => {
+      const blueprint = String(version.blueprint || version.content || '');
+      const id = String(version.id || `blueprint-version-${index + 1}`);
+      return {
+        id,
+        version: Number(version.version) || index + 1,
+        blueprint,
+        summary: String(version.summary || (index === 0 ? 'Baseline blueprint' : 'Blueprint update')),
+        modelUsed: version.modelUsed ? String(version.modelUsed) : '',
+        providerUsed: version.providerUsed ? String(version.providerUsed) : '',
+        createdAt: version.createdAt || new Date().toISOString(),
+      };
+    })
+    .filter(version => {
+      const key = `${version.version}:${version.blueprint}`;
+      if (!version.blueprint || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .slice(-20)
+    .map((version, index) => ({ ...version, version: index + 1 }));
+
+  if (!mapped.length && currentBlueprint) {
+    mapped.push({
+      id: 'blueprint-version-1',
+      version: 1,
+      blueprint: String(currentBlueprint || ''),
+      summary: 'Baseline blueprint',
+      modelUsed: '',
+      providerUsed: '',
+      createdAt: new Date().toISOString(),
+    });
+  }
+
+  return mapped;
+}
+
 function createDraft({
   projectName,
   brainDump = '',
@@ -219,6 +262,7 @@ function createDraft({
   modelUsed = null,
   prototypeHtml = '',
   prototypeIterations = [],
+  blueprintVersions = [],
 }) {
   if (!projectName || !blueprint) throw new Error('projectName and blueprint are required');
   const db = requireDb();
@@ -226,6 +270,7 @@ function createDraft({
   const markdownPath = path.join(DRAFTS_DIR, `${filename}.md`);
   const metaPath = path.join(META_DIR, `${filename}.json`);
   const normalisedIterations = normalisePrototypeIterations(prototypeIterations);
+  const normalisedBlueprintVersions = normaliseBlueprintVersions(blueprintVersions, blueprint);
 
   fs.writeFileSync(markdownPath, blueprint, 'utf8');
   fs.writeFileSync(metaPath, JSON.stringify({
@@ -236,15 +281,16 @@ function createDraft({
     modelUsed,
     prototypeHtml,
     prototypeIterations: normalisedIterations,
+    blueprintVersions: normalisedBlueprintVersions,
     createdAt: new Date().toISOString(),
   }, null, 2), 'utf8');
 
   db.run(`
     INSERT INTO drafts (
       project_name, brain_dump, blueprint, design_reference, generation_mode, model_used,
-      prototype_html, prototype_iterations_json, file_path, updated_at
+      prototype_html, prototype_iterations_json, blueprint_versions_json, file_path, updated_at
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
   `, [
     projectName,
     brainDump,
@@ -254,6 +300,7 @@ function createDraft({
     modelUsed,
     prototypeHtml || '',
     JSON.stringify(normalisedIterations),
+    JSON.stringify(normalisedBlueprintVersions),
     markdownPath,
   ]);
 
@@ -310,7 +357,9 @@ function hydrateDraftRow(row) {
   }
   if (row) {
     row.prototype_iterations = safeJsonParse(row.prototype_iterations_json, []);
+    row.blueprint_versions = safeJsonParse(row.blueprint_versions_json, []);
     delete row.prototype_iterations_json;
+    delete row.blueprint_versions_json;
   }
   return row;
 }

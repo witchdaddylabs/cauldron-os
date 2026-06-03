@@ -40,6 +40,10 @@ function cauldronApp() {
     referoResultsOpen: false,
     selectedReferoStyle: null,
     blueprint: '',
+    blueprintVersions: [],
+    selectedBlueprintVersion: 0,
+    blueprintDiff: null,
+    blueprintDiffLoading: false,
     prototypeHtml: '',
     critiqueText: '',
     prototypeIterations: [],
@@ -149,6 +153,27 @@ function cauldronApp() {
 
     get visiblePrototypeIterations() {
       return this.prototypeIterations.slice(-5).reverse();
+    },
+
+    get selectedBlueprintVersionEntry() {
+      return this.blueprintVersions.find(version => version.version === Number(this.selectedBlueprintVersion)) || null;
+    },
+
+    get selectedBlueprintPreviousEntry() {
+      const selected = Number(this.selectedBlueprintVersion);
+      if (!selected || selected <= 1) return null;
+      return this.blueprintVersions.find(version => version.version === selected - 1) || null;
+    },
+
+    get blueprintDiffRows() {
+      return Array.isArray(this.blueprintDiff?.rows) ? this.blueprintDiff.rows : [];
+    },
+
+    get blueprintDiffSummaryText() {
+      if (!this.selectedBlueprintVersionEntry) return 'No blueprint versions yet.';
+      if (!this.selectedBlueprintPreviousEntry) return 'Baseline version. Generate or save another blueprint to see a diff.';
+      const summary = this.blueprintDiff?.summary || {};
+      return `+${summary.additions || 0} / -${summary.deletions || 0} across ${summary.nextLines || 0} lines`;
     },
 
     get pipelineProgressPercent() {
@@ -402,6 +427,9 @@ function cauldronApp() {
       this.researchResult = null;
       this.clarifyResult = null;
       this.blueprint = '';
+      this.blueprintVersions = [];
+      this.selectedBlueprintVersion = 0;
+      this.blueprintDiff = null;
       this.prototypeHtml = '';
       this.critiqueText = '';
       this.prototypeIterations = [];
@@ -799,7 +827,13 @@ ${this.form.projectType === 'app' ? `
         }
 
         if (blueprint) {
+          const previousBlueprint = this.blueprint;
           this.blueprint = blueprint;
+          this.recordBlueprintVersion(blueprint, {
+            summary: previousBlueprint ? 'Generated blueprint update' : 'Generated baseline blueprint',
+            modelUsed,
+            providerUsed,
+          });
           this.generatedAt = new Date().toISOString();
           this.status = `Blueprint generated with ${modelUsed || this.form.cloudModel || this.form.provider}.`;
           this.toast('Blueprint brewed', 'Blueprint ready. Review and edit, then generate the prototype.');
@@ -985,6 +1019,82 @@ ${this.form.projectType === 'app' ? `
       this.toast('Iteration restored', `Prototype v${iteration.version} is now active.`);
     },
 
+    async refreshBlueprintDiff() {
+      const current = this.selectedBlueprintVersionEntry;
+      const previous = this.selectedBlueprintPreviousEntry;
+      if (!current || !previous) {
+        this.blueprintDiff = current ? { rows: [], summary: { additions: 0, deletions: 0, changed: 0, nextLines: String(current.blueprint || '').split('\n').length } } : null;
+        return;
+      }
+
+      this.blueprintDiffLoading = true;
+      try {
+        const data = await this.api('/api/blueprint-diff', {
+          method: 'POST',
+          body: JSON.stringify({
+            previous: previous.blueprint || '',
+            next: current.blueprint || '',
+          }),
+        });
+        this.blueprintDiff = { rows: data.rows || [], summary: data.summary || {} };
+      } catch (err) {
+        console.error('Blueprint diff failed:', err);
+        this.blueprintDiff = { rows: [], summary: { additions: 0, deletions: 0, changed: 0 } };
+        this.toast('Diff unavailable', err.message, 'warn');
+      } finally {
+        this.blueprintDiffLoading = false;
+      }
+    },
+
+    recordBlueprintVersion(blueprint = '', meta = {}) {
+      const content = String(blueprint || '');
+      if (!content.trim()) return;
+      const last = this.blueprintVersions[this.blueprintVersions.length - 1];
+      if (last?.blueprint === content) {
+        this.selectedBlueprintVersion = last.version;
+        this.refreshBlueprintDiff();
+        return;
+      }
+
+      const nextVersion = this.blueprintVersions.length + 1;
+      const version = {
+        id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${nextVersion}`,
+        version: nextVersion,
+        blueprint: content,
+        summary: meta.summary || (nextVersion === 1 ? 'Baseline blueprint' : 'Blueprint update'),
+        modelUsed: meta.modelUsed || '',
+        providerUsed: meta.providerUsed || '',
+        createdAt: new Date().toISOString(),
+      };
+
+      this.blueprintVersions.push(version);
+      this.blueprintVersions = this.blueprintVersions.slice(-20).map((entry, index) => ({ ...entry, version: index + 1 }));
+      this.selectedBlueprintVersion = this.blueprintVersions[this.blueprintVersions.length - 1]?.version || 0;
+      this.refreshBlueprintDiff();
+    },
+
+    ensureCurrentBlueprintVersion(summary = 'Saved blueprint edit') {
+      if (!this.blueprint.trim()) return;
+      this.recordBlueprintVersion(this.blueprint, { summary });
+    },
+
+    selectBlueprintVersion() {
+      const selected = Number(this.selectedBlueprintVersion);
+      const min = this.blueprintVersions[0]?.version || 0;
+      const max = this.blueprintVersions[this.blueprintVersions.length - 1]?.version || 0;
+      this.selectedBlueprintVersion = Math.max(min, Math.min(max, selected || max));
+      this.refreshBlueprintDiff();
+    },
+
+    restoreBlueprintVersion() {
+      const version = this.selectedBlueprintVersionEntry;
+      if (!version?.blueprint) return;
+      this.blueprint = version.blueprint;
+      this.previewMode = 'blueprint';
+      this.pipelineView = 'preview';
+      this.toast('Blueprint restored', `Blueprint v${version.version} is now in the editor.`);
+    },
+
     addPipelineEntry(event) {
       const time = new Date().toLocaleTimeString('en-AU', { hour12: false });
       const icons = { active: '...', complete: 'ok', error: '!', warn: '!' };
@@ -1064,6 +1174,7 @@ ${this.form.projectType === 'app' ? `
 
     async saveDraft(showToast = true) {
       if (!this.blueprint.trim()) return;
+      this.ensureCurrentBlueprintVersion('Saved blueprint edit');
       const name = this.form.projectName || 'cauldron-untitled';
       const data = await this.api('/api/drafts', {
         method: 'POST',
@@ -1076,6 +1187,7 @@ ${this.form.projectType === 'app' ? `
           modelUsed: `${this.form.provider}/${this.form.cloudModel || 'default'}`,
           prototypeHtml: this.prototypeHtml,
           prototypeIterations: this.prototypeIterations,
+          blueprintVersions: this.blueprintVersions,
         }),
       });
       this.savedDraftId = data.draftId;
@@ -1178,6 +1290,15 @@ ${this.form.projectType === 'app' ? `
       this.form.projectName = draft.project_name || this.form.projectName;
       this.form.brainDump = draft.brain_dump || this.form.brainDump;
       this.blueprint = draft.blueprint || '';
+      this.blueprintVersions = Array.isArray(draft.blueprint_versions) && draft.blueprint_versions.length
+        ? draft.blueprint_versions
+        : [];
+      if (!this.blueprintVersions.length && this.blueprint.trim()) {
+        this.recordBlueprintVersion(this.blueprint, { summary: 'Loaded baseline blueprint' });
+      } else {
+        this.selectedBlueprintVersion = this.blueprintVersions[this.blueprintVersions.length - 1]?.version || 0;
+        this.refreshBlueprintDiff();
+      }
       this.prototypeHtml = draft.prototype_html || this.extractHtml(this.blueprint);
       this.prototypeIterations = Array.isArray(draft.prototype_iterations) ? draft.prototype_iterations : [];
       const latestIteration = this.prototypeIterations[this.prototypeIterations.length - 1];

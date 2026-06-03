@@ -15,7 +15,7 @@
 
 Cauldron OS 0.30 is a local-first workshop for AI-assisted builders. Drop in a rough app or website idea, choose a model or design reference, and Cauldron turns the mess into a structured product blueprint with architecture notes, schema ideas, exportable docs, a live HTML + AlpineJS prototype preview, critique-driven iteration, and build-agent handoff with real scaffold generation.
 
-New in **0.30** (5-Phase Codex Sprint): 150+ design systems from Open Design, BYOK build-agent handoff (Cursor, Claude Code, Codex, Hermes, OpenCode), critique & review loop with iteration history, scaffold export (Next.js, Astro, static HTML, AlpineJS), UI polish (progress bars, keyboard shortcuts, responsive layout, settings modal, toast notifications).
+New in **0.30**: 150+ design systems from Open Design, BYOK build-agent handoff (Cursor, Claude Code, Codex, Hermes, OpenCode), critique & review loop with iteration history, scaffold export (Next.js, Astro, static HTML, AlpineJS), UI polish (progress bars, keyboard shortcuts, responsive layout, settings modal, toast notifications).
 
 It is built for hobbyists, indie builders, designers, enthusiasts, and developers who want better AI output than "make me a nice dashboard".
 

@@ -771,7 +771,7 @@ registerAllRoutes(app, deps);
   try {
     await db.init();
     app.listen(PORT, () => {
-      console.log(`\n🔥 Cauldron OS v0.30 — Witch Daddy Labs (Refactor & Polish Sprint 5)`);
+      console.log(`\n🔥 Cauldron OS v0.30 — Witch Daddy Labs`);
       console.log(`   Merged features from public open-source + private advanced builds`);
       console.log(`   Master Brain upgrades loaded:`);
       console.log(`   • Impeccable Taste (Grendel)`);

@@ -116,7 +116,7 @@ function assertProjectFiles(projectPath, files) {
     app.kill('SIGTERM');
     fs.rmSync(tmp, { recursive: true, force: true });
     for (const projectPath of createdProjects) {
-      fs.rmSync(projectPath, { recursive: true, force: true });
+      try { fs.rmSync(projectPath, { recursive: true, force: true }); } catch { /* node_modules may need a moment */ }
     }
   }
 })().catch(err => {

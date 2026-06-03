@@ -53,4 +53,4 @@ Anything special for the release? (e.g. "needs to bump version in two places")
 
 ## Owner
 
-Who should review this PR? @witchdaddylabs/billy
+Who should review this PR? @witchdaddylabs/maintainers

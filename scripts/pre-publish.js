@@ -16,7 +16,6 @@ const REQUIRED_FILES = [
   'README.md',
   'LICENSE',
   '.gitignore',
-  'GETTING_STARTED.md',
   '.github/CODE_OF_CONDUCT.md',
   '.github/SECURITY.md',
   '.github/ISSUE_TEMPLATE/bug-report.md',

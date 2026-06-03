@@ -25,7 +25,7 @@ Initial target agents:
 
 Detection must be capability-based. If a command is missing, return `available: false`; do not fail the app.
 
-Current implementation note: OpenCode is the only external CLI path with backend support today, and it lives in project resume/open routes rather than `/api/handoff`. Cursor, Claude Code, Codex, and Hermes detection/invocation still need to be implemented.
+Current implementation note: `/api/build-agents` detects Cursor, Claude Code, Codex, Hermes, and OpenCode. `/api/build-agents/run` always creates the handoff package. Cursor and OpenCode support automated launch when detected; Claude Code, Codex, and Hermes are exposed as detected/manual fallback options until their invocation contracts are hardened.
 
 ## Handoff Bundle
 
@@ -184,8 +184,8 @@ Future tracking can watch file modification times, child process exit codes, or 
 
 ## Relationship To Existing Routes
 
-Current `/api/handoff` already writes `blueprint.md`, `prototype.html`, and `.opencode/config.md`. Phase 2 should either extend that implementation or wrap it so the generated bundle is not duplicated in two incompatible places.
+Current `/api/handoff` and `/api/build-agents/run` use the shared handoff package writer, so the generated bundle stays consistent.
 
 Current `/api/build/*` routes run the XML tool workspace flow. Phase 2 should decide whether the Build stage prefers BYOK/CLI handoff by default while preserving the XML route as a local-agent option or legacy path.
 
-Known mismatch to resolve in Phase 2: the frontend currently labels direct export as an OpenCode dispatch/launch, but the handoff route only creates files. Agent launch should become a separate explicit action or the copy should be softened to match package-only behavior.
+The frontend now separates package creation from launch state: package-only fallback is reported as `handoff-only`, while a detected automated launch returns `launched` with command/log metadata.

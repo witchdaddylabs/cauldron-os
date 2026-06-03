@@ -10,6 +10,7 @@
  * 5. Verifies error handling (missing fields, duplicate project names)
  * 6. Handoff with multiple HTML blocks (only first used)
  * 7. Handoff without HTML blocks (no prototype.html created)
+ * 8. Verifies v0.30 handoff package files and manifest
  */
 
 const http = require('http');
@@ -146,6 +147,10 @@ A test project for smoke testing handoff.
     assert(fs.existsSync(projectPath), `Project dir not found: ${projectPath}`);
     assert(fs.existsSync(path.join(projectPath, 'blueprint.md')), 'blueprint.md not found');
     assert(fs.existsSync(path.join(projectPath, 'prototype.html')), 'prototype.html not found');
+    assert(fs.existsSync(path.join(projectPath, 'cauldron.project.json')), 'cauldron.project.json not found');
+    assert(fs.existsSync(path.join(projectPath, 'design-system.md')), 'design-system.md not found');
+    assert(fs.existsSync(path.join(projectPath, 'README.md')), 'README.md not found');
+    assert(fs.existsSync(path.join(projectPath, '.cursorrules')), '.cursorrules not found');
     assert(fs.existsSync(path.join(projectPath, '.opencode', 'config.md')), '.opencode/config.md not found');
 
     // Verify blueprint content
@@ -163,6 +168,19 @@ A test project for smoke testing handoff.
     const config = fs.readFileSync(path.join(projectPath, '.opencode', 'config.md'), 'utf8');
     assert(config.includes('handoff-test-1'), 'config.md missing project name');
     assert(config.includes('blueprint.md'), 'config.md missing blueprint reference');
+
+    const manifest = JSON.parse(fs.readFileSync(path.join(projectPath, 'cauldron.project.json'), 'utf8'));
+    assert.equal(manifest.schemaVersion, 1, 'manifest schemaVersion should be 1');
+    assert.equal(manifest.projectName, 'handoff-test-1', 'manifest missing safe project name');
+    assert.equal(manifest.agent.mode, 'handoff-only', 'manifest should distinguish package-only mode');
+    assert.equal(manifest.files.blueprint, 'blueprint.md', 'manifest missing blueprint file');
+    assert.equal(manifest.files.prototype, 'prototype.html', 'manifest missing prototype file');
+    assert.equal(manifest.files.designSystem, 'design-system.md', 'manifest missing design-system file');
+    assert.equal(manifest.files.readme, 'README.md', 'manifest missing README file');
+
+    const readme = fs.readFileSync(path.join(projectPath, 'README.md'), 'utf8');
+    assert(readme.includes('handoff package'), 'README should describe package creation');
+    assert(!readme.includes('launched'), 'README should not imply an agent was launched');
   })();
 
   // ── Test 3: Verify draft record ──

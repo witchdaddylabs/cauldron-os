@@ -41,6 +41,7 @@ const {
   createDesignSystemService,
 } = require('./lib/design-system-catalog');
 const registerAllRoutes = require('./routes');
+const { version: PACKAGE_VERSION } = require('./package.json');
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
@@ -757,6 +758,7 @@ const deps = {
   inferProviderFromModel,
   CLOUD_MODELS,
   rootDir: __dirname,
+  PACKAGE_VERSION,
 };
 
 registerAllRoutes(app, deps);

@@ -11,6 +11,8 @@ assert.match(html, /Blueprint next/, 'Blueprint button should exist');
 assert.match(html, /Build this/, 'Build stage button should exist');
 assert.match(html, /Build Agents/, 'Build agent settings tab should exist');
 assert.match(html, /Refresh build agents/, 'Build agent refresh button should exist');
+assert.match(html, /Multi-agent orchestration/, 'Multi-agent build-agent controls should exist');
+assert.match(html, /agentResults/, 'Multi-agent result list should be rendered');
 assert.match(html, /Create handoff package/, 'Handoff package button should exist');
 assert.match(html, /Critique this prototype/, 'Prototype critique textarea should exist');
 assert.match(html, /Prototype iterations/, 'Prototype iteration timeline should exist');
@@ -28,10 +30,13 @@ assert.match(html, /blueprint-diff/, 'Blueprint diff preview mode should be wire
 assert.match(html, /stageModels/, 'Stage model routing should be configured');
 assert.match(html, /Brain dump →/, 'Pipeline subtitle should reference brain dump');
 assert.match(html, /selectedBuildAgentId/, 'Build agent selection state should be wired');
+assert.match(html, /selectedBuildAgentIds/, 'Multi-agent build selection state should be wired');
 
 const appJs = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'scripts', 'app.js'), 'utf8');
 assert.match(appJs, /\/api\/build-agents/, 'Build agent detection API should be called');
 assert.match(appJs, /\/api\/build-agents\/run/, 'Build agent run API should be called');
+assert.match(appJs, /toggleBuildAgent/, 'Multi-agent toggle handler should be wired');
+assert.match(appJs, /agentIds/, 'Build agent run should send multiple selected agent ids');
 assert.match(appJs, /submitCritique/, 'Critique submit handler should be wired');
 assert.match(appJs, /prototypeIterations/, 'Prototype iteration state should be wired');
 assert.match(appJs, /testApiKey/, 'API key test handler should be wired');

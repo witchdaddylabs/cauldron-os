@@ -81,11 +81,50 @@ function waitForServer(url, timeoutMs = 15000) {
       assert.ok(fs.existsSync(path.join(runData.projectPath, file)), `${file} should be written`);
     }
 
+    const multiRes = await fetch(`http://127.0.0.1:${appPort}/api/build-agents/run`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        projectName: 'multi-agent-handoff-test',
+        agentIds: ['handoff', 'cursor', 'codex'],
+        blueprint: '# Multi Agent Test\n\nBuild UI, API, and tests.',
+        prototypeHtml: '<main>Multi-agent prototype</main>',
+        designReference: 'cursor',
+        templateId: 'html-alpine',
+        projectType: 'prototype',
+        dryRun: true,
+      }),
+    });
+    const multiData = await multiRes.json();
+    assert.strictEqual(multiRes.status, 200, multiData.error || 'multi-agent run should succeed');
+    assert.strictEqual(multiData.success, true);
+    assert.strictEqual(multiData.mode, 'multi-agent');
+    assert.strictEqual(multiData.agentResults.length, 3);
+    assert.ok(fs.existsSync(multiData.manifestPath), 'root multi-agent manifest should exist');
+
+    const multiManifest = JSON.parse(fs.readFileSync(multiData.manifestPath, 'utf8'));
+    assert.strictEqual(multiManifest.orchestration.mode, 'multi-agent');
+    assert.strictEqual(multiManifest.orchestration.agents.length, 3);
+
+    const cursorResult = multiData.agentResults.find(result => result.agentId === 'cursor');
+    const codexResult = multiData.agentResults.find(result => result.agentId === 'codex');
+    assert.ok(cursorResult, 'cursor scoped handoff should exist');
+    assert.ok(codexResult, 'codex scoped handoff should exist');
+    assert.match(cursorResult.scope.label, /Frontend UI/);
+    assert.match(codexResult.scope.label, /Architecture/);
+
+    const cursorPrompt = fs.readFileSync(path.join(cursorResult.projectPath, 'agent-prompt.md'), 'utf8');
+    const codexPrompt = fs.readFileSync(path.join(codexResult.projectPath, 'agent-prompt.md'), 'utf8');
+    assert.match(cursorPrompt, /visual implementation/i);
+    assert.match(codexPrompt, /API\/data contracts/i);
+    assert.match(cursorPrompt, /Multi-Agent Context/);
+
     console.log('Build agents smoke tests passed');
   } finally {
     app.kill('SIGTERM');
     fs.rmSync(tmp, { recursive: true, force: true });
     fs.rmSync(path.join(__dirname, '..', 'projects', 'agent-handoff-test'), { recursive: true, force: true });
+    fs.rmSync(path.join(__dirname, '..', 'projects', 'multi-agent-handoff-test'), { recursive: true, force: true });
   }
 })().catch(err => {
   console.error(err);

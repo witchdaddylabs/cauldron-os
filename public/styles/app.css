@@ -569,6 +569,65 @@ select:focus {
   font-size: 14px;
 }
 
+.agent-checklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 8px;
+}
+
+.agent-checklist.compact-list {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+.agent-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  min-height: 52px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.agent-check input {
+  width: auto;
+  min-height: auto;
+  margin-top: 3px;
+}
+
+.agent-check strong,
+.agent-check small {
+  display: block;
+}
+
+.agent-check small {
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.agent-result-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.agent-result {
+  display: grid;
+  gap: 2px;
+  padding: 10px;
+  border: 1px solid rgba(183, 148, 246, 0.18);
+  border-radius: var(--radius-sm);
+  background: rgba(13, 13, 15, 0.42);
+}
+
+.agent-result span,
+.agent-result small {
+  color: var(--text-muted);
+}
+
 .key-actions {
   align-items: stretch;
 }

@@ -313,12 +313,28 @@
 
           <div class="field">
             <label for="buildAgentSelect">Selected build agent</label>
-            <select id="buildAgentSelect" x-model="selectedBuildAgentId" :disabled="busy || buildAgentDetecting">
+            <select id="buildAgentSelect" x-model="selectedBuildAgentId" @change="syncSingleBuildAgent(selectedBuildAgentId)" :disabled="busy || buildAgentDetecting">
               <template x-for="agent in buildAgents" :key="agent.id">
                 <option :value="agent.id" :disabled="!agent.available && agent.id !== 'handoff'" x-text="`${agent.name}${agent.available ? '' : ' (not detected)'}`"></option>
               </template>
             </select>
             <small x-text="selectedBuildAgent?.notes || 'Choose handoff package mode when no CLI is available.'"></small>
+          </div>
+
+          <div class="field">
+            <label>Multi-agent orchestration</label>
+            <div class="agent-checklist">
+              <template x-for="agent in buildAgents" :key="`multi-${agent.id}`">
+                <label class="agent-check">
+                  <input type="checkbox" :checked="selectedBuildAgentIds.includes(agent.id)" :disabled="busy || (!agent.available && agent.id !== 'handoff')" @change="toggleBuildAgent(agent.id, $event.target.checked)" />
+                  <span>
+                    <strong x-text="agent.name"></strong>
+                    <small x-text="agent.available || agent.id === 'handoff' ? (agent.notes || 'Available') : 'Not detected'"></small>
+                  </span>
+                </label>
+              </template>
+            </div>
+            <small>Select multiple agents to create scoped handoff packages for each one.</small>
           </div>
 
           <div class="button-row">
@@ -728,16 +744,27 @@
             <p class="stage-intro">Create a handoff package for a detected local build agent, or keep using the legacy local XML workspace for direct file iteration.</p>
 
             <div class="callout" style="margin-bottom: 16px;">
-              <strong>Build agent:</strong>
-              <span x-text="selectedBuildAgent?.name || 'Generate handoff package'"></span><br />
+              <strong>Build agents:</strong>
+              <span x-text="selectedBuildAgentSummary"></span><br />
               <span x-text="selectedBuildAgent?.notes || buildAgentStatus"></span>
               <div class="button-row compact" style="margin-top:10px;">
-                <select x-model="selectedBuildAgentId" @focus="!buildAgentsLoaded && loadBuildAgents()" :disabled="busy || buildAgentDetecting" class="route-select">
+                <select x-model="selectedBuildAgentId" @change="syncSingleBuildAgent(selectedBuildAgentId)" @focus="!buildAgentsLoaded && loadBuildAgents()" :disabled="busy || buildAgentDetecting" class="route-select">
                   <template x-for="agent in buildAgents" :key="agent.id">
                     <option :value="agent.id" :disabled="!agent.available && agent.id !== 'handoff'" x-text="`${agent.name}${agent.available ? '' : ' (not detected)'}`"></option>
                   </template>
                 </select>
                 <button class="btn btn-ghost" type="button" @click="openSettings('agents')">Agent settings</button>
+              </div>
+              <div class="agent-checklist compact-list" x-show="buildAgents.length" style="margin-top:12px;">
+                <template x-for="agent in buildAgents" :key="`build-${agent.id}`">
+                  <label class="agent-check">
+                    <input type="checkbox" :checked="selectedBuildAgentIds.includes(agent.id)" :disabled="busy || (!agent.available && agent.id !== 'handoff')" @change="toggleBuildAgent(agent.id, $event.target.checked)" />
+                    <span>
+                      <strong x-text="agent.name"></strong>
+                      <small x-text="agent.available || agent.id === 'handoff' ? 'Selected package target' : 'Not detected'"></small>
+                    </span>
+                  </label>
+                </template>
               </div>
             </div>
 
@@ -822,6 +849,15 @@
               <template x-if="handoffResult?.error">
                 <span><strong>Note:</strong> <span x-text="handoffResult.error"></span></span>
               </template>
+              <div x-show="(handoffResult?.agentResults || []).length" class="agent-result-list">
+                <template x-for="result in (handoffResult?.agentResults || [])" :key="result.agentId">
+                  <div class="agent-result">
+                    <strong x-text="result.agentName"></strong>
+                    <span x-text="result.scope?.label || result.mode"></span>
+                    <small x-text="result.relativePath || result.projectPath"></small>
+                  </div>
+                </template>
+              </div>
             </div>
           </section>
         </div>
@@ -856,7 +892,7 @@
           <!-- Pipeline Summary Bar -->
           <div class="pipeline-summary" x-show="pipelineComplete && pipelineView === 'log'">
             <span>OK</span>
-            <span>Generated in <span x-text="pipelineComplete?.duration?.toFixed(1)"></span>s · <span x-text="pipelineComplete?.steps"></span> steps</span>
+            <span>Generated in <span x-text="Number(pipelineComplete?.duration || 0).toFixed(1)"></span>s · <span x-text="pipelineComplete?.steps"></span> steps</span>
             <span class="summary-link" @click="switchPipelineView('log')">[View Log]</span>
           </div>
 
@@ -870,7 +906,7 @@
                     <span x-show="entry.status === 'active'" class="pipeline-spinner"></span>
                     <span x-text="entry.icon" x-show="entry.status !== 'active'"></span>
                     <span class="info" x-text="entry.label"></span>
-                    <span x-show="entry.duration" style="color:#72727d;font-size:11px;margin-left:4px;" x-text="'(' + entry.duration.toFixed(1) + 's)'"></span>
+                    <span x-show="entry.duration" style="color:#72727d;font-size:11px;margin-left:4px;" x-text="'(' + Number(entry.duration || 0).toFixed(1) + 's)'"></span>
                     <span x-show="entry.message" class="error" x-text="':' + entry.message" style="margin-left:4px;"></span>
                   </span>
                 </div>

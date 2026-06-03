@@ -38,6 +38,7 @@ Important state names:
 | `critiqueText` | current natural-language prototype critique |
 | `prototypeIterations` | latest prototype snapshots and critique history |
 | `buildSession` | active build workspace metadata |
+| `selectedBuildAgentIds` | selected build-agent ids for multi-agent handoff |
 | `handoffResult` | latest export/handoff response |
 | `pipelineLog` | user-facing activity log |
 | `pipelineProgress` | estimated live progress for model-backed generation |
@@ -86,7 +87,9 @@ Draft saves accept optional `blueprintVersions`, `prototypeHtml`, and `prototype
 | `/api/build/file/:sessionId` | GET | read one workspace file |
 | `/api/build/status/:sessionId` | GET | inspect build session metadata |
 | `/api/build-agents` | GET | detect BYOK build-agent CLIs |
-| `/api/build-agents/run` | POST | create a handoff package and optionally launch the selected detected CLI |
+| `/api/build-agents/run` | POST | create one or more build-agent handoff packages and optionally launch selected detected CLIs |
+
+`/api/build-agents/run` accepts the existing single-agent `agentId` field and optional `agentIds` for v0.40 multi-agent orchestration. When `agentIds` contains 2+ ids, the route returns `mode: "multi-agent"`, writes a root `cauldron.project.json`, and creates scoped handoff packages under `agents/<agentId>/`.
 
 The v0.30 BYOK/CLI work should treat this as an existing local-agent path, not assume the build stage is empty.
 

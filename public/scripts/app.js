@@ -59,6 +59,7 @@ function cauldronApp() {
     workspacePreviewUrl: '',
     buildAgents: [],
     selectedBuildAgentId: 'handoff',
+    selectedBuildAgentIds: ['handoff'],
     buildAgentsLoaded: false,
     buildAgentDetecting: false,
     buildAgentRunResult: null,
@@ -145,6 +146,21 @@ function cauldronApp() {
 
     get selectedBuildAgent() {
       return this.buildAgents.find(agent => agent.id === this.selectedBuildAgentId) || null;
+    },
+
+    get selectedBuildAgents() {
+      const ids = Array.isArray(this.selectedBuildAgentIds) && this.selectedBuildAgentIds.length
+        ? this.selectedBuildAgentIds
+        : [this.selectedBuildAgentId || 'handoff'];
+      return ids
+        .map(id => this.buildAgents.find(agent => agent.id === id))
+        .filter(Boolean);
+    },
+
+    get selectedBuildAgentSummary() {
+      const agents = this.selectedBuildAgents;
+      if (agents.length <= 1) return agents[0]?.name || this.selectedBuildAgent?.name || 'Generate handoff package';
+      return `${agents.length} agents: ${agents.map(agent => agent.name).join(', ')}`;
     },
 
     get selectedBuildAgentAvailable() {
@@ -394,6 +410,9 @@ function cauldronApp() {
         if (!this.buildAgents.some(agent => agent.id === this.selectedBuildAgentId)) {
           this.selectedBuildAgentId = this.buildAgents.find(agent => agent.id === 'handoff')?.id || this.buildAgents[0]?.id || 'handoff';
         }
+        this.selectedBuildAgentIds = this.selectedBuildAgentIds
+          .filter(id => this.buildAgents.some(agent => agent.id === id && (agent.available || agent.id === 'handoff')));
+        if (!this.selectedBuildAgentIds.length) this.selectedBuildAgentIds = [this.selectedBuildAgentId];
         const available = this.buildAgents.filter(agent => agent.available && agent.id !== 'handoff').length;
         this.buildAgentStatus = available
           ? `${available} build agent${available === 1 ? '' : 's'} detected.`
@@ -401,6 +420,7 @@ function cauldronApp() {
       } catch (error) {
         this.buildAgents = [{ id: 'handoff', name: 'Generate handoff package', available: true, command: null, notes: 'Always available' }];
         this.selectedBuildAgentId = 'handoff';
+        this.selectedBuildAgentIds = ['handoff'];
         this.buildAgentStatus = `Build-agent detection failed: ${error.message}`;
       } finally {
         this.buildAgentDetecting = false;
@@ -417,6 +437,22 @@ function cauldronApp() {
       this.openApiKeySettings(`${actionLabel} needs a ${this.form.provider} API key before it can run.`);
       this.toast('API key needed', `${actionLabel} needs a saved ${this.form.provider} key first.`, 'error');
       return false;
+    },
+
+    toggleBuildAgent(agentId, checked) {
+      const id = String(agentId || '');
+      if (!id) return;
+      const next = new Set(this.selectedBuildAgentIds.length ? this.selectedBuildAgentIds : [this.selectedBuildAgentId || 'handoff']);
+      if (checked) next.add(id);
+      else next.delete(id);
+      if (!next.size) next.add('handoff');
+      this.selectedBuildAgentIds = Array.from(next);
+      this.selectedBuildAgentId = this.selectedBuildAgentIds[0] || 'handoff';
+    },
+
+    syncSingleBuildAgent(agentId) {
+      this.selectedBuildAgentId = agentId || 'handoff';
+      this.selectedBuildAgentIds = [this.selectedBuildAgentId];
     },
 
     newWorkspace() {
@@ -1204,11 +1240,13 @@ ${this.form.projectType === 'app' ? `
       if (!this.buildAgentsLoaded) await this.loadBuildAgents();
 
       await this.withBusy('Creating build-agent handoff package...', async () => {
+        const selectedIds = this.selectedBuildAgentIds.length ? this.selectedBuildAgentIds : [this.selectedBuildAgentId || 'handoff'];
         const data = await this.api('/api/build-agents/run', {
           method: 'POST',
           body: JSON.stringify({
             projectName: this.form.projectName || 'cauldron-project',
             agentId: this.selectedBuildAgentId || 'handoff',
+            agentIds: selectedIds,
             blueprint: this.blueprint,
             prototypeHtml: this.prototypeHtml,
             designReference: this.form.designReference || 'none',
@@ -1219,7 +1257,20 @@ ${this.form.projectType === 'app' ? `
         });
         this.buildAgentRunResult = data;
         this.handoffResult = data;
-        if (data.mode === 'launched') {
+        if (data.mode === 'multi-agent') {
+          const agentCount = data.agentResults?.length || selectedIds.length;
+          this.status = `Multi-agent handoff created for ${agentCount} agents.`;
+          this.toast('Multi-agent package created', data.projectPath || 'Project folder created.');
+          for (const result of data.agentResults || []) {
+            this.addPipelineEntry({
+              step: this.pipelineLog.length + 1,
+              total: data.agentResults.length,
+              label: `${result.agentName}: ${result.scope?.label || result.mode}`,
+              status: result.fallback ? 'warn' : 'complete',
+              message: result.error || result.relativePath || result.mode,
+            });
+          }
+        } else if (data.mode === 'launched') {
           this.status = `Handoff package created and ${data.agentName || data.agentId} launched.`;
           this.toast('Build agent launched', data.projectPath || 'Project folder created.');
         } else if (data.fallback) {

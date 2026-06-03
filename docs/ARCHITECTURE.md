@@ -464,10 +464,10 @@ CREATE TABLE project_status_overrides (
 
 ### 6.2 Design Reference Selector
 
-- 13 curated brand design systems from `awesome-design-md` repo
-- 14 Refero styles from `refero.design`
-- Fetched from GitHub on first use, cached in `designSystemCache` (Map)
-- Local fallback: `design-systems/{handle}/DESIGN.md`
+- 150 local `DESIGN.md` systems imported from Open Design and indexed by `design-systems/catalog.json`
+- Refero styles from `refero.design`
+- Local files, Refero prompt guidance, and legacy remote fallbacks share `designSystemCache` (Map)
+- Local source: `design-systems/{handle}/DESIGN.md`
 
 ### 6.3 URL Research Sweep
 
@@ -492,15 +492,15 @@ Two modes:
 
 ## 7. Design Systems
 
-**27 total entries** in `DESIGN_SYSTEMS`:
+**150+ selectable entries** in `DESIGN_SYSTEMS`:
 
-### 13 Curated Brands (awesome-design-md)
-cursor, vercel, lovable, raycast, linear, stripe, notion, apple, figma, supabase, resend, webflow, opencode
+### Imported Open Design Catalog
+150 local `DESIGN.md` systems live under `design-systems/{handle}/DESIGN.md` and are indexed by `design-systems/catalog.json`.
 
-### 14 Refero Styles (refero.design)
-antimetal, good-glyphs, linear, cursor, anthropic, raycast, superhuman, hyperstudio, generalint, mercury, elevenlabs, monopo, minimal, stripe
+### Refero Styles (refero.design)
+Refero styles are represented as prompt-guidance entries and can also be searched live through `/api/refero-search`.
 
-Refero styles are fetched from `https://styles.refero.design/style/{uuid}`.
+Refero search proxies `https://styles.refero.design/api/styles`; curated Refero prompt entries also keep UUID metadata for future style-detail use.
 
 ---
 
@@ -737,9 +737,10 @@ erDiagram
 ## 13. Extension Points
 
 ### Adding a New Design System
-1. Add entry to `DESIGN_SYSTEMS` in `server.js`
-2. (Optional) Create `design-systems/{handle}/DESIGN.md` for local fallback
-3. Refero styles just need a UUID — no local file needed
+1. Create `design-systems/{handle}/DESIGN.md`
+2. Add the entry to `design-systems/catalog.json`
+3. Run `node scripts/validate-design-systems.js`
+4. Refero styles still live as prompt-guidance entries in `server.js`
 
 ### Adding a New Template
 1. Add entry to `TEMPLATES` array in `server.js`

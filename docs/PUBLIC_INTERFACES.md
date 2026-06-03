@@ -77,11 +77,13 @@ Known v0.30 gap: `/api/build/generate` and `/api/build/refine` are intended SSE 
 | --- | --- | --- |
 | `/api/cloud-models` | GET | list supported cloud providers/models |
 | `/api/ollama-models` | GET | detect local Ollama models from `/api/tags` |
-| `/api/design-systems` | GET | list selectable design-system ids/names |
-| `/api/design-reference` | POST | fetch/cache a selected design reference |
+| `/api/design-systems` | GET | list selectable design-system ids/names/sources |
+| `/api/design-reference` | POST | fetch/cache a selected local, Refero, or remote design reference |
 | `/api/refero-search` | GET | proxy cached Refero style search |
 
-`/api/design-systems` depends on the `DESIGN_SYSTEMS` map in `server.js`. Phase 1 should either migrate that map to generated data or keep this route response stable.
+`/api/design-systems` returns `{ systems: [{ id, name, source }] }`. IDs are canonical catalog IDs. `source` may be `open-design`, `refero`, or `remote`.
+
+Imported catalog entries live under `design-systems/<id>/DESIGN.md` and are indexed by `design-systems/catalog.json`. `/api/design-reference` shares the same cache and loader for local files, Refero prompt guidance, and legacy remote fallbacks.
 
 ### Project And Status
 

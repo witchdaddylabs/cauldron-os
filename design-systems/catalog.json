@@ -1,0 +1,3460 @@
+{
+  "schemaVersion": 1,
+  "source": "https://github.com/nexu-io/open-design",
+  "sourceRef": "main",
+  "importedAt": "2026-06-03T06:35:04.834Z",
+  "count": 150,
+  "systems": [
+    {
+      "id": "agentic",
+      "name": "Design System Inspired by Agentic",
+      "path": "design-systems/agentic/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/agentic",
+      "sha": "dfe4e62d495aa13b32281878a8be7e54d026138e",
+      "colors": [
+        "#FF5701",
+        "#F6F6F1",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "airbnb",
+      "name": "Design System Inspired by Airbnb",
+      "path": "design-systems/airbnb/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/airbnb",
+      "sha": "f4310620dc4e14aaa363543a1ce0bc2088c59323",
+      "colors": [
+        "#ff385c",
+        "#222222",
+        "#92174d",
+        "#460479",
+        "#e00b41",
+        "#428bff",
+        "#ffffff",
+        "#f7f7f7",
+        "#dddddd",
+        "#3f3f3f",
+        "#6a6a6a",
+        "#929292"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "airtable",
+      "name": "Design System Inspired by Airtable",
+      "path": "design-systems/airtable/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/airtable",
+      "sha": "18a9c2aeb607e5df30dd9dc85b1a5236af765b1b",
+      "colors": [
+        "#181d26",
+        "#1b61c9",
+        "#ffffff",
+        "#006400",
+        "#333333",
+        "#254fad",
+        "#e0e2e6",
+        "#f8fafc"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "ant",
+      "name": "Design System Inspired by Ant",
+      "path": "design-systems/ant/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/ant",
+      "sha": "42c8775099e99ded76cf4c5ea1d299d7a9b92807",
+      "colors": [
+        "#1677FF",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "apple",
+      "name": "Design System Inspired by Apple",
+      "path": "design-systems/apple/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/apple",
+      "sha": "9976e12b42d3c396c96c063b61bedb4dac83c10e",
+      "colors": [
+        "#000000",
+        "#f5f5f7",
+        "#0071e3",
+        "#0066cc",
+        "#2997ff",
+        "#1d1d1f",
+        "#ffffff",
+        "#272729",
+        "#262629",
+        "#28282b",
+        "#2a2a2c",
+        "#6e6e73"
+      ],
+      "fonts": [
+        "SF Pro Display",
+        "fallbacks SF Pro Icons",
+        "Helvetica Neue",
+        "Helvetica",
+        "Arial",
+        "sans-serif",
+        "SF Pro Text"
+      ]
+    },
+    {
+      "id": "application",
+      "name": "Design System Inspired by Application",
+      "path": "design-systems/application/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/application",
+      "sha": "c06befa78ade83074496c956b053fdc53921e494",
+      "colors": [
+        "#9333EA",
+        "#A855F7",
+        "#10B981",
+        "#F59E0B",
+        "#EF4444",
+        "#FFFFFF",
+        "#09090B"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "arc",
+      "name": "Design System Inspired by Arc Browser",
+      "path": "design-systems/arc/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/arc",
+      "sha": "53c4cb753a741b9b1c69f2b3d8489645b8e8f1a0",
+      "colors": [
+        "#ff7e5f",
+        "#feb47b",
+        "#7f5af0",
+        "#e84393",
+        "#16f2b3",
+        "#0db4f7",
+        "#1a1a1f",
+        "#54545a",
+        "#8c8c93",
+        "#fafafa",
+        "#ff5f5f",
+        "#b794f4"
+      ],
+      "fonts": [
+        "12px / 600"
+      ]
+    },
+    {
+      "id": "artistic",
+      "name": "Design System Inspired by Artistic",
+      "path": "design-systems/artistic/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/artistic",
+      "sha": "97e4a8d123c8220f2e4792eac68738ad6acc8da1",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "atelier-zero",
+      "name": "Atelier Zero",
+      "path": "design-systems/atelier-zero/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/atelier-zero",
+      "sha": "616ef8d894be680b344c837912ecca9b2185be3a",
+      "colors": [
+        "#efe7d2",
+        "#ece4cf",
+        "#ddd2b6",
+        "#f7f1de",
+        "#15140f",
+        "#2a2620",
+        "#5a5448",
+        "#8b8676",
+        "#ed6f5c",
+        "#f08e7c",
+        "#e9b94a",
+        "#6e7448"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "bento",
+      "name": "Design System Inspired by Bento",
+      "path": "design-systems/bento/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/bento",
+      "sha": "48b685a3fe624ba9c20f4f897da338751ac3f3c0",
+      "colors": [
+        "#FAD4C0",
+        "#80A1C1",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFF5E6",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "binance",
+      "name": "Design System Inspired by Binance.US",
+      "path": "design-systems/binance/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/binance",
+      "sha": "80ba5d1bdc6cb630b976356a1de52b93ec784ea3",
+      "colors": [
+        "#222126",
+        "#F0B90B",
+        "#FFD000",
+        "#F8D12F",
+        "#D0980B",
+        "#1EAEDB",
+        "#FFFFFF",
+        "#F5F5F5",
+        "#2B2F36",
+        "#1E2026",
+        "#32313A",
+        "#848E9C"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "bmw-m",
+      "name": "Design System Inspired by BMW M",
+      "path": "design-systems/bmw-m/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/bmw-m",
+      "sha": "c761a17585a66d4bd13e807cb8edd8cef7053627",
+      "colors": [
+        "#000",
+        "#0066b1",
+        "#1c69d4",
+        "#e22718",
+        "#ffffff",
+        "#0653b6",
+        "#000000",
+        "#0d0d0d",
+        "#1a1a1a",
+        "#262626",
+        "#2b2b2b",
+        "#3c3c3c"
+      ],
+      "fonts": [
+        "BMW Type Next Latin Light carries the large editorial display voice",
+        "labels",
+        "cards",
+        "and emphasis",
+        "use BMWTypeNextLatin Light for display when available",
+        "BMWTypeNextLatin for body/UI",
+        "then Helvetica",
+        "Arial"
+      ]
+    },
+    {
+      "id": "bmw",
+      "name": "Design System Inspired by BMW",
+      "path": "design-systems/bmw/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/bmw",
+      "sha": "3254627a5f1327201bc1a05c5ffa8cf4aac4a7fa",
+      "colors": [
+        "#1c69d4",
+        "#0653b6",
+        "#757575",
+        "#ffffff",
+        "#262626",
+        "#bbbbbb"
+      ],
+      "fonts": [
+        "BMWTypeNextLatin Light (weight 300) for massive uppercase display headings",
+        "Meiryo)",
+        "reflecting BMW's global presence."
+      ]
+    },
+    {
+      "id": "bold",
+      "name": "Design System Inspired by Bold",
+      "path": "design-systems/bold/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/bold",
+      "sha": "004a0868a47c7767bbbaf2fdb747a1a2c5adfa9a",
+      "colors": [
+        "#0077BC",
+        "#009866",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#111111",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "brutalism",
+      "name": "Design System Inspired by Brutalism",
+      "path": "design-systems/brutalism/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/brutalism",
+      "sha": "5922713522dbac4e17fe5eb8ac64af7f5adc0e22",
+      "colors": [
+        "#DD614C",
+        "#DAA144",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "bugatti",
+      "name": "Design System Inspired by Bugatti",
+      "path": "design-systems/bugatti/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/bugatti",
+      "sha": "98b5e86652da09a2e5f4abe2f54de6cda529f628",
+      "colors": [
+        "#000000",
+        "#ffffff",
+        "#999999",
+        "#000",
+        "#0070cc"
+      ],
+      "fonts": [
+        "from across a showroom floor. At 288px the headline is no longer text",
+        "and it is what gives Bugatti.com its sculptural",
+        "couture-showroom presence.",
+        "Bugatti Display (sculptural)",
+        "Bugatti Monospace (UI labels)",
+        "Bugatti Text Regular (body)"
+      ]
+    },
+    {
+      "id": "cafe",
+      "name": "Design System Inspired by Cafe",
+      "path": "design-systems/cafe/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/cafe",
+      "sha": "7a6e9d037c61aa1d59121d4a184ae379a4968836",
+      "colors": [
+        "#5D4432",
+        "#E9E3DD",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#F9F7F5",
+        "#3E2B1E"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "cal",
+      "name": "Design System Inspired by Cal.com",
+      "path": "design-systems/cal/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/cal",
+      "sha": "41c0d7490c707cb95d2a3defc641b9c48c9af7bd",
+      "colors": [
+        "#242424",
+        "#898989",
+        "#111111",
+        "#ffffff",
+        "#0099ff",
+        "#3b82f6",
+        "#0000ee",
+        "#f5f5f5",
+        "#000000",
+        "#1e1f23"
+      ],
+      "fonts": [
+        "Cal Sans speaks",
+        "Inter explains.",
+        "Inter Placeholder"
+      ]
+    },
+    {
+      "id": "canva",
+      "name": "Design System Inspired by Canva",
+      "path": "design-systems/canva/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/canva",
+      "sha": "21590190d02c3fda72988daff435c56d5fcc8be9",
+      "colors": [
+        "#ffffff",
+        "#7d2ae8",
+        "#00c4cc",
+        "#ff5757",
+        "#f4f5f7",
+        "#e8eaed",
+        "#eef0fc",
+        "#0e1318",
+        "#3c4043",
+        "#5f6368",
+        "#9aa0a6",
+        "#00b894"
+      ],
+      "fonts": [
+        "11px / 600 / uppercase",
+        "10px / 700 / uppercase"
+      ]
+    },
+    {
+      "id": "cisco",
+      "name": "Design System Inspired by Cisco",
+      "path": "design-systems/cisco/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/cisco",
+      "sha": "c2d8da7c23eee4081fff80df0a37451f2a11a2c0",
+      "colors": [
+        "#049fd9",
+        "#64bbe3",
+        "#005073",
+        "#2b5592",
+        "#39393b",
+        "#58585b",
+        "#9e9ea2",
+        "#e8ebf1",
+        "#ffffff",
+        "#abc233",
+        "#6cc04a",
+        "#ffcc00"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "claude",
+      "name": "Design System Inspired by Claude (Anthropic)",
+      "path": "design-systems/claude/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/claude",
+      "sha": "795605ed1f181b3c9ff77c35430321851fd50619",
+      "colors": [
+        "#f5f4ed",
+        "#c96442",
+        "#5e5d59",
+        "#87867f",
+        "#4d4c48",
+        "#f0eee6",
+        "#e8e6dc",
+        "#141413",
+        "#30302e",
+        "#d97757",
+        "#b53333",
+        "#3898ec"
+      ],
+      "fonts": [
+        "Serif for headlines",
+        "Sans for UI",
+        "Mono for code"
+      ]
+    },
+    {
+      "id": "clay",
+      "name": "Design System Inspired by Clay",
+      "path": "design-systems/clay/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/clay",
+      "sha": "d553ce9f397fc584a40909fe3ab5eef4d1371aea",
+      "colors": [
+        "#faf9f7",
+        "#dad4c8",
+        "#eee9df",
+        "#000000",
+        "#ffffff",
+        "#84e7a5",
+        "#078a52",
+        "#02492a",
+        "#3bd3fd",
+        "#0089ad",
+        "#f8cc65",
+        "#fbbd41"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "claymorphism",
+      "name": "Design System Inspired by Claymorphism",
+      "path": "design-systems/claymorphism/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/claymorphism",
+      "sha": "ef7d5f434dd7f0f8b4b2853c1a445c26a17962dc",
+      "colors": [
+        "#3B82F6",
+        "#FFFFFF",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#1C398E"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "clean",
+      "name": "Design System Inspired by Clean",
+      "path": "design-systems/clean/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/clean",
+      "sha": "e40d8412d532cf5e3d0049c0e45157251e44430d",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "clickhouse",
+      "name": "Design System Inspired by ClickHouse",
+      "path": "design-systems/clickhouse/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/clickhouse",
+      "sha": "ccf1713ce44325b3b7873f1c9d6df0d22d2a997e",
+      "colors": [
+        "#000000",
+        "#414141",
+        "#faff69",
+        "#166534",
+        "#f4f692",
+        "#14572f",
+        "#4f5100",
+        "#161600",
+        "#141414",
+        "#343434",
+        "#3a3a3a",
+        "#ffffff"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "cohere",
+      "name": "Design System Inspired by Cohere",
+      "path": "design-systems/cohere/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/cohere",
+      "sha": "3463593bcf40f40afb6704d355840ad84e28c367",
+      "colors": [
+        "#d9d9dd",
+        "#e5e7eb",
+        "#1863dc",
+        "#000000",
+        "#212121",
+        "#17171c",
+        "#4c6ee6",
+        "#9b60aa",
+        "#ffffff",
+        "#fafafa",
+        "#f2f2f2",
+        "#93939f"
+      ],
+      "fonts": [
+        "CohereText",
+        "a custom display serif with tight tracking",
+        "gives headlines the gravitas of a technology manifesto",
+        "CohereText (display serif) + Unica77 (body sans)"
+      ]
+    },
+    {
+      "id": "coinbase",
+      "name": "Design System Inspired by Coinbase",
+      "path": "design-systems/coinbase/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/coinbase",
+      "sha": "5a459fbd15f07e7cd88533e26089e908d2874de3",
+      "colors": [
+        "#0052ff",
+        "#578bfa",
+        "#0a0b0d",
+        "#282b31",
+        "#eef0f3",
+        "#ffffff",
+        "#0667d0",
+        "#5b616e"
+      ],
+      "fonts": [
+        "Display",
+        "Sans",
+        "Text",
+        "Icons"
+      ]
+    },
+    {
+      "id": "colorful",
+      "name": "Design System Inspired by Colorful",
+      "path": "design-systems/colorful/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/colorful",
+      "sha": "d7bdd30f1c45185288f717371ca19ca09fa81583",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "composio",
+      "name": "Design System Inspired by Composio",
+      "path": "design-systems/composio/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/composio",
+      "sha": "c5cf5d76a7638b68d91c3d178d9441546c07a74e",
+      "colors": [
+        "#0f0f0f",
+        "#0007cd",
+        "#00ffff",
+        "#0089ff",
+        "#0096ff",
+        "#000000",
+        "#2c2c2c",
+        "#ffffff",
+        "#444444",
+        "#e0e0e0"
+      ],
+      "fonts": [
+        "geometric sans-serif (abcDiatype) for content",
+        "monospace (JetBrains Mono) for technical credibility"
+      ]
+    },
+    {
+      "id": "contemporary",
+      "name": "Design System Inspired by Contemporary",
+      "path": "design-systems/contemporary/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/contemporary",
+      "sha": "dbf5bf6a9cf195c0b89ff75e8f8256786fa5292c",
+      "colors": [
+        "#C800DF",
+        "#E60076",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "corporate",
+      "name": "Design System Inspired by Corporate",
+      "path": "design-systems/corporate/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/corporate",
+      "sha": "cae8b26307043cabb09cfbf9e5e9945adf495403",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "cosmic",
+      "name": "Design System Inspired by Cosmic",
+      "path": "design-systems/cosmic/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/cosmic",
+      "sha": "8ab80d125443bb3dd94dcecfd8fad424f6a82a44",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "creative",
+      "name": "Design System Inspired by Creative",
+      "path": "design-systems/creative/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/creative",
+      "sha": "2727f862bb12ea9a756d3923c5906241e84489be",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "cursor",
+      "name": "Design System Inspired by Cursor",
+      "path": "design-systems/cursor/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/cursor",
+      "sha": "c9ea295d07bbd4da4f00d36652ffe16bbe7ddfe1",
+      "colors": [
+        "#f2f1ed",
+        "#26251e",
+        "#e6e5e0",
+        "#ebeae5",
+        "#cf2d56",
+        "#f54e00",
+        "#ffffff",
+        "#000000",
+        "#c08532",
+        "#1f8a65",
+        "#dfa88f",
+        "#9fc9a2"
+      ],
+      "fonts": [
+        "-2.16px at 72px",
+        "-0.72px at 36px",
+        "-0.325px at 26px",
+        "normal at 16px",
+        "CursorGothic (display/UI)",
+        "jjannon (editorial)",
+        "berkeleyMono (code)"
+      ]
+    },
+    {
+      "id": "dashboard",
+      "name": "Design System Inspired by Dashboard",
+      "path": "design-systems/dashboard/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/dashboard",
+      "sha": "56e999fd4156dd64699851d531e418eb42576173",
+      "colors": [
+        "#0C5CAB",
+        "#0A4A8A",
+        "#10B981",
+        "#F59E0B",
+        "#EF4444",
+        "#09090B",
+        "#FAFAFA"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "default",
+      "name": "Neutral Modern",
+      "path": "design-systems/default/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/default",
+      "sha": "5826bc288229dcb19de9dc26705834a791dd1228",
+      "colors": [
+        "#FAFAFA",
+        "#111111",
+        "#2F6FEB",
+        "#6B6B6B",
+        "#E5E5E5",
+        "#FFFFFF",
+        "#17A34A",
+        "#EAB308",
+        "#DC2626"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "discord",
+      "name": "Design System Inspired by Discord",
+      "path": "design-systems/discord/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/discord",
+      "sha": "e378596766aa61f25dc00d5ae115d4c864316d72",
+      "colors": [
+        "#313338",
+        "#1e1f22",
+        "#5865f2",
+        "#2b2d31",
+        "#4752c4",
+        "#7289da",
+        "#111214",
+        "#ffffff",
+        "#f2f3f5",
+        "#e3e5e8",
+        "#b5bac1",
+        "#dbdee1"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "dithered",
+      "name": "Design System Inspired by Dithered",
+      "path": "design-systems/dithered/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/dithered",
+      "sha": "e0d0758ddbfac8e22301299a6744d77c32bb475f",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "doodle",
+      "name": "Design System Inspired by Doodle",
+      "path": "design-systems/doodle/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/doodle",
+      "sha": "b893c161783255605ae23751e1460f1d997218da",
+      "colors": [
+        "#49B6E5",
+        "#263D5B",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "dramatic",
+      "name": "Design System Inspired by Dramatic",
+      "path": "design-systems/dramatic/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/dramatic",
+      "sha": "4ec5fcf81bee726de0caf72986456ad5e6d54139",
+      "colors": [
+        "#8B5CF6",
+        "#F43F5E",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#09090B",
+        "#FAFAFA"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "duolingo",
+      "name": "Design System Inspired by Duolingo",
+      "path": "design-systems/duolingo/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/duolingo",
+      "sha": "03c43b1dac7e7d3dff37aff7d7c81e6c0cbb4bb6",
+      "colors": [
+        "#58cc02",
+        "#ffffff",
+        "#e5e5e5",
+        "#ff9600",
+        "#ce82ff",
+        "#58a700",
+        "#89e219",
+        "#dbf8c5",
+        "#cc7a00",
+        "#1cb0f6",
+        "#ff4b4b",
+        "#ffc800"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "editorial",
+      "name": "Design System Inspired by Editorial",
+      "path": "design-systems/editorial/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/editorial",
+      "sha": "f67fc5abc6b5d62cdc652b578627134138449eec",
+      "colors": [
+        "#111111",
+        "#F1F1F1",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "elegant",
+      "name": "Design System Inspired by Elegant",
+      "path": "design-systems/elegant/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/elegant",
+      "sha": "4c255d7f862a4e690376306e56d4f634340788cc",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "elevenlabs",
+      "name": "Design System Inspired by ElevenLabs",
+      "path": "design-systems/elevenlabs/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/elevenlabs",
+      "sha": "45841f4e245337eb31e963c1da8736677e53d436",
+      "colors": [
+        "#ffffff",
+        "#f5f5f5",
+        "#f5f2ef",
+        "#777169",
+        "#000000",
+        "#4e4e4e",
+        "#f6f6f6",
+        "#7fffff",
+        "#e5e5e5",
+        "#fff"
+      ],
+      "fonts": [
+        "WaldenburgFH 14px weight 700"
+      ]
+    },
+    {
+      "id": "energetic",
+      "name": "Design System Inspired by Energetic",
+      "path": "design-systems/energetic/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/energetic",
+      "sha": "56747147efba663f8946fb3baa6fe0c8c28f05e3",
+      "colors": [
+        "#EA580B",
+        "#F59E0B",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFEDD5",
+        "#FDBA74",
+        "#EA580C"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "enterprise",
+      "name": "Design System Inspired by Enterprise",
+      "path": "design-systems/enterprise/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/enterprise",
+      "sha": "bcf2ab35b17267b4a6c79d638038c234a1fd5ecb",
+      "colors": [
+        "#072C2C",
+        "#FF5F03",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#EDEADE",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "expo",
+      "name": "Design System Inspired by Expo",
+      "path": "design-systems/expo/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/expo",
+      "sha": "a625cd9e6ec6e0ff37bb7269a5137e2a97e56e38",
+      "colors": [
+        "#f0f0f3",
+        "#000000",
+        "#60646c",
+        "#b0b4ba",
+        "#555860",
+        "#1c2024",
+        "#000",
+        "#0d74ce",
+        "#476cff",
+        "#47c2ff",
+        "#8145b5",
+        "#ffffff"
+      ],
+      "fonts": [
+        "Inter is the only sans-serif"
+      ]
+    },
+    {
+      "id": "expressive",
+      "name": "Design System Inspired by Expressive",
+      "path": "design-systems/expressive/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/expressive",
+      "sha": "be090af7645f290570184283a28422c873404e58",
+      "colors": [
+        "#DB2777",
+        "#2563EB",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "fantasy",
+      "name": "Design System Inspired by Fantasy",
+      "path": "design-systems/fantasy/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/fantasy",
+      "sha": "82cedf63ef5238b93bb7c4560df1b1f2d240eb1c",
+      "colors": [
+        "#0250CC",
+        "#FDC800",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "ferrari",
+      "name": "Design System Inspired by Ferrari",
+      "path": "design-systems/ferrari/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/ferrari",
+      "sha": "cb3349513b04e9a352e7bca4498cb96e54f6e523",
+      "colors": [
+        "#DA291C",
+        "#303030",
+        "#8F8F8F",
+        "#D2D2D2",
+        "#FFF200",
+        "#F6E500",
+        "#FFFFFF",
+        "#B01E0A",
+        "#9D2211",
+        "#000000",
+        "#181818",
+        "#666666"
+      ],
+      "fonts": [
+        "Arial",
+        "Helvetica",
+        "sans-serif",
+        "Secondary typeface for captions",
+        "labels"
+      ]
+    },
+    {
+      "id": "figma",
+      "name": "Design System Inspired by Figma",
+      "path": "design-systems/figma/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/figma",
+      "sha": "481681cf30679fd20dad131458bdf19779e543f0",
+      "colors": [
+        "#000000",
+        "#ffffff"
+      ],
+      "fonts": [
+        "320",
+        "330",
+        "340",
+        "450",
+        "480",
+        "540",
+        "700",
+        "figmaSans uses weights that most systems never touch — 320"
+      ]
+    },
+    {
+      "id": "flat",
+      "name": "Design System Inspired by Flat",
+      "path": "design-systems/flat/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/flat",
+      "sha": "e4e6d4c74566eb21d9dcfa65ad1fab8b40a7685c",
+      "colors": [
+        "#F2673C",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "framer",
+      "name": "Design System Inspired by Framer",
+      "path": "design-systems/framer/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/framer",
+      "sha": "44ae213e0082273733a904e27c328ae15102b79a",
+      "colors": [
+        "#000000",
+        "#0099ff",
+        "#ffffff",
+        "#a6a6a6",
+        "#090909",
+        "#0000ee",
+        "#1a1a1a",
+        "#2d2d2d"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "friendly",
+      "name": "Design System Inspired by Friendly",
+      "path": "design-systems/friendly/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/friendly",
+      "sha": "10b89f75d241aaf80bbc7410eb10eceb4c8417bd",
+      "colors": [
+        "#F2D9DC",
+        "#D9F2D8",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "futuristic",
+      "name": "Design System Inspired by Futuristic",
+      "path": "design-systems/futuristic/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/futuristic",
+      "sha": "7b14407ce9c64d0aa8009a39a8759b6ee981fb12",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "github",
+      "name": "Design System Inspired by GitHub",
+      "path": "design-systems/github/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/github",
+      "sha": "b918a7258475ea1192ac2d69958828261787b0bd",
+      "colors": [
+        "#ffffff",
+        "#0d1117",
+        "#0969da",
+        "#1a7f37",
+        "#d0d7de",
+        "#f6f8fa",
+        "#eaeef2",
+        "#1f2328",
+        "#656d76",
+        "#0550ae",
+        "#ddf4ff",
+        "#dafbe1"
+      ],
+      "fonts": [
+        "12px / 500"
+      ]
+    },
+    {
+      "id": "glassmorphism",
+      "name": "Design System Inspired by Glassmorphism",
+      "path": "design-systems/glassmorphism/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/glassmorphism",
+      "sha": "14ed02c1ba9fdc0fa0bf8539b07bc66442f26222",
+      "colors": [
+        "#1856FF",
+        "#3A344E",
+        "#07CA6B",
+        "#E89558",
+        "#EA2143",
+        "#FFFFFF",
+        "#141414"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "gradient",
+      "name": "Design System Inspired by Gradient",
+      "path": "design-systems/gradient/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/gradient",
+      "sha": "20371a66e998d3845b4bcab88ebed278a9f26c8c",
+      "colors": [
+        "#990FFA",
+        "#E60076",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "hashicorp",
+      "name": "Design System Inspired by HashiCorp",
+      "path": "design-systems/hashicorp/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/hashicorp",
+      "sha": "2cda74521624d40553b7a65f88be740eee7334e0",
+      "colors": [
+        "#15181e",
+        "#0d0e12",
+        "#7b42bc",
+        "#ffcf25",
+        "#14c6cb",
+        "#1868f2",
+        "#000000",
+        "#f1f2f3",
+        "#d5d7db",
+        "#b2b6bd",
+        "#656a76",
+        "#3b3d45"
+      ],
+      "fonts": [
+        "16px"
+      ]
+    },
+    {
+      "id": "hud",
+      "name": "HUD",
+      "path": "design-systems/hud/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/hud",
+      "sha": "d8e22352e6ebae4a05eff6d45c686e6127b28998",
+      "colors": [
+        "#0A0A0A",
+        "#111316",
+        "#1E2328",
+        "#00FF41",
+        "#7FFF00",
+        "#5A9A5A",
+        "#FFB800",
+        "#FF3B3B"
+      ],
+      "fonts": [
+        "'JetBrains Mono'",
+        "monospace",
+        "14px",
+        "700",
+        "'Inter'",
+        "sans-serif",
+        "10px",
+        "600"
+      ]
+    },
+    {
+      "id": "huggingface",
+      "name": "Design System Inspired by Hugging Face",
+      "path": "design-systems/huggingface/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/huggingface",
+      "sha": "5f72b239ee6361928d87accb21c21c8acd30fced",
+      "colors": [
+        "#ffd21e",
+        "#fafafa",
+        "#0d1117",
+        "#f3f4f6",
+        "#e5e7eb",
+        "#f59e0b",
+        "#fff4cc",
+        "#ffffff",
+        "#374151",
+        "#6b7280",
+        "#f9fafb",
+        "#2563eb"
+      ],
+      "fonts": [
+        "IBM Plex Mono 12px / 500"
+      ]
+    },
+    {
+      "id": "ibm",
+      "name": "Design System Inspired by IBM",
+      "path": "design-systems/ibm/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/ibm",
+      "sha": "9799fbb81a5fdf329c230412c1480c2b2679214d",
+      "colors": [
+        "#ffffff",
+        "#161616",
+        "#0f62fe",
+        "#f4f4f4",
+        "#262626",
+        "#393939",
+        "#525252",
+        "#6f6f6f",
+        "#8d8d8d",
+        "#c6c6c6",
+        "#e0e0e0",
+        "#e8e8e8"
+      ],
+      "fonts": [
+        "ibmicons — proprietary icon glyphs at 20px",
+        "12px weight 400"
+      ]
+    },
+    {
+      "id": "intercom",
+      "name": "Design System Inspired by Intercom",
+      "path": "design-systems/intercom/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/intercom",
+      "sha": "ea2901a1dd9cb5a0e689ee234d315a0bb709934f",
+      "colors": [
+        "#faf9f6",
+        "#111111",
+        "#ff5600",
+        "#dedbd6",
+        "#ffffff",
+        "#fe4c02",
+        "#65b5ff",
+        "#0bdf50",
+        "#c41c1c",
+        "#ff2067",
+        "#b3e01c",
+        "#00da00"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "kami",
+      "name": "Design System Inspired by kami (紙 / 纸)",
+      "path": "design-systems/kami/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/kami",
+      "sha": "0772e722e10992c65718f6a125752dbb2569b0c3",
+      "colors": [
+        "#f5f4ed",
+        "#1B365D",
+        "#ffffff",
+        "#E4ECF5",
+        "#2D5A8A",
+        "#faf9f5",
+        "#e8e6dc",
+        "#30302e",
+        "#141413",
+        "#000000",
+        "#3d3d3a",
+        "#504e49"
+      ],
+      "fonts": [
+        "tabular-nums so columns of metrics don't shimmy",
+        "500 } is explicitly set so browsers don't synthesize bold.",
+        "italic. If emphasis is needed",
+        "switch the color to ink-blue or wrap in a tag.",
+        "500 12px/1 var(--sans)",
+        "500 15px/1.55 var(--serif)",
+        "tabular-nums so adjacent metrics align.",
+        "12px/1.55 var(--mono)"
+      ]
+    },
+    {
+      "id": "kraken",
+      "name": "Design System Inspired by Kraken",
+      "path": "design-systems/kraken/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/kraken",
+      "sha": "422d26c9d1264c068f73d58fbf17307f4dee8ab9",
+      "colors": [
+        "#7132f5",
+        "#5741d8",
+        "#5b1ecf",
+        "#101114",
+        "#149e61",
+        "#686b82",
+        "#9497a9",
+        "#ffffff",
+        "#dedee5",
+        "#026b3f",
+        "#484b5e"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "lamborghini",
+      "name": "Design System Inspired by Lamborghini",
+      "path": "design-systems/lamborghini/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/lamborghini",
+      "sha": "54ca59f88b1155521811b85f41aa5a33ba97d716",
+      "colors": [
+        "#000000",
+        "#FFC000",
+        "#FFFFFF",
+        "#917300",
+        "#FFCE3E",
+        "#29ABE2",
+        "#3860BE",
+        "#202020",
+        "#181818",
+        "#F8F8F8",
+        "#E6E6E6",
+        "#F5F5F5"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "levels",
+      "name": "Design System Inspired by Levels",
+      "path": "design-systems/levels/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/levels",
+      "sha": "8fe4fcb03735188807604a32e3fea88265dcfc5a",
+      "colors": [
+        "#27272A",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "linear-app",
+      "name": "Design System Inspired by Linear",
+      "path": "design-systems/linear-app/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/linear-app",
+      "sha": "f2f13150569761a93e1da955659c8c266d62de23",
+      "colors": [
+        "#08090a",
+        "#f7f8f8",
+        "#5e6ad2",
+        "#7170ff",
+        "#0f1011",
+        "#191a1b",
+        "#828fff",
+        "#27a644",
+        "#10b981",
+        "#010102",
+        "#28282c",
+        "#d0d6e0"
+      ],
+      "fonts": [
+        "it sits between regular and medium",
+        "creating a subtle emphasis that doesn't shout. At display sizes (72px",
+        "64px",
+        "48px)",
+        "Inter uses aggressive negative letter-spacing (-1.584px to -1.056px)",
+        "creating compressed",
+        "with fallbacks to ui-monospace",
+        "SF Mono"
+      ]
+    },
+    {
+      "id": "lingo",
+      "name": "Design System Inspired by Lingo",
+      "path": "design-systems/lingo/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/lingo",
+      "sha": "e0d6b33809c2031679ec1ea3918de18e7d72d5e2",
+      "colors": [
+        "#58CC02",
+        "#CE82FF",
+        "#FFC800",
+        "#FF4B4B",
+        "#FFFFFF",
+        "#3C3C3C"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "loom",
+      "name": "Loom",
+      "path": "design-systems/loom/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/loom",
+      "sha": "f5373077d78e1e28fec59130a3ddefd8a6aef350",
+      "colors": [
+        "#625DF5",
+        "#FFFFFF",
+        "#F7F7F8",
+        "#E4E4E7",
+        "#5048E5",
+        "#1F1F23",
+        "#6B6D76",
+        "#9B9CA3",
+        "#D64770",
+        "#EF440C",
+        "#FDECEE"
+      ],
+      "fonts": [
+        "\"Inter\"",
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "\"Segoe UI\"",
+        "Helvetica",
+        "Arial",
+        "sans-serif",
+        "ui-monospace"
+      ]
+    },
+    {
+      "id": "lovable",
+      "name": "Design System Inspired by Lovable",
+      "path": "design-systems/lovable/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/lovable",
+      "sha": "9a6648dcf8caaa67a9afbe288a6b094eb78387ad",
+      "colors": [
+        "#f7f4ed",
+        "#1c1c1c",
+        "#eceae4",
+        "#fcfbf8",
+        "#5f5f5d",
+        "#3b82f6",
+        "#ffffff"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "luxury",
+      "name": "Design System Inspired by Luxury",
+      "path": "design-systems/luxury/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/luxury",
+      "sha": "bb3452d59f74b57a0b8b2792bdf659ac82984fed",
+      "colors": [
+        "#FAFAFA",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#000000",
+        "#FFFFFF"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "mastercard",
+      "name": "Design System Inspired by Mastercard",
+      "path": "design-systems/mastercard/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/mastercard",
+      "sha": "a6c80588b7732d0996ef46c6a8db5d8cc7eeff8e",
+      "colors": [
+        "#F3F0EE",
+        "#141413",
+        "#EB001B",
+        "#F79E1B",
+        "#CF4500",
+        "#F37338",
+        "#9A3A0A",
+        "#FCFBFA",
+        "#FFFFFF",
+        "#F4F4F4",
+        "#262627",
+        "#696969"
+      ],
+      "fonts": [
+        "450 with variable fonts",
+        "MarkForMC 16px / weight 500 / letter-spacing -0.32px",
+        "MarkForMC 16px / weight 450 / line-height 20.8px",
+        "MarkForMC 13px / weight 400 / letter-spacing 0.13px",
+        "MarkForMC 72–128px / weight 500 / tight -2% tracking"
+      ]
+    },
+    {
+      "id": "material",
+      "name": "Design System Inspired by Material",
+      "path": "design-systems/material/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/material",
+      "sha": "9e29058db8024b8e2beab3f87f43407491db6230",
+      "colors": [
+        "#6442D6",
+        "#C8B3FD",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "meta",
+      "name": "Design System Inspired by Meta (Store)",
+      "path": "design-systems/meta/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/meta",
+      "sha": "56c888178c241272bde43c15913af5f26caa6066",
+      "colors": [
+        "#0064E0",
+        "#0143B5",
+        "#004BB9",
+        "#47A5FA",
+        "#1877F2",
+        "#D6311F",
+        "#A121CE",
+        "#6441D2",
+        "#1B365D",
+        "#C8E4E8",
+        "#ADD4E0",
+        "#FFFFFF"
+      ],
+      "fonts": [
+        "pure white for browsing and information",
+        "rich dark for immersive product moments.",
+        "300",
+        "400",
+        "500",
+        "700)",
+        "Optimistic VF",
+        "14px"
+      ]
+    },
+    {
+      "id": "minimal",
+      "name": "Design System Inspired by Minimal",
+      "path": "design-systems/minimal/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/minimal",
+      "sha": "6c4ce3012eb067b91ac9c74c8cadccf52e01561e",
+      "colors": [
+        "#0C0C09",
+        "#312C85",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#F4F4F1"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "minimax",
+      "name": "Design System Inspired by MiniMax",
+      "path": "design-systems/minimax/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/minimax",
+      "sha": "f775524bd573c25470da0b43737e8f9461f2d8d0",
+      "colors": [
+        "#ffffff",
+        "#1456f0",
+        "#3b82f6",
+        "#60a5fa",
+        "#ea5ec1",
+        "#222222",
+        "#18181b",
+        "#181e25",
+        "#3daeff",
+        "#bfdbfe",
+        "#2563eb",
+        "#1d4ed8"
+      ],
+      "fonts": [
+        "DM Sans serves as the primary UI workhorse",
+        "Outfit handles display headings with geometric elegance",
+        "Poppins appears for mid-tier headings",
+        "DM Sans (UI)",
+        "Outfit (display)",
+        "Poppins (mid-tier)",
+        "Roboto (data)",
+        "DM Sans = UI workhorse (body"
+      ]
+    },
+    {
+      "id": "mintlify",
+      "name": "Design System Inspired by Mintlify",
+      "path": "design-systems/mintlify/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/mintlify",
+      "sha": "bd01a2390788c0d7ef2aa431812ca0291a139eff",
+      "colors": [
+        "#ffffff",
+        "#0d0d0d",
+        "#18E299",
+        "#d4fae8",
+        "#0fa76e",
+        "#c37d0d",
+        "#3772cf",
+        "#d45656",
+        "#333333",
+        "#666666",
+        "#888888",
+        "#e5e5e5"
+      ],
+      "fonts": [
+        "Inter for all human-readable content",
+        "Inter 15px weight 500",
+        "-1.28px at 64px",
+        "-0.8px at 40px",
+        "-0.24px at 24px",
+        "normal at 16px"
+      ]
+    },
+    {
+      "id": "miro",
+      "name": "Design System Inspired by Miro",
+      "path": "design-systems/miro/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/miro",
+      "sha": "3512480e20667000c2a4ebb842ad0a5217a936d8",
+      "colors": [
+        "#1c1c1e",
+        "#5b76fe",
+        "#00b473",
+        "#ffffff",
+        "#2a41b6",
+        "#ffc6c6",
+        "#600000",
+        "#ffd8f4",
+        "#c3faf5",
+        "#187574",
+        "#ffe6cd",
+        "#746019"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "mission-control",
+      "name": "Mission Control",
+      "path": "design-systems/mission-control/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/mission-control",
+      "sha": "b501a15c1c8f6a3cbb18475bc9049454a549c1a3",
+      "colors": [
+        "#0B1120",
+        "#111827",
+        "#1A2535",
+        "#1E3A5F",
+        "#FFB800",
+        "#00D4FF",
+        "#FF4757",
+        "#E8F0FE",
+        "#8BA3C7",
+        "#4A6080",
+        "#162035",
+        "#FF9F43"
+      ],
+      "fonts": [
+        "\"JetBrains Mono\"",
+        "ui-monospace",
+        "SFMono-Regular",
+        "\"SF Mono\"",
+        "Menlo",
+        "Consolas",
+        "monospace",
+        "\"Inter\""
+      ]
+    },
+    {
+      "id": "mistral-ai",
+      "name": "Design System Inspired by Mistral AI",
+      "path": "design-systems/mistral-ai/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/mistral-ai",
+      "sha": "f68dc970dc8ce50ff18856ca36406222279b6db7",
+      "colors": [
+        "#fa520f",
+        "#ffd900",
+        "#ffa110",
+        "#fffaeb",
+        "#fb6424",
+        "#ff8105",
+        "#ff8a00",
+        "#ffb83e",
+        "#ffd06a",
+        "#ffe295",
+        "#fff0c2",
+        "#ffffff"
+      ],
+      "fonts": [
+        "ui-sans-serif",
+        "system-ui",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji"
+      ]
+    },
+    {
+      "id": "modern",
+      "name": "Design System Inspired by Modern",
+      "path": "design-systems/modern/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/modern",
+      "sha": "5d9579651ac31f726c7deb15b2d05ef0dadafcdd",
+      "colors": [
+        "#553F83",
+        "#111111",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "mongodb",
+      "name": "Design System Inspired by MongoDB",
+      "path": "design-systems/mongodb/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/mongodb",
+      "sha": "91841e008e451ae7054fe9a0c13fc3d78c2b844b",
+      "colors": [
+        "#001e2b",
+        "#00ed64",
+        "#b8c4c2",
+        "#00684a",
+        "#006cfa",
+        "#3860be",
+        "#1eaedb",
+        "#1c2d38",
+        "#3d4f58",
+        "#21313c",
+        "#5c6c75",
+        "#e8edeb"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "mono",
+      "name": "Design System Inspired by Mono",
+      "path": "design-systems/mono/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/mono",
+      "sha": "2f37f3543f8d439ef2778190d613b4b4a29f7cfc",
+      "colors": [
+        "#37F712",
+        "#00A6F4",
+        "#00A63D",
+        "#FE9900",
+        "#FF2157",
+        "#E7E5E4",
+        "#78716B"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "neobrutalism",
+      "name": "Design System Inspired by Neobrutalism",
+      "path": "design-systems/neobrutalism/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/neobrutalism",
+      "sha": "f45b1346177cf8bc0cb635084701fcf78326be88",
+      "colors": [
+        "#FDC800",
+        "#432DD7",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FBFBF9",
+        "#1C293C"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "neon",
+      "name": "Design System Inspired by Neon",
+      "path": "design-systems/neon/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/neon",
+      "sha": "2bd6ce90a8cecc0912f1164414a0baebdb2801b1",
+      "colors": [
+        "#BBF351",
+        "#00BCFF",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "neumorphism",
+      "name": "Design System Inspired by Neumorphism",
+      "path": "design-systems/neumorphism/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/neumorphism",
+      "sha": "71642bfb3e54d827cb64cf0c55a57540b5761062",
+      "colors": [
+        "#006666",
+        "#F1F2F5",
+        "#00A63D",
+        "#FE9900",
+        "#FF2157",
+        "#E7E5E4",
+        "#1E2938"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "nike",
+      "name": "Design System Inspired by Nike",
+      "path": "design-systems/nike/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/nike",
+      "sha": "ec2ce7e2a590f758e0c23e5f5d70bf2c439b1664",
+      "colors": [
+        "#111111",
+        "#000000",
+        "#FFFFFF",
+        "#FAFAFA",
+        "#F5F5F5",
+        "#E5E5E5",
+        "#28282A",
+        "#1F1F21",
+        "#39393B",
+        "#707072",
+        "#9E9EA0",
+        "#4B4B4D"
+      ],
+      "fonts": [
+        "inspiration meets execution.",
+        "Helvetica Now Text",
+        "16px"
+      ]
+    },
+    {
+      "id": "notion",
+      "name": "Design System Inspired by Notion",
+      "path": "design-systems/notion/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/notion",
+      "sha": "df843d3f5afcf0bda8b7def103bfaa4a1e1c03db",
+      "colors": [
+        "#ffffff",
+        "#f6f5f4",
+        "#31302e",
+        "#615d59",
+        "#a39e98",
+        "#0075de",
+        "#000000f2",
+        "#213183",
+        "#005bab",
+        "#2a9d99",
+        "#1aae39",
+        "#dd5b00"
+      ],
+      "fonts": [
+        "400 for body",
+        "500 for UI elements",
+        "600 for semi-bold labels",
+        "adding typographic sophistication that rewards close reading.",
+        "12px weight 600",
+        "-2.125px at 64px",
+        "-1.875px at 54px",
+        "-0.625px at 26px"
+      ]
+    },
+    {
+      "id": "nvidia",
+      "name": "Design System Inspired by NVIDIA",
+      "path": "design-systems/nvidia/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/nvidia",
+      "sha": "15f828986ed25701b93971539cc6d66b58ae509f",
+      "colors": [
+        "#000000",
+        "#ffffff",
+        "#76b900",
+        "#bff230",
+        "#df6500",
+        "#ef9100",
+        "#feeeb2",
+        "#e52020",
+        "#650b0b",
+        "#3f8500",
+        "#0046a4",
+        "#4d1368"
+      ],
+      "fonts": [
+        "Font Awesome 6 Pro (weight 900 for solid icons",
+        "700 for regular)",
+        "16px weight 700",
+        "14.4px weight 700"
+      ]
+    },
+    {
+      "id": "ollama",
+      "name": "Design System Inspired by Ollama",
+      "path": "design-systems/ollama/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/ollama",
+      "sha": "2adcf2acf9ed4abf2e07c148c9b7bafe7d4278cf",
+      "colors": [
+        "#000000",
+        "#ffffff",
+        "#262626",
+        "#090909",
+        "#fafafa",
+        "#e5e5e5",
+        "#737373",
+        "#525252",
+        "#a3a3a3",
+        "#404040",
+        "#3b82f6",
+        "#d4d4d4"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "openai",
+      "name": "Design System Inspired by OpenAI",
+      "path": "design-systems/openai/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/openai",
+      "sha": "fec153abc2b5f7c16423ded6bbc009e5e1839f4f",
+      "colors": [
+        "#ffffff",
+        "#0d0d0d",
+        "#e5e5e5",
+        "#1a1a1a",
+        "#fafafa",
+        "#f5f5f5",
+        "#ececec",
+        "#10a37f",
+        "#0a7a5e",
+        "#e8f5f0",
+        "#3c3c3c",
+        "#6e6e6e"
+      ],
+      "fonts": [
+        "12px / 500"
+      ]
+    },
+    {
+      "id": "opencode-ai",
+      "name": "Design System Inspired by OpenCode",
+      "path": "design-systems/opencode-ai/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/opencode-ai",
+      "sha": "f69563985580133b0f46af859615c487fbe330ba",
+      "colors": [
+        "#201d1d",
+        "#fdfcfc",
+        "#9a9898",
+        "#007aff",
+        "#ff3b30",
+        "#30d158",
+        "#ff9f0a",
+        "#302c2c",
+        "#646262",
+        "#f1eeee",
+        "#0056b3",
+        "#004085"
+      ],
+      "fonts": [
+        "body",
+        "16px Berkeley Mono",
+        "weight 500",
+        "line-height 2.00 (relaxed)",
+        "Berkeley Mono",
+        "standard size",
+        "500",
+        "16px"
+      ]
+    },
+    {
+      "id": "pacman",
+      "name": "Design System Inspired by Pacman",
+      "path": "design-systems/pacman/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/pacman",
+      "sha": "e61cb0863475ba573e6b2263c97ea982a36ef51d",
+      "colors": [
+        "#2A3FE5",
+        "#F4B9B0",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#000000",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "paper",
+      "name": "Design System Inspired by Paper",
+      "path": "design-systems/paper/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/paper",
+      "sha": "3306e19fc82b5a22d645c7e0f801681a0b820a52",
+      "colors": [
+        "#111111",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "perplexity",
+      "name": "Design System Inspired by Perplexity AI",
+      "path": "design-systems/perplexity/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/perplexity",
+      "sha": "490fabd2f2b6faef97736b529e008039ae20c4c6",
+      "colors": [
+        "#0f0f10",
+        "#19191a",
+        "#232325",
+        "#2e2e30",
+        "#f0f0f0",
+        "#9b9b9b",
+        "#5c5c5e",
+        "#a855f7",
+        "#c084fc",
+        "#3b1f5e",
+        "#22c55e",
+        "#f59e0b"
+      ],
+      "fonts": [
+        "0.9375rem",
+        "500",
+        "0.6875rem"
+      ]
+    },
+    {
+      "id": "perspective",
+      "name": "Design System Inspired by Perspective",
+      "path": "design-systems/perspective/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/perspective",
+      "sha": "621d768f1747948a26889a3e6772cb1bf25db119",
+      "colors": [
+        "#00BD7D",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "pinterest",
+      "name": "Design System Inspired by Pinterest",
+      "path": "design-systems/pinterest/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/pinterest",
+      "sha": "3c3fae8bd73a4c93edfd9636a466a7365614801b",
+      "colors": [
+        "#e60023",
+        "#91918c",
+        "#62625b",
+        "#e5e5e0",
+        "#211922",
+        "#103c25",
+        "#0b2819",
+        "#000000",
+        "#ffffff",
+        "#435ee5",
+        "#6845ab",
+        "#7e238b"
+      ],
+      "fonts": [
+        "buttons at 12px",
+        "captions at 12–14px. The CSS variable naming system (--comp-",
+        "--sema-",
+        "semantic-level",
+        "and base-level tokens.",
+        "Pin Sans handles everything — no secondary display or monospace font detected."
+      ]
+    },
+    {
+      "id": "playstation",
+      "name": "Design System Inspired by PlayStation",
+      "path": "design-systems/playstation/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/playstation",
+      "sha": "d0baed048500c359bbc7d4eba761a790ae388cb9",
+      "colors": [
+        "#1eaedb",
+        "#0070cc",
+        "#d53b00",
+        "#000000",
+        "#ffffff",
+        "#1883fd",
+        "#0068bd",
+        "#f5f7fa",
+        "#f3f3f3",
+        "#121314",
+        "#1f1f1f",
+        "#6b6b6b"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "posthog",
+      "name": "Design System Inspired by PostHog",
+      "path": "design-systems/posthog/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/posthog",
+      "sha": "f10edede26e64d08090f72eae04a0a628621ace6",
+      "colors": [
+        "#fdfdf8",
+        "#F54E00",
+        "#1e1f23",
+        "#bfc1b7",
+        "#eeefe9",
+        "#4d4f46",
+        "#23251d",
+        "#F7A501",
+        "#b17816",
+        "#3b82f6",
+        "#e5e7e0",
+        "#d4c9b8"
+      ],
+      "fonts": [
+        "IBM Plex Sans",
+        "-apple-system",
+        "system-ui",
+        "Avenir Next",
+        "Avenir",
+        "Segoe UI",
+        "Helvetica Neue",
+        "Helvetica"
+      ]
+    },
+    {
+      "id": "premium",
+      "name": "Design System Inspired by Premium",
+      "path": "design-systems/premium/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/premium",
+      "sha": "cb24fe8aa197ba01802bde08134f139da98912a9",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "professional",
+      "name": "Design System Inspired by Professional",
+      "path": "design-systems/professional/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/professional",
+      "sha": "4087c39325ea09df3117bb265e3aa645bd23cc90",
+      "colors": [
+        "#FECE14",
+        "#000000",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "publication",
+      "name": "Design System Inspired by Publication",
+      "path": "design-systems/publication/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/publication",
+      "sha": "fda77a69603c479bcf20901c6ef6233de5ae70e2",
+      "colors": [
+        "#A855F7",
+        "#0A1829",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "raycast",
+      "name": "Design System Inspired by Raycast",
+      "path": "design-systems/raycast/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/raycast",
+      "sha": "88e665905c215694fe99126767e6ce63be865de1",
+      "colors": [
+        "#07080a",
+        "#FF6363",
+        "#ffffff",
+        "#55b3ff",
+        "#5fc992",
+        "#ffbc33",
+        "#101111",
+        "#121212",
+        "#0d0d0d",
+        "#1b1c1e",
+        "#18191a",
+        "#f9f9f9"
+      ],
+      "fonts": [
+        "SF Pro Icons",
+        "Inter",
+        "Inter Fallback",
+        "ui-monospace",
+        "SFMono-Regular",
+        "Roboto Mono",
+        "Menlo",
+        "Monaco"
+      ]
+    },
+    {
+      "id": "refined",
+      "name": "Design System Inspired by Refined",
+      "path": "design-systems/refined/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/refined",
+      "sha": "529e460d8eec6e8c012436505034b5130585b684",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "renault",
+      "name": "Design System Inspired by Renault",
+      "path": "design-systems/renault/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/renault",
+      "sha": "5ccfd75833ddd388540bd78aa8c77434257c26d7",
+      "colors": [
+        "#EFDF00",
+        "#1883FD",
+        "#000000",
+        "#FFFFFF",
+        "#F8EB4C",
+        "#D9D9D6",
+        "#222222",
+        "#F2F2F2",
+        "#D1D1D1",
+        "#8DC572",
+        "#BE6464",
+        "#F0AD4E"
+      ],
+      "fonts": [
+        "sans-serif. Declared as \"NouvelR",
+        "sans-serif\" in CSS",
+        "Unlike Ferrari (FerrariSans + Body-Font) or Lamborghini (LamboType + Open Sans)",
+        "Renault uses a single font family for all text — headings",
+        "body",
+        "buttons",
+        "captions",
+        "and navigation"
+      ]
+    },
+    {
+      "id": "replicate",
+      "name": "Design System Inspired by Replicate",
+      "path": "design-systems/replicate/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/replicate",
+      "sha": "7d4ef2df3c31d8c3eeccc0e41658be216925b3c5",
+      "colors": [
+        "#ea2804",
+        "#202020",
+        "#2b9a66",
+        "#000",
+        "#dd4425",
+        "#24292e",
+        "#ffffff",
+        "#fcfcfc",
+        "#646464",
+        "#4e4e4e",
+        "#8d8d8d",
+        "#bbbbbb"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "resend",
+      "name": "Design System Inspired by Resend",
+      "path": "design-systems/resend/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/resend",
+      "sha": "516d5b60123d4e3bd3e473b071e531ba2d9a35db",
+      "colors": [
+        "#000000",
+        "#f0f0f0",
+        "#ffffff",
+        "#ff5900",
+        "#ff801f",
+        "#ffa057",
+        "#22ff99",
+        "#11ff99",
+        "#0075ff",
+        "#0081fd",
+        "#3b9eff",
+        "#ffc53d"
+      ],
+      "fonts": [
+        "giving a compressed",
+        "engineered quality to mid-tier text. Inter takes over for body and UI",
+        "Domaine Display (serif hero)",
+        "ABC Favorit (geometric sections)",
+        "Inter (body/UI)",
+        "Domaine Display (serif",
+        "hero)",
+        "ABC Favorit (geometric sans"
+      ]
+    },
+    {
+      "id": "retro",
+      "name": "Design System Inspired by Retro",
+      "path": "design-systems/retro/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/retro",
+      "sha": "96ea9e8f2f7797d45cfccdbe3042fd7aa7edd22a",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "revolut",
+      "name": "Design System Inspired by Revolut",
+      "path": "design-systems/revolut/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/revolut",
+      "sha": "8500e3befd1d659b514bdbddde10fb98c3c41232",
+      "colors": [
+        "#e23b4a",
+        "#ec7e00",
+        "#00a87e",
+        "#494fdf",
+        "#e61e49",
+        "#191c1f",
+        "#ffffff",
+        "#f4f4f4",
+        "#4f55f1",
+        "#376cd5",
+        "#b09000",
+        "#428619"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "runwayml",
+      "name": "Design System Inspired by Runway",
+      "path": "design-systems/runwayml/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/runwayml",
+      "sha": "c78d9c2d644c19d278928cfb465f26986ec3f01d",
+      "colors": [
+        "#767d88",
+        "#7d848e",
+        "#000000",
+        "#030303",
+        "#1a1a1a",
+        "#ffffff",
+        "#fefefe",
+        "#e9ecf2",
+        "#27272a",
+        "#404040",
+        "#3f3f3f",
+        "#a7a7a7"
+      ],
+      "fonts": [
+        "abcNormal for everything from display to micro labels",
+        "abcNormal handles every text role. The design achieves variety through size",
+        "weight",
+        "case",
+        "and letter-spacing rather than font-family switching."
+      ]
+    },
+    {
+      "id": "sanity",
+      "name": "Design System Inspired by Sanity",
+      "path": "design-systems/sanity/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/sanity",
+      "sha": "3f4d60b08061882b82b1429e37c74cde23fcbf17",
+      "colors": [
+        "#0b0b0b",
+        "#212121",
+        "#353535",
+        "#797979",
+        "#b9b9b9",
+        "#ededed",
+        "#ffffff",
+        "#0052ef",
+        "#f36458",
+        "#000000",
+        "#55beff",
+        "#afe3ff"
+      ],
+      "fonts": [
+        "500-600 only for tiny labels)",
+        "keeping the voice consistent.",
+        "16px waldenburgNormal",
+        "weight 400",
+        "11px waldenburgNormal",
+        "weight 600",
+        "uppercase",
+        "13px"
+      ]
+    },
+    {
+      "id": "sentry",
+      "name": "Design System Inspired by Sentry",
+      "path": "design-systems/sentry/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/sentry",
+      "sha": "5e862058b268cb7e536047079227d94fe00fb462",
+      "colors": [
+        "#1f1633",
+        "#150f23",
+        "#c2ef4e",
+        "#79628c",
+        "#362d59",
+        "#6a5fc1",
+        "#422082",
+        "#ffb287",
+        "#fa7faa",
+        "#ffffff",
+        "#e5e7eb",
+        "#dcdcaa"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "shadcn",
+      "name": "Design System Inspired by Shadcn",
+      "path": "design-systems/shadcn/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/shadcn",
+      "sha": "93a4243717ab61291a21daec17b228808080f931",
+      "colors": [
+        "#000000",
+        "#111111",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "shopify",
+      "name": "Design System Inspired by Shopify",
+      "path": "design-systems/shopify/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/shopify",
+      "sha": "023511c728f6b1ae20518ecf39f183e3790138b8",
+      "colors": [
+        "#02090A",
+        "#061A1C",
+        "#102620",
+        "#36F4A4",
+        "#C1FBD4",
+        "#D4F9E0",
+        "#A1A1AA",
+        "#3F3F46",
+        "#FFFFFF",
+        "#000000",
+        "#1E2C31",
+        "#D4D4D8"
+      ],
+      "fonts": [
+        "where others shout",
+        "'g'",
+        "and certain numerals) a more refined appearance",
+        "16px regular"
+      ]
+    },
+    {
+      "id": "simple",
+      "name": "Design System Inspired by Simple",
+      "path": "design-systems/simple/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/simple",
+      "sha": "53f845227d00cbc0aa5050424be19d9db9e5d9c9",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "skeumorphism",
+      "name": "Design System Inspired by Skeumorphism",
+      "path": "design-systems/skeumorphism/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/skeumorphism",
+      "sha": "4902e4530b02f1cb2bc57ca96589a472c1454d7a",
+      "colors": [
+        "#FA3C00",
+        "#F08321",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "slack",
+      "name": "Design System Inspired by Slack",
+      "path": "design-systems/slack/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/slack",
+      "sha": "26cabd1d9027ece2224859050a2f727c116929ed",
+      "colors": [
+        "#4A154B",
+        "#FFFFFF",
+        "#F8F8F8",
+        "#350d36",
+        "#611f69",
+        "#36C5F0",
+        "#2EB67D",
+        "#ECB22E",
+        "#E01E5A",
+        "#F1F1F1",
+        "#1D1C1D",
+        "#616061"
+      ],
+      "fonts": [
+        "15px",
+        "700",
+        "400",
+        "11px",
+        "13px"
+      ]
+    },
+    {
+      "id": "sleek",
+      "name": "Design System Inspired by Sleek",
+      "path": "design-systems/sleek/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/sleek",
+      "sha": "de252abb486b3636f1c3a3c8268283d1e46e0fac",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "spacex",
+      "name": "Design System Inspired by SpaceX",
+      "path": "design-systems/spacex/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/spacex",
+      "sha": "53babd727268f66c5166165b8081b6a01fbfbf6a",
+      "colors": [
+        "#000000",
+        "#f0f0fa"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "spacious",
+      "name": "Design System Inspired by Spacious",
+      "path": "design-systems/spacious/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/spacious",
+      "sha": "612139d570620a33414715b8d60add3504e858e2",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "spotify",
+      "name": "Design System Inspired by Spotify",
+      "path": "design-systems/spotify/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/spotify",
+      "sha": "50fb2396b806b6ef79295aa89e7ae57dbe8d3883",
+      "colors": [
+        "#121212",
+        "#181818",
+        "#1f1f1f",
+        "#1ed760",
+        "#f3727f",
+        "#ffa42b",
+        "#539df5",
+        "#ffffff",
+        "#b3b3b3",
+        "#cbcbcb",
+        "#fdfdfd",
+        "#252525"
+      ],
+      "fonts": [
+        "700 (bold) for emphasis and navigation",
+        "600 (semibold) for secondary emphasis",
+        "label-like quality."
+      ]
+    },
+    {
+      "id": "starbucks",
+      "name": "Design System Inspired by Starbucks",
+      "path": "design-systems/starbucks/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/starbucks",
+      "sha": "6fe30874c8ba78f638610f7d2a162561a8e5ec95",
+      "colors": [
+        "#f2f0eb",
+        "#edebe9",
+        "#006241",
+        "#cba258",
+        "#00754A",
+        "#1E3932",
+        "#2b5148",
+        "#d4e9e2",
+        "#dfc49d",
+        "#faf6ee",
+        "#ffffff",
+        "#f9f9f9"
+      ],
+      "fonts": [
+        "the Rewards page switches to a warm serif (\"Lander Tall\"",
+        "\"Iowan Old Style\"",
+        "Georgia) for specific headline moments",
+        "\"Comic Sans MS\"",
+        "cursive) for personal cup-name touches. Three typefaces",
+        "three contexts — the system is disciplined about when each appears.",
+        "62.5% root trick). So 1.6rem = 16px",
+        "2.4rem = 24px"
+      ]
+    },
+    {
+      "id": "storytelling",
+      "name": "Design System Inspired by Storytelling",
+      "path": "design-systems/storytelling/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/storytelling",
+      "sha": "714c2968856eae8a37e3ef61d078d174d2c02095",
+      "colors": [
+        "#3B82F6",
+        "#8B5CF6",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#111827"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "stripe",
+      "name": "Design System Inspired by Stripe",
+      "path": "design-systems/stripe/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/stripe",
+      "sha": "8ab94dc6a93367833283bb9c7c930c6bacd6b70d",
+      "colors": [
+        "#ffffff",
+        "#061b31",
+        "#533afd",
+        "#ea2261",
+        "#f96bee",
+        "#1c1e54",
+        "#0d253d",
+        "#ffd7ef",
+        "#4434d4",
+        "#2e2b8c",
+        "#b9b9f9",
+        "#665efd"
+      ],
+      "fonts": [
+        "16px sohne-var weight 400",
+        "\"ss01\"",
+        "11px weight 400",
+        "10px weight 300",
+        "\"ss01\" on sohne-var text -- this is the brand's typographic DNA"
+      ]
+    },
+    {
+      "id": "supabase",
+      "name": "Design System Inspired by Supabase",
+      "path": "design-systems/supabase/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/supabase",
+      "sha": "21c80f2515da76f5a815199ee303d0c324320c82",
+      "colors": [
+        "#0f0f0f",
+        "#171717",
+        "#3ecf8e",
+        "#00c573",
+        "#898989",
+        "#fafafa",
+        "#2e2e2e",
+        "#363636",
+        "#393939",
+        "#242424",
+        "#434343",
+        "#4d4d4d"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "superhuman",
+      "name": "Design System Inspired by Superhuman",
+      "path": "design-systems/superhuman/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/superhuman",
+      "sha": "5d6516500eaa834450e6f039f29c5351533cd806",
+      "colors": [
+        "#1b1938",
+        "#e9e5dd",
+        "#cbb7fb",
+        "#292827",
+        "#714cb6",
+        "#ffffff",
+        "#dcd7d3",
+        "#000000"
+      ],
+      "fonts": [
+        "system-ui",
+        "-apple-system",
+        "Segoe UI",
+        "Roboto",
+        "Oxygen",
+        "Ubuntu",
+        "Cantarell",
+        "Fira Sans"
+      ]
+    },
+    {
+      "id": "tesla",
+      "name": "Design System Inspired by Tesla",
+      "path": "design-systems/tesla/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/tesla",
+      "sha": "7f32287cb9229b4bf5b29cec1c428dc5ff83317f",
+      "colors": [
+        "#3E6AE1",
+        "#FFFFFF",
+        "#F4F4F4",
+        "#171A20",
+        "#393C41",
+        "#5C5E62",
+        "#8E8E8E",
+        "#EEEEEE",
+        "#D0D1D2"
+      ],
+      "fonts": [
+        "Universal Sans Text",
+        "14px"
+      ]
+    },
+    {
+      "id": "tetris",
+      "name": "Design System Inspired by Tetris",
+      "path": "design-systems/tetris/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/tetris",
+      "sha": "b0f9b7f1ca92cd493bdd1074a3598bc1a98ea0d1",
+      "colors": [
+        "#1C202B",
+        "#7107E7",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#DFE7FF",
+        "#1C398E"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "theverge",
+      "name": "Design System Inspired by The Verge",
+      "path": "design-systems/theverge/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/theverge",
+      "sha": "caea31e6b71f8488ee374327905b4d0c2c4d0265",
+      "colors": [
+        "#131313",
+        "#3cffd0",
+        "#5200ff",
+        "#ffffff",
+        "#2d2d2d",
+        "#309875",
+        "#3860be",
+        "#1eaedb",
+        "#3d00bf",
+        "#313131",
+        "#000000",
+        "#949494"
+      ],
+      "fonts": [
+        "PolySans Mono 11px / 600 UPPERCASE",
+        "1.8px tracking"
+      ]
+    },
+    {
+      "id": "together-ai",
+      "name": "Design System Inspired by Together AI",
+      "path": "design-systems/together-ai/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/together-ai",
+      "sha": "927bd76a8e61bc713c2d4e6693572705275ecb22",
+      "colors": [
+        "#010120",
+        "#ef2cc1",
+        "#fc4c02",
+        "#bdbbff",
+        "#00000066",
+        "#ffffff",
+        "#000000"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "totality-festival",
+      "name": "Totality Festival Design System",
+      "path": "design-systems/totality-festival/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/totality-festival",
+      "sha": "acc3de05372585c7668c24aff9f612540fccd9c1",
+      "colors": [
+        "#121318",
+        "#38393f",
+        "#0d0e13",
+        "#1a1b21",
+        "#1e1f25",
+        "#292a2f",
+        "#34343a",
+        "#e3e1e9",
+        "#d0c6ab",
+        "#2f3036",
+        "#999077",
+        "#4d4732"
+      ],
+      "fonts": [
+        "Space Grotesk",
+        "72px",
+        "\"700\"",
+        "48px",
+        "\"600\"",
+        "32px",
+        "Inter",
+        "18px"
+      ]
+    },
+    {
+      "id": "trading-terminal",
+      "name": "Trading Terminal",
+      "path": "design-systems/trading-terminal/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/trading-terminal",
+      "sha": "1c5744eacc225120470ee2c28cafb66ae9816c03",
+      "colors": [
+        "#00D4AA",
+        "#FF4757",
+        "#0D0D0D",
+        "#141414",
+        "#1A1A1A",
+        "#2A2A2A",
+        "#FFB800",
+        "#808086",
+        "#FFFFFF",
+        "#AAAAAA",
+        "#828282"
+      ],
+      "fonts": [
+        "12px",
+        "500",
+        "'JetBrains Mono'",
+        "monospace",
+        "28px",
+        "600",
+        "14px"
+      ]
+    },
+    {
+      "id": "uber",
+      "name": "Design System Inspired by Uber",
+      "path": "design-systems/uber/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/uber",
+      "sha": "49cc7258874b9a3369f51683ba70793c4b02b02c",
+      "colors": [
+        "#000000",
+        "#ffffff",
+        "#e2e2e2",
+        "#f3f3f3",
+        "#efefef",
+        "#4b4b4b",
+        "#afafaf",
+        "#0000ee"
+      ],
+      "fonts": [
+        "clear",
+        "efficient",
+        "built for scanning at speed.",
+        "UberMove is exclusively for headings. UberMoveText is exclusively for body",
+        "buttons",
+        "links",
+        "and UI. The boundary is never crossed."
+      ]
+    },
+    {
+      "id": "urdu",
+      "name": "Urdu Modern (Indus Script System)",
+      "path": "design-systems/urdu/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/urdu",
+      "sha": "c836a16cf75ff5a24a795940b55e1880feffaa6d",
+      "colors": [
+        "#0F595E",
+        "#F4F1EA",
+        "#C05621",
+        "#1A202C",
+        "#4A5568",
+        "#E2E8F0",
+        "#0D3F45",
+        "#2B7A82",
+        "#A03F1C",
+        "#E8754A",
+        "#FAFAF8",
+        "#718096"
+      ],
+      "fonts": [
+        "\"Noto Nastaliq Urdu\"",
+        "\"Mehr Nastaliq\"",
+        "\"URW Chancery\"",
+        "serif",
+        "Professionally maintained",
+        "open-source",
+        "optimized for modern screens. Heavy weight (700) gives proper authority.",
+        "wght@400"
+      ]
+    },
+    {
+      "id": "vercel",
+      "name": "Design System Inspired by Vercel",
+      "path": "design-systems/vercel/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/vercel",
+      "sha": "156d11cd61c623de14119d1bf70b3989a9e219d2",
+      "colors": [
+        "#ffffff",
+        "#171717",
+        "#ff5b4f",
+        "#de1d8d",
+        "#0a72ef",
+        "#000000",
+        "#0070f3",
+        "#7928ca",
+        "#eb367f",
+        "#0072f5",
+        "#4d4d4d",
+        "#666666"
+      ],
+      "fonts": [
+        "12px weight 500",
+        "-2.4px at 48px",
+        "-1.28px at 32px",
+        "-0.96px at 24px",
+        "normal at 14px"
+      ]
+    },
+    {
+      "id": "vibrant",
+      "name": "Design System Inspired by Vibrant",
+      "path": "design-systems/vibrant/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/vibrant",
+      "sha": "002ebc92f477e0e05791d2f7679901e4ad769b04",
+      "colors": [
+        "#7C61D4",
+        "#EAAE87",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#FFFFFF",
+        "#2F281D"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "vintage",
+      "name": "Design System Inspired by Vintage",
+      "path": "design-systems/vintage/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/vintage",
+      "sha": "54500c9a000862a100be1d6f80a256bda7415732",
+      "colors": [
+        "#008080",
+        "#C0C0C0",
+        "#16A34A",
+        "#D97706",
+        "#DC2626",
+        "#000000"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "vodafone",
+      "name": "Design System Inspired by Vodafone",
+      "path": "design-systems/vodafone/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/vodafone",
+      "sha": "2266e0d0d7b36df903245b1da965e340d44d85ef",
+      "colors": [
+        "#e60000",
+        "#25282b",
+        "#ffffff",
+        "#3860be",
+        "#ac1811",
+        "#f2f2f2",
+        "#7e7e7e",
+        "#333333",
+        "#bebebe",
+        "#000000"
+      ],
+      "fonts": [
+        "icomoon — carries pictograph glyphs at 18px/24px/48px fixed sizes",
+        "antialiased across the board",
+        "not stylistic alternates"
+      ]
+    },
+    {
+      "id": "voltagent",
+      "name": "Design System Inspired by VoltAgent",
+      "path": "design-systems/voltagent/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/voltagent",
+      "sha": "0dec46b30eb10cd27ee521a49aaa1f8b42453456",
+      "colors": [
+        "#050507",
+        "#00d992",
+        "#3d3a39",
+        "#8b949e",
+        "#b8b3b0",
+        "#2fd6a1",
+        "#10b981",
+        "#818cf8",
+        "#306cce",
+        "#2554a0",
+        "#3b82f6",
+        "#101010"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "warm-editorial",
+      "name": "Warm Editorial",
+      "path": "design-systems/warm-editorial/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/warm-editorial",
+      "sha": "491242090884d239a2dc92fa7793b794ee92baea",
+      "colors": [
+        "#FAF7F2",
+        "#1C1A17",
+        "#C0512F",
+        "#2F5B4F",
+        "#8A817A",
+        "#FFFFFF"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "warp",
+      "name": "Design System Inspired by Warp",
+      "path": "design-systems/warp/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/warp",
+      "sha": "9f4f95e4aef4d176e2120acd1d9557c0c372052e",
+      "colors": [
+        "#faf9f6",
+        "#353534",
+        "#868584",
+        "#afaeac",
+        "#666469",
+        "#454545",
+        "#ffffff"
+      ],
+      "fonts": [
+        "this tool brings you closer to flow",
+        "to calm productivity."
+      ]
+    },
+    {
+      "id": "webex",
+      "name": "Design System Inspired by Webex",
+      "path": "design-systems/webex/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/webex",
+      "sha": "bb9bb23e91c8750de7daa475e2222dcac23486b2",
+      "colors": [
+        "#1170cf",
+        "#0353a8",
+        "#063a75",
+        "#64b4fa",
+        "#000000f2",
+        "#000000b3",
+        "#fffffff2",
+        "#ffffffb3",
+        "#ffffff",
+        "#000000",
+        "#1a1a1a",
+        "#262626"
+      ],
+      "fonts": [
+        "capable",
+        "legible",
+        "modern",
+        "and designed for continuous use rather than one-shot marketing drama."
+      ]
+    },
+    {
+      "id": "webflow",
+      "name": "Design System Inspired by Webflow",
+      "path": "design-systems/webflow/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/webflow",
+      "sha": "ac5d94ac5c148590ecfc800364cc1918b5eae7c3",
+      "colors": [
+        "#146ef5",
+        "#080808",
+        "#7a3dff",
+        "#ed52cb",
+        "#00d722",
+        "#ff6b00",
+        "#ffae13",
+        "#ee1d36",
+        "#3b89ff",
+        "#006acc",
+        "#0055d4",
+        "#222222"
+      ],
+      "fonts": [
+        "WF Visual Sans Variable",
+        "fallback: Arial"
+      ]
+    },
+    {
+      "id": "wechat",
+      "name": "WeChat",
+      "path": "design-systems/wechat/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/wechat",
+      "sha": "9ceb403eee0e7393b2f6eb4a008435942038e62a",
+      "colors": [
+        "#07C160",
+        "#10B160",
+        "#059050",
+        "#95EC69",
+        "#FFFFFF",
+        "#1A1A1A",
+        "#EDEDED",
+        "#F7F7F7",
+        "#E0E0E0",
+        "#888888",
+        "#FA5151",
+        "#FAB702"
+      ],
+      "fonts": [
+        "-apple-system",
+        "BlinkMacSystemFont",
+        "\"PingFang SC\"",
+        "\"Helvetica Neue\"",
+        "Helvetica",
+        "Arial",
+        "sans-serif",
+        "15px"
+      ]
+    },
+    {
+      "id": "wired",
+      "name": "Design System Inspired by WIRED",
+      "path": "design-systems/wired/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/wired",
+      "sha": "282ee46cc8244dc44512db1981350911907c1e3f",
+      "colors": [
+        "#057dbc",
+        "#000000",
+        "#1a1a1a",
+        "#ffffff",
+        "#e2e8f0",
+        "#757575",
+        "#999999",
+        "#4a5568",
+        "#e53e3e",
+        "#a0aec0",
+        "#000"
+      ],
+      "fonts": [
+        "WiredDisplay never sets body",
+        "BreveText never sets buttons."
+      ]
+    },
+    {
+      "id": "wise",
+      "name": "Design System Inspired by Wise",
+      "path": "design-systems/wise/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/wise",
+      "sha": "57476c89c4e20995188fe3d439557e2c4d493644",
+      "colors": [
+        "#0e0f0c",
+        "#9fe870",
+        "#163300",
+        "#e2f6d5",
+        "#cdffad",
+        "#054d28",
+        "#d03238",
+        "#ffd11a",
+        "#ffc091",
+        "#454745",
+        "#868685",
+        "#e8ebe6"
+      ],
+      "fonts": []
+    },
+    {
+      "id": "x-ai",
+      "name": "Design System Inspired by xAI",
+      "path": "design-systems/x-ai/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/x-ai",
+      "sha": "cbdf4819330e51357e3cfdb7b7e1cabd9b93717e",
+      "colors": [
+        "#1f2228",
+        "#ffffff",
+        "#000000"
+      ],
+      "fonts": [
+        "sans-serif for information and reading. No overlap",
+        "no ambiguity.",
+        "GeistMono 14px weight 400",
+        "uppercase",
+        "letter-spacing 1.4px",
+        "universalSans 16px weight 400",
+        "GeistMono 12px uppercase",
+        "letter-spacing 1px"
+      ]
+    },
+    {
+      "id": "xiaohongshu",
+      "name": "Design System Inspired by Xiaohongshu",
+      "path": "design-systems/xiaohongshu/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/xiaohongshu",
+      "sha": "8d5342f47c29cb3918e7d6a93d24799c8a76139c",
+      "colors": [
+        "#FFFFFF",
+        "#F5F5F5",
+        "#FF2442",
+        "#FF2E4D",
+        "#FDBC5F",
+        "#FAFAFA",
+        "#EAEAEA",
+        "#02B940",
+        "#EAF8EF",
+        "#FF7D03",
+        "#FFF2E6",
+        "#3D8AF5"
+      ],
+      "fonts": [
+        "second person",
+        "conversational",
+        "never enterprise. \"你的生活兴趣社区\" — your lifestyle interest community",
+        "not \"the platform\".",
+        "12px",
+        "'RED Number'",
+        "PingFang SC",
+        "-apple-system"
+      ]
+    },
+    {
+      "id": "zapier",
+      "name": "Design System Inspired by Zapier",
+      "path": "design-systems/zapier/DESIGN.md",
+      "source": "open-design",
+      "origin": "https://github.com/nexu-io/open-design/tree/main/design-systems/zapier",
+      "sha": "b265af4eba9aaf7147de0be2d018d254ce060087",
+      "colors": [
+        "#fffefb",
+        "#201515",
+        "#ff4f00",
+        "#c5c0b1",
+        "#939084",
+        "#eceae3",
+        "#fffdf9",
+        "#36342e",
+        "#b5b2aa",
+        "#2d2d2e",
+        "#ffffff",
+        "#000000"
+      ],
+      "fonts": [
+        "Degular Display (hero)",
+        "Inter (UI)",
+        "GT Alpina (editorial)"
+      ]
+    }
+  ]
+}

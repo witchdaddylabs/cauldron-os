@@ -742,6 +742,7 @@
                   </select>
                   <button class="btn btn-ghost" type="button" @click="restoreBlueprintVersion()" :disabled="!selectedBlueprintVersionEntry">Restore selected</button>
                   <button class="btn btn-purple" type="button" @click="previewMode = 'blueprint-diff'; pipelineView = 'preview'; refreshBlueprintDiff()" :disabled="blueprintVersions.length < 2">View diff</button>
+                  <button class="btn" type="button" @click="ensureCurrentBlueprintVersion()" :disabled="!blueprint.trim()">Save current as version</button>
                 </div>
               </div>
               <div class="blueprint-diff-mini" x-show="selectedBlueprintPreviousEntry">

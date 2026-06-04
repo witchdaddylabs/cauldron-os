@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
-const { npmExecutable } = require('../lib/scaffold-generator');
+const { npmExecutable, npmSpawnOptions } = require('../lib/scaffold-generator');
 
 const repoRoot = path.resolve(__dirname, '..');
 const batch = fs.readFileSync(path.join(repoRoot, 'start-cauldron.bat'), 'utf8');
@@ -13,6 +13,8 @@ const ciWorkflow = fs.readFileSync(path.join(repoRoot, '.github', 'workflows', '
 assert.equal(npmExecutable('win32'), 'npm.cmd', 'Windows scaffold bootstrap should launch npm.cmd');
 assert.equal(npmExecutable('darwin'), 'npm', 'macOS scaffold bootstrap should launch npm');
 assert.equal(npmExecutable('linux'), 'npm', 'Linux scaffold bootstrap should launch npm');
+assert.equal(npmSpawnOptions('C:\\cauldron-project', 'win32').shell, true, 'Windows npm.cmd should run through the command shell');
+assert.equal(npmSpawnOptions('/tmp/cauldron-project', 'linux').shell, false, 'Unix npm should not require shell execution');
 
 for (const [name, script] of [['batch', batch], ['PowerShell', powershell]]) {
   assert.match(script, /package\.json/, `${name} launcher should read the current package version`);

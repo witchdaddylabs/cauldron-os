@@ -1,52 +1,57 @@
-# Cauldron OS — PowerShell Quick Start
-# Run this script from the cauldron-os folder
+# Cauldron OS - Windows PowerShell Quick Start
 
 $ErrorActionPreference = 'Stop'
+Set-Location $PSScriptRoot
 
-Write-Host ''
-Write-Host '========================================' -ForegroundColor Magenta
-Write-Host '   Cauldron OS 2.3.0 — Witch Daddy Labs' -ForegroundColor Magenta
-Write-Host '========================================' -ForegroundColor Magenta
-Write-Host ''
-
-# Check Node.js
-if (-not (Get-Command node -ErrorAction SilentlyContinue)) {
-    Write-Host '[ERROR] Node.js is not installed or not in PATH.' -ForegroundColor Red
-    Write-Host '        Download from https://nodejs.org' -ForegroundColor Yellow
+function Stop-WithMessage {
+    param([string]$Message)
     Write-Host ''
-    Pause
+    Write-Host "[ERROR] $Message" -ForegroundColor Red
+    Write-Host ''
+    Read-Host 'Press Enter to close'
     exit 1
 }
 
-# Install deps if missing
-if (-not (Test-Path 'node_modules')) {
-    Write-Host '[INFO] node_modules not found — running npm install...' -ForegroundColor Cyan
-    npm install
-    if ($LASTEXITCODE -ne 0) {
-        Write-Host '[ERROR] npm install failed.' -ForegroundColor Red
-        Pause
-        exit 1
-    }
+$nodeCommand = Get-Command node -ErrorAction SilentlyContinue
+$npmCommand = Get-Command npm.cmd -ErrorAction SilentlyContinue
+if (-not $npmCommand) {
+    $npmCommand = Get-Command npm -ErrorAction SilentlyContinue
 }
 
-# Set model and start
-$env:OLLAMA_MODEL = 'qwen3.6:9b'
+if (-not $nodeCommand -or -not $npmCommand) {
+    Stop-WithMessage 'Node.js 18 or newer is required. Download the LTS version from https://nodejs.org, then run this launcher again.'
+}
 
-Write-Host '[INFO] Starting Cauldron OS...' -ForegroundColor Green
-Write-Host "       Model: `$env:OLLAMA_MODEL"
-Write-Host "       URL:   http://localhost:3000"
+$nodeMajor = [int](& node -p "Number(process.versions.node.split('.')[0])")
+if ($nodeMajor -lt 18) {
+    Stop-WithMessage "Node.js 18 or newer is required. Your installed version is $(& node --version)."
+}
+
+$version = & node -p "require('./package.json').version"
+
 Write-Host ''
-Write-Host '       Press Ctrl+C to stop the server.' -ForegroundColor Gray
+Write-Host '========================================' -ForegroundColor Magenta
+Write-Host "   Cauldron OS $version - Witch Daddy Labs" -ForegroundColor Magenta
 Write-Host '========================================' -ForegroundColor Magenta
 Write-Host ''
 
-node server.js
-
+& $npmCommand.Source ls --depth=0 *> $null
 if ($LASTEXITCODE -ne 0) {
-    Write-Host ''
-    Write-Host '[ERROR] Server crashed. Make sure Ollama is running:' -ForegroundColor Red
-    Write-Host '        ollama serve' -ForegroundColor Yellow
-    Write-Host ''
+    Write-Host '[SETUP] Installing or repairing dependencies. This may take a minute...' -ForegroundColor Cyan
+    & $npmCommand.Source install --no-audit --no-fund
+    if ($LASTEXITCODE -ne 0) {
+        Stop-WithMessage 'Dependency installation failed. Check your internet connection, then run this launcher again.'
+    }
 }
 
-Pause
+Write-Host '[READY] Starting Cauldron OS at http://localhost:3000' -ForegroundColor Green
+Write-Host '        Keep this window open. Press Ctrl+C to stop.' -ForegroundColor Gray
+Write-Host ''
+Write-Host 'Use an OpenAI or Gemini API key in Settings, or run Ollama locally.' -ForegroundColor Gray
+Write-Host ''
+
+& $npmCommand.Source start
+
+if ($LASTEXITCODE -ne 0) {
+    Stop-WithMessage 'Cauldron OS stopped unexpectedly. Review the error above, then run this launcher again.'
+}

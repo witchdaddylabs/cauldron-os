@@ -43,3 +43,15 @@ jobs:
           # Validate blueprint structure on sample
           node scripts/validate-blueprint.js examples/sample-blueprint.md \
             || echo "Sample blueprint validation note: see output above"
+
+  windows-smoke-test:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Use Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test

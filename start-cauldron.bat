@@ -1,54 +1,70 @@
 @echo off
-REM Cauldron OS — Windows Quick Start
-REM Place this file in the cauldron-os folder and double-click to run
+setlocal
+REM Cauldron OS - Windows double-click launcher
 
 cd /d "%~dp0"
 
-echo.
-echo ========================================
-echo    Cauldron OS 2.3.0 — Witch Daddy Labs
-echo ========================================
-echo.
-
-REM Check if Node.js is installed
 where node >nul 2>nul
-if %ERRORLEVEL% NEQ 0 (
-    echo [ERROR] Node.js is not installed or not in PATH.
-    echo         Download from https://nodejs.org
-    echo.
-    pause
-    exit /b 1
-)
+if errorlevel 1 goto :node_missing
 
-REM Check if npm dependencies are installed
-if not exist "node_modules" (
-    echo [INFO] node_modules not found — running npm install...
-    call npm install
-    if %ERRORLEVEL% NEQ 0 (
-        echo [ERROR] npm install failed. Check your internet connection.
-        pause
-        exit /b 1
-    )
-)
+where npm >nul 2>nul
+if errorlevel 1 goto :node_missing
 
-REM Set the model — change this if you have a different model
-set OLLAMA_MODEL=qwen3.6:9b
+for /f %%v in ('node -p "Number(process.versions.node.split('.')[0])"') do set NODE_MAJOR=%%v
+if %NODE_MAJOR% LSS 18 goto :node_old
 
-echo [INFO] Starting Cauldron OS...
-echo       Model: %OLLAMA_MODEL%
-echo       URL:   http://localhost:3000
+for /f %%v in ('node -p "require('./package.json').version"') do set CAULDRON_VERSION=%%v
+
 echo.
-echo       Press Ctrl+C to stop the server.
+echo ========================================
+echo    Cauldron OS %CAULDRON_VERSION% - Witch Daddy Labs
 echo ========================================
 echo.
 
-node server.js
-
-if %ERRORLEVEL% NEQ 0 (
-    echo.
-    echo [ERROR] Server crashed. Make sure Ollama is running:
-    echo         ollama serve
-    echo.
+call npm ls --depth=0 >nul 2>nul
+if errorlevel 1 (
+    echo [SETUP] Installing or repairing dependencies. This may take a minute...
+    call npm install --no-audit --no-fund
+    if errorlevel 1 goto :install_failed
 )
 
+echo [READY] Starting Cauldron OS at http://localhost:3000
+echo         Keep this window open. Press Ctrl+C to stop.
+echo.
+echo Use an OpenAI or Gemini API key in Settings, or run Ollama locally.
+echo.
+
+call npm start
+if errorlevel 1 goto :server_failed
+goto :end
+
+:node_missing
+echo.
+echo [ERROR] Node.js 18 or newer is required.
+echo         Download the LTS version from https://nodejs.org
+goto :pause_error
+
+:node_old
+echo.
+echo [ERROR] Node.js 18 or newer is required. Installed version:
+node --version
+goto :pause_error
+
+:install_failed
+echo.
+echo [ERROR] Dependency installation failed.
+echo         Check your internet connection, then run this launcher again.
+goto :pause_error
+
+:server_failed
+echo.
+echo [ERROR] Cauldron OS stopped unexpectedly.
+echo         Review the error above, then run this launcher again.
+
+:pause_error
+echo.
 pause
+exit /b 1
+
+:end
+endlocal

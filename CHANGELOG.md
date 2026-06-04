@@ -10,6 +10,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Fixed
+- **Windows Quick Start**: Updated the Batch and PowerShell launchers for v0.40, Node.js 18+ validation, dependency repair, package-driven startup, and cloud-or-local model guidance.
+- **Windows Scaffold Bootstrap**: Use `npm.cmd` when automatically installing generated scaffold dependencies on Windows.
+- **Windows CI**: Run the full smoke suite on `windows-latest` for every pull request and main-branch update.
+
+### Changed
+- Simplified the README start path and first-blueprint walkthrough to reduce setup friction and cognitive overload.
+
 ## [0.40.0] — 2026-06-04 — Blueprint Review, Multi-Agent Handoffs, Community, and Quality
 
 ### Added

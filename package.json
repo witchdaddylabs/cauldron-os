@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
-    "test": "node tests/smoke.js && node tests/cloud-models-smoke.js && node tests/frontend-static-smoke.js && node tests/research-history-smoke.js && node tests/templates-smoke.js && node tests/template-generation-smoke.js && node tests/design-system-validation-smoke.js && node tests/design-systems-smoke.js && node tests/community-smoke.js && node tests/build-agents-smoke.js && node tests/scaffold-smoke.js && node tests/scaffold-export-smoke.js && node tests/quality-scorer-smoke.js && node tests/critique-smoke.js && node tests/handoff-smoke.js"
+    "test": "node tests/smoke.js && node tests/cloud-models-smoke.js && node tests/frontend-static-smoke.js && node tests/windows-compatibility-smoke.js && node tests/research-history-smoke.js && node tests/templates-smoke.js && node tests/template-generation-smoke.js && node tests/design-system-validation-smoke.js && node tests/design-systems-smoke.js && node tests/community-smoke.js && node tests/build-agents-smoke.js && node tests/scaffold-smoke.js && node tests/scaffold-export-smoke.js && node tests/quality-scorer-smoke.js && node tests/critique-smoke.js && node tests/handoff-smoke.js"
   },
   "keywords": [
     "ai",

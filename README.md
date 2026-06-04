@@ -21,22 +21,49 @@ It is built for hobbyists, indie builders, designers, enthusiasts, and developer
 
 ---
 
-## Quick Start
+## Start Here
+
+**Required:** Install the current [Node.js LTS release](https://nodejs.org) (Node 18 or newer).
+
+**Windows (easiest):**
+
+1. [Download Cauldron OS as a ZIP](https://github.com/witchdaddylabs/cauldron-os/archive/refs/heads/main.zip) and extract it.
+2. Open the extracted folder and double-click `start-cauldron.bat`.
+3. Keep the launcher window open, then visit [http://localhost:3000](http://localhost:3000).
+
+The launcher checks Node.js, repairs missing dependencies, and starts Cauldron.
+
+PowerShell users can run:
+
+```powershell
+.\start-cauldron.ps1
+```
+
+**macOS / Linux:**
+
+```bash
+npm install
+npm start
+```
+
+Then open [http://localhost:3000](http://localhost:3000).
+
+To generate with AI, choose either:
+
+- **Cloud:** add your own OpenAI or Google Gemini API key in Settings.
+- **Local:** install [Ollama](https://ollama.com) and pull a model.
+
+<details>
+<summary>Developer install from Git</summary>
 
 ```bash
 git clone https://github.com/witchdaddylabs/cauldron-os.git
 cd cauldron-os
 npm install
 npm start
-# → Open http://localhost:3000
 ```
 
-### Non-technical start
-
-**Windows:** double-click `start-cauldron.bat` or run `start-cauldron.ps1` in PowerShell.<br>
-**macOS / Linux:** open Terminal in the repo folder, then run `npm install` and `npm start`.
-
-You will need Node.js 18+. For local AI generation, install Ollama and pull at least one model. You can also use OpenAI or Google AI Studio with your own API key.
+</details>
 
 ---
 
@@ -125,19 +152,12 @@ You will need Node.js 18+. For local AI generation, install Ollama and pull at l
 
 ## First Blueprint
 
-1. Enter an idea, for example: `A tiny CRM for freelance designers who hate spreadsheets`.
-2. Pick **Local Router** or **Cloud Cauldron**.
-3. Choose **App** or **Static Site**.
-4. Pick a detected local Ollama model, or switch to Cloud Cauldron.
-5. Optionally choose a design reference.
-6. Optionally add one reference URL in the cloner target field, or paste a URL like `https://raycast.com` into Brain Dump to trigger research mode.
-7. Optional but recommended: click **Interrogate Idea** to make Cauldron ask the annoying product-manager questions first.
-8. Answer what you can in the pop-up. Blank answers are allowed and treated as unresolved assumptions.
-9. Click **Generate Blueprint** or press **Cmd/Ctrl + Enter**.
-10. Review the blueprint and HTML + AlpineJS preview.
-11. **Give critique**: type feedback in the critique box ("make the CTA more aggressive") or use quick buttons ("Make it bolder", "Tighter spacing", "Warmer palette", "More accessible"). Up to 3 iterations per session.
-12. Save/download, export, or click **Build with [Your Agent]** to generate a handoff package and launch it in Cursor, Claude Code, Codex, Hermes, or OpenCode.
-13. Or click **Export Scaffold** to generate a runnable Next.js, Astro, or static HTML project.
+1. Write your idea in **Brain Dump**.
+2. Choose a cloud provider or a detected local Ollama model.
+3. Optionally run **Interrogate** and choose a design reference.
+4. Generate and review the blueprint.
+5. Generate the prototype, review its quality score, and add critique if needed.
+6. Save it, export a scaffold, or create a build-agent handoff.
 
 ---
 

@@ -40,6 +40,8 @@ assert.match(html, />Community</, 'Community design reference tab should exist')
 assert.match(html, /Submit your own via PR/, 'Community contribution link should be visible');
 assert.match(html, /importCommunityDesignSystem\(system\)/, 'Community design-system import action should be wired');
 assert.match(html, /useCommunityTemplate\(template\)/, 'Community scaffold action should be wired');
+assert.match(html, /:srcdoc="prototypeHtml"/, 'Prototype preview iframe should be present');
+assert.equal((html.match(/allow-same-origin/g) || []).length, 1, 'Only the workspace preview iframe should keep allow-same-origin; the prototype iframe must not');
 
 const appJs = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'scripts', 'app.js'), 'utf8');
 assert.match(appJs, /\/api\/build-agents/, 'Build agent detection API should be called');

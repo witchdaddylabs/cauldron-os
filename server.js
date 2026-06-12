@@ -41,6 +41,7 @@ const { version: PACKAGE_VERSION } = require('./package.json');
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
+const HOST = process.env.CAULDRON_HOST || '127.0.0.1';
 const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434';
 const OLLAMA_URL = `${OLLAMA_BASE_URL}/api/generate`;
 const OLLAMA_TAGS_URL = `${OLLAMA_BASE_URL}/api/tags`;
@@ -482,6 +483,18 @@ function _extractBuildActions(text) {
 
 // ─── Middleware ─────────────────────────────────────────────────────────────
 app.use(express.json());
+
+// Reject cross-origin mutating requests (CSRF/SSRF hardening for a localhost daemon).
+app.use((req, res, next) => {
+  if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
+  const origin = req.headers.origin;
+  if (!origin) return next();
+  let host;
+  try { host = new URL(origin).hostname; } catch { return res.status(403).json({ error: 'Cross-origin request blocked' }); }
+  if (host === 'localhost' || host === '127.0.0.1') return next();
+  return res.status(403).json({ error: 'Cross-origin request blocked' });
+});
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/research-assets', express.static(path.join(db.paths.DATA_DIR, 'research')));
 
@@ -773,7 +786,7 @@ registerAllRoutes(app, deps);
 (async () => {
   try {
     await db.init();
-    app.listen(PORT, () => {
+    app.listen(PORT, HOST, () => {
       console.log(`\n🔥 Cauldron OS v${PACKAGE_VERSION} — Witch Daddy Labs`);
       console.log(`   Merged features from public open-source + private advanced builds`);
       console.log(`   Master Brain upgrades loaded:`);

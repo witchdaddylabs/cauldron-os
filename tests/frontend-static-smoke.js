@@ -65,4 +65,9 @@ assert.match(appJs, /\/api\/community/, 'Community catalog API should be called'
 assert.match(appJs, /selectedCommunityTemplate/, 'Community scaffold guidance should be stored');
 assert.match(appJs, /Community scaffold guidance/, 'Community scaffold guidance should feed blueprint prompts');
 
+assert.doesNotMatch(appJs, /apiKey:\s*this\.form\.apiKey/, 'modelPayload must not send the global key blindly — resolve per stage provider');
+assert.match(appJs, /resolveKeyForProvider/, 'per-provider key resolver must exist');
+assert.equal((appJs.match(/finishPipelineProgress\(event\.label/g) || []).length, 2, 'both stream loops must stop progress on a server error event');
+assert.match(html, /Follow global/, 'per-stage provider select must offer Follow global');
+
 console.log('Frontend static smoke tests passed');

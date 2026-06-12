@@ -782,6 +782,12 @@ const deps = {
 
 registerAllRoutes(app, deps);
 
+// ─── Shutdown: flush debounced DB writes on exit ────────────────────────────
+for (const sig of ['SIGINT', 'SIGTERM']) {
+  process.on(sig, () => { try { db.flush(); } catch {} process.exit(0); });
+}
+process.on('exit', () => { try { db.flush(); } catch {} });
+
 // ─── Start server ──────────────────────────────────────────────────────────
 (async () => {
   try {

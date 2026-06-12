@@ -37,7 +37,7 @@ async function init() {
     }
 
     runMigrations();
-    save();
+    flush();
     return database;
   })();
 
@@ -127,9 +127,24 @@ function ensureColumn(tableName, columnName, definition) {
   db.run(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${definition}`);
 }
 
+let saveTimer = null;
+let pendingDirty = false;
+
+function flush() {
+  if (!database) return;
+  fs.writeFileSync(DB_PATH, Buffer.from(database.export()));
+  pendingDirty = false;
+  if (saveTimer) { clearTimeout(saveTimer); saveTimer = null; }
+}
+
 function save() {
-  const db = requireDb();
-  fs.writeFileSync(DB_PATH, Buffer.from(db.export()));
+  pendingDirty = true;
+  if (saveTimer) return;
+  saveTimer = setTimeout(() => {
+    saveTimer = null;
+    if (pendingDirty) flush();
+  }, 250);
+  if (typeof saveTimer.unref === 'function') saveTimer.unref();
 }
 
 function sanitizeName(name) {
@@ -600,6 +615,7 @@ function generateSessionId() {
 
 module.exports = {
   init,
+  flush,
   createDraft,
   getAllDrafts,
   getDraftById,

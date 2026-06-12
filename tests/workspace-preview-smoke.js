@@ -104,8 +104,11 @@ async function request(pathname, options = {}) {
     assert.ok([403, 404].includes(r.res.status), `traversal (encoded) should be 403/404, got ${r.res.status}`);
     assert.ok(!r.text.includes('"name": "cauldron'), 'encoded traversal must not leak package.json');
 
+    // fetch() normalizes '../../' client-side to '/package.json', an unmatched
+    // route served by the SPA catch-all (200 index.html — the app shell, NOT the
+    // workspace-preview middleware). The encoded %2f case above is the real
+    // middleware test; here assert only the security property: no real package.json leak.
     r = await request(`/workspace-preview/${sid}/../../package.json`);
-    assert.ok([403, 404].includes(r.res.status), `traversal (literal) should be 403/404, got ${r.res.status}`);
     assert.ok(!r.text.includes('"name": "cauldron'), 'literal traversal must not leak package.json');
     console.log('Path traversal blocked: OK');
 

@@ -33,19 +33,26 @@ function registerWorkspacePreviewRoutes(app, deps) {
     if (!fs.existsSync(wsDir)) {
       return res.status(404).send('Workspace not found');
     }
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    const baseReal = fs.realpathSync(wsDir);
     const relPath = '/' + parts.slice(1).join('/');
     if (relPath === '/' || relPath === '') {
       const indexPath = path.join(wsDir, 'index.html');
-      if (fs.existsSync(indexPath)) return res.sendFile(indexPath);
-      return res.status(404).send('No index.html found in workspace');
+      let indexReal;
+      try { indexReal = fs.realpathSync(indexPath); } catch { return res.status(404).send('No index.html found in workspace'); }
+      if (indexReal !== baseReal && !indexReal.startsWith(baseReal + path.sep)) {
+        return res.status(403).send('Forbidden');
+      }
+      if (!fs.statSync(indexReal).isFile()) return res.status(404).send('No index.html found in workspace');
+      return res.sendFile(path.relative(baseReal, indexReal), { root: baseReal });
     }
-    const fullPath = path.join(wsDir, relPath);
-    if (!fullPath.startsWith(wsDir)) return res.status(403).send('Forbidden');
-    if (!fs.existsSync(fullPath) || !fs.statSync(fullPath).isFile()) return res.status(404).send('File not found');
-    res.sendFile(fullPath);
+    const candidate = path.resolve(wsDir, '.' + relPath); // '.' keeps it relative to wsDir
+    let real;
+    try { real = fs.realpathSync(candidate); } catch { return res.status(404).send('File not found'); }
+    if (real !== baseReal && !real.startsWith(baseReal + path.sep)) {
+      return res.status(403).send('Forbidden');
+    }
+    if (!fs.statSync(real).isFile()) return res.status(404).send('File not found');
+    res.sendFile(path.relative(baseReal, real), { root: baseReal });
   });
 }
 

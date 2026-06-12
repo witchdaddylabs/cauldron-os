@@ -21,7 +21,7 @@ function registerGenerationRoutes(app, deps) {
     db, TEMPLATES, DESIGN_SYSTEMS, workspace, designSystemCache,
     getSystemPrompt, getTemplate, formatTemplateForPrompt, ensureDesignSystem,
     CLARIFY_SYSTEM_PROMPT, PROTOTYPE_SYSTEM_PROMPT, CLARIFY_NUM_PREDICT, BLUEPRINT_NUM_PREDICT,
-    OLLAMA_BASE_URL, OLLAMA_TAGS_URL, CLOUD_TIMEOUT_MS,
+    OLLAMA_BASE_URL, OLLAMA_TAGS_URL, CLOUD_TIMEOUT_MS, OLLAMA_TIMEOUT_MS,
     activeBuildControllers, buildSessions,
     safeProjectName, getProjectPath, getProjectsDir, buildResumePrompt, buildOpencodeArgs,
     commandPreview, listImportableProjects, getBuildStatus,

@@ -18,7 +18,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npx playwright install chromium || true
-      - run: npm run lint || true  # lint won't fail build
+      - run: npm run lint
 
   smoke-test:
     runs-on: ubuntu-latest

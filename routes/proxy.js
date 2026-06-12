@@ -17,6 +17,7 @@ function registerProxyRoutes(app, deps) {
     extractJsonObject, normaliseClarifyResult,
     scrapeURLFast, scrapeRenderedURL, formatResearchForPrompt,
     inferProviderFromModel,
+    GEMINI_BASE_URL, normaliseOpenAICompatibleChatUrl, buildChatPayload,
   } = deps;
 
   app.post('/api/chat/completions', async (req, res) => {

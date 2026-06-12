@@ -7,7 +7,10 @@
     "dev": "node --watch server.js",
     "start": "node server.js",
     "test": "node tests/smoke.js && node tests/cloud-models-smoke.js && node tests/frontend-static-smoke.js && node tests/windows-compatibility-smoke.js && node tests/research-history-smoke.js && node tests/templates-smoke.js && node tests/template-generation-smoke.js && node tests/design-system-validation-smoke.js && node tests/design-systems-smoke.js && node tests/community-smoke.js && node tests/build-agents-smoke.js && node tests/scaffold-smoke.js && node tests/scaffold-export-smoke.js && node tests/quality-scorer-smoke.js && node tests/critique-smoke.js && node tests/handoff-smoke.js && node tests/build-generate-smoke.js && node tests/workspace-preview-smoke.js && node tests/origin-guard-smoke.js",
-    "test:integration": "node tests/build-status-smoke.js && node tests/private-records-smoke.js && node tests/deep-research-smoke.js"
+    "test:integration": "node tests/build-status-smoke.js && node tests/private-records-smoke.js && node tests/deep-research-smoke.js",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [
     "ai",
@@ -23,5 +26,10 @@
     "express": "^5.2.1",
     "playwright": "^1.60.0",
     "sql.js": "^1.14.1"
+  },
+  "devDependencies": {
+    "eslint": "^10.4.1",
+    "globals": "^17.6.0",
+    "prettier": "^3.8.4"
   }
 }

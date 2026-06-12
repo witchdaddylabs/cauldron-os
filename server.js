@@ -759,6 +759,7 @@ const deps = {
   OLLAMA_TIMEOUT_MS,
   _runCloudAgentBuild,
   buildSystemPrompt,
+  generateWithTools,
   GEMINI_BASE_URL,
   normaliseOpenAICompatibleChatUrl,
   buildChatPayload,

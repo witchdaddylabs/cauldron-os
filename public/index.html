@@ -274,6 +274,7 @@
                 </div>
                 <div class="route-controls">
                   <select x-model="stageModels[stageId].provider" @change="stageModels[stageId].cloudModel = ''" class="route-select">
+                    <option value="">Follow global</option>
                     <option value="gemini">Gemini</option>
                     <option value="openai">OpenAI-compatible</option>
                   </select>
@@ -1034,7 +1035,7 @@
             x-show="pipelineView === 'preview' && previewMode === 'prototype' && prototypeHtml"
             class="preview-iframe"
             title="Generated prototype preview"
-            sandbox="allow-scripts allow-forms allow-same-origin"
+            sandbox="allow-scripts allow-forms"
             :srcdoc="prototypeHtml"
           ></iframe>
 

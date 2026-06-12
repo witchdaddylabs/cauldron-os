@@ -74,8 +74,8 @@ function cauldronApp() {
     buildAgentStatus: 'Build agents not checked yet.',
     tasteInjectionEnabled: true,
     stageModels: {
-      interrogate: { provider: 'gemini', cloudModel: '', label: 'Interrogate', stage: 'interrogate' },
-      blueprint: { provider: 'openai', cloudModel: '', label: 'Blueprint', stage: 'blueprint' },
+      interrogate: { provider: '', cloudModel: '', label: 'Interrogate', stage: 'interrogate' },
+      blueprint: { provider: '', cloudModel: '', label: 'Blueprint', stage: 'blueprint' },
     },
 
     form: {
@@ -504,14 +504,14 @@ function cauldronApp() {
     },
 
     ensureApiKey(actionLabel = 'This action', pendingStage = '', pendingAction = '') {
-      if (!['openai', 'gemini'].includes(this.form.provider)) return true;
-      if (this.form.apiKey.trim()) return true;
-      this.loadSavedKey(false);
-      if (this.form.apiKey.trim()) return true;
+      const stageCfg = pendingStage && this.stageModels[pendingStage] ? this.stageModels[pendingStage] : null;
+      const provider = (stageCfg && stageCfg.provider) || this.form.provider;
+      if (!['openai', 'gemini'].includes(provider)) return true;
+      if (this.resolveKeyForProvider(provider)) return true;
       this.pendingStageAfterKey = pendingStage;
       this.pendingActionAfterKey = pendingAction;
-      this.openApiKeySettings(`${actionLabel} needs a ${this.form.provider} API key before it can run.`);
-      this.toast('API key needed', `${actionLabel} needs a saved ${this.form.provider} key first.`, 'error');
+      this.openApiKeySettings(`${actionLabel} needs a ${provider} API key before it can run.`);
+      this.toast('API key needed', `${actionLabel} needs a saved ${provider} key first.`, 'error');
       return false;
     },
 
@@ -761,13 +761,25 @@ function cauldronApp() {
       });
     },
 
+    resolveKeyForProvider(provider) {
+      if (provider === this.form.provider && this.form.apiKey.trim()) {
+        return this.form.apiKey.trim();
+      }
+      try {
+        return (localStorage.getItem(`cauldron:api-key:${provider}`) || '').trim();
+      } catch (_) {
+        return '';
+      }
+    },
+
     modelPayload(stageId, extra = {}) {
       const config = stageId && this.stageModels[stageId] ? this.stageModels[stageId] : null;
+      const provider = config?.provider || this.form.provider;
       return {
-        model: config?.provider || this.form.provider,
-        apiKey: this.form.apiKey,
+        model: provider,
+        apiKey: this.resolveKeyForProvider(provider),
         cloudModel: config?.cloudModel || this.form.cloudModel,
-        baseUrl: (config?.provider || this.form.provider) === 'openai' ? this.form.openAIBaseUrl : '',
+        baseUrl: provider === 'openai' ? this.form.openAIBaseUrl : '',
         projectType: this.form.projectType,
         ...extra,
       };
@@ -776,9 +788,10 @@ function cauldronApp() {
     getStageModelLabel(stageId) {
       const config = this.stageModels[stageId];
       if (!config) return 'Global default';
-      return config.provider === 'gemini'
-        ? `Gemini${config.cloudModel ? ' / ' + config.cloudModel : ''}`
-        : `OpenAI${config.cloudModel ? ' / ' + config.cloudModel : ''}`;
+      const provider = config.provider || this.form.provider;
+      const label = provider === 'gemini' ? 'Gemini' : provider === 'openai' ? 'OpenAI' : provider;
+      const suffix = config.cloudModel ? ' / ' + config.cloudModel : (config.provider ? '' : ' (global)');
+      return `${label}${suffix}`;
     },
 
     stageProgressLabel(stage) {
@@ -926,6 +939,9 @@ ${this.form.projectType === 'app' ? `
                   status: 'error',
                   message: event.message,
                 });
+                this.status = `Failed: ${event.message || event.label || 'Generation error'}`;
+                this.finishPipelineProgress(event.label || 'Blueprint failed', true);
+                this.toast('Generation failed', event.message || 'The model rejected the request.', 'error');
               } else if (event.type === 'blueprint') {
                 blueprint = event.data.blueprint || '';
                 modelUsed = event.data.modelUsed || '';
@@ -998,7 +1014,7 @@ ${this.form.projectType === 'app' ? `
             templateId: this.form.templateId,
             model: this.stageModels.blueprint?.provider || this.form.provider,
             cloudModel: this.stageModels.blueprint?.cloudModel || this.form.cloudModel,
-            apiKey: this.form.apiKey,
+            apiKey: this.resolveKeyForProvider(this.stageModels.blueprint?.provider || this.form.provider),
             projectType: this.form.projectType,
             critique,
             previousPrototypeHtml,
@@ -1039,6 +1055,9 @@ ${this.form.projectType === 'app' ? `
                   status: 'error',
                   message: event.message,
                 });
+                this.status = `Failed: ${event.message || event.label || 'Generation error'}`;
+                this.finishPipelineProgress(event.label || 'Prototype failed', true);
+                this.toast('Generation failed', event.message || 'The model rejected the request.', 'error');
               } else if (event.type === 'prototype') {
                 this.prototypeHtml = event.data.html || '';
                 this.prototypeQuality = event.data.quality || null;

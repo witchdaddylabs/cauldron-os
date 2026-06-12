@@ -40,6 +40,8 @@ assert.match(html, />Community</, 'Community design reference tab should exist')
 assert.match(html, /Submit your own via PR/, 'Community contribution link should be visible');
 assert.match(html, /importCommunityDesignSystem\(system\)/, 'Community design-system import action should be wired');
 assert.match(html, /useCommunityTemplate\(template\)/, 'Community scaffold action should be wired');
+assert.match(html, /:srcdoc="prototypeHtml"/, 'Prototype preview iframe should be present');
+assert.equal((html.match(/allow-same-origin/g) || []).length, 1, 'Only the workspace preview iframe should keep allow-same-origin; the prototype iframe must not');
 
 const appJs = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'scripts', 'app.js'), 'utf8');
 assert.match(appJs, /\/api\/build-agents/, 'Build agent detection API should be called');
@@ -62,5 +64,10 @@ assert.match(appJs, /data\.providers \|\| data/, 'Cloud model response should no
 assert.match(appJs, /\/api\/community/, 'Community catalog API should be called');
 assert.match(appJs, /selectedCommunityTemplate/, 'Community scaffold guidance should be stored');
 assert.match(appJs, /Community scaffold guidance/, 'Community scaffold guidance should feed blueprint prompts');
+
+assert.doesNotMatch(appJs, /apiKey:\s*this\.form\.apiKey/, 'modelPayload must not send the global key blindly — resolve per stage provider');
+assert.match(appJs, /resolveKeyForProvider/, 'per-provider key resolver must exist');
+assert.equal((appJs.match(/finishPipelineProgress\(event\.label/g) || []).length, 2, 'both stream loops must stop progress on a server error event');
+assert.match(html, /Follow global/, 'per-stage provider select must offer Follow global');
 
 console.log('Frontend static smoke tests passed');

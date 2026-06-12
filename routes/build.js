@@ -24,6 +24,7 @@ function registerBuildRoutes(app, deps) {
     extractJsonObject, normaliseClarifyResult,
     scrapeURLFast, scrapeRenderedURL, formatResearchForPrompt,
     inferProviderFromModel,
+    buildSystemPrompt, _runCloudAgentBuild, generateWithTools,
   } = deps;
 
   app.post('/api/build/start', async (req, res) => {

@@ -178,7 +178,7 @@ You can change the selected model in the UI. This makes cloned installs portable
 
 ### Cloud models
 
-Cloud Cauldron supports user-provided API keys stored in your browser localStorage.
+Cloud Cauldron supports user-provided API keys stored in your browser localStorage. Every pipeline stage follows the provider you've selected, so one key runs the whole pipeline — pick Gemini and blueprint *and* prototype generation both run on Gemini, no surprise hops to another provider.
 
 | Provider | Default / Available Models |
 |----------|----------------------------|
@@ -230,17 +230,31 @@ cauldron-os/
 
 ## Configuration
 
-### Port
+### Environment variables
 
-Default: `3000`.
+Copy [`.env.example`](.env.example) for the full list. Cauldron reads these straight from the process environment — it doesn't auto-load a `.env` file yet, so export them (or use your own loader) before `npm start`. The ones you'll actually reach for:
+
+| Variable | Default | What it does |
+|----------|---------|--------------|
+| `PORT` | `3000` | Port the server listens on (`PORT=4000 npm start`) |
+| `CAULDRON_HOST` | `127.0.0.1` | Network interface to bind — see below |
+| `OLLAMA_BASE_URL` | `http://127.0.0.1:11434` | Where Cauldron looks for your local Ollama |
+| `CAULDRON_DATA_DIR` | `./data` | Where drafts, the local DB, and research assets live |
+| `CAULDRON_COMMUNITY_OFFLINE` | `0` | Set to `1` to skip remote community-catalog fetches |
+
+### Network access
+
+Cauldron is local-first, so it binds to `127.0.0.1` (loopback) by default — it stays on your machine and nothing else on the network can see it. Want to open it on another device, like a tablet on your couch? Bind all interfaces:
 
 ```bash
-PORT=4000 npm start
+CAULDRON_HOST=0.0.0.0 npm start
 ```
+
+It also turns away cross-origin requests to its state-changing endpoints, so a random web page you happen to have open can't quietly poke your local instance.
 
 ### Local data
 
-Drafts, sessions, and local runtime data are stored under `data/` and are gitignored by default.
+Drafts, sessions, and local runtime data live under `data/` (or wherever `CAULDRON_DATA_DIR` points) and are gitignored by default.
 
 ### API keys
 

@@ -39,12 +39,10 @@ const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL || 'http://127.0.0.1:11434';
 const OLLAMA_URL = `${OLLAMA_BASE_URL}/api/generate`;
 const OLLAMA_TAGS_URL = `${OLLAMA_BASE_URL}/api/tags`;
 const OLLAMA_TIMEOUT_MS = 600000;
-const CLOUD_TIMEOUT_MS = 300000;
+const CLOUD_TIMEOUT_MS = Number(process.env.CAULDRON_CLOUD_TIMEOUT_MS || 300000);
 const CLARIFY_NUM_PREDICT = Number(process.env.CAULDRON_CLARIFY_NUM_PREDICT || 2048);
 const BLUEPRINT_NUM_PREDICT = Number(process.env.CAULDRON_BLUEPRINT_NUM_PREDICT || 8192);
 const OPENAI_BASE_URL = 'https://api.openai.com/v1/chat/completions';
-const REFERO_BASE = 'https://styles.refero.design/style';
-
 // ─── Refero Styles Index ──────────────────────────────────────────────────
 // Cleaned 2026-06-02: replaced orphaned UUIDs with current Refero API catalog.
 // Each entry has promptGuidance for rich injection when no DESIGN.md is available.

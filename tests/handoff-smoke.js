@@ -21,7 +21,6 @@ const { spawn } = require('child_process');
 const { stopProcess } = require('./_process-cleanup');
 
 const PORT = 3410;
-const BASE = `http://127.0.0.1:${PORT}`;
 const DATA_DIR = fs.mkdtempSync(path.join(require('os').tmpdir(), 'cauldron-handoff-test-'));
 
 process.env.PORT = String(PORT);

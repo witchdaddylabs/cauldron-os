@@ -164,7 +164,7 @@ function cauldronApp() {
       this.savedKeyVersion;
       try {
         return Boolean(localStorage.getItem(this.keyStorageKey));
-      } catch (_) {
+      } catch {
         return false;
       }
     },
@@ -392,7 +392,7 @@ function cauldronApp() {
       try {
         const data = await this.api('/api/drafts?limit=6');
         this.recentDrafts = data.drafts || [];
-      } catch (_) {}
+      } catch {}
     },
 
     ensureCloudModel() {
@@ -497,14 +497,14 @@ function cauldronApp() {
         if (tasteSaved !== null) {
           this.tasteInjectionEnabled = tasteSaved === 'true';
         }
-      } catch (_) {}
+      } catch {}
     },
 
     saveStageConfig() {
       try {
         localStorage.setItem('cauldron:stage-models', JSON.stringify(this.stageModels));
         localStorage.setItem('cauldron:taste-injection', String(this.tasteInjectionEnabled));
-      } catch (_) {}
+      } catch {}
     },
 
     openSettings(tab = 'general') {
@@ -887,7 +887,7 @@ function cauldronApp() {
       }
       try {
         return (localStorage.getItem(`cauldron:api-key:${provider}`) || '').trim();
-      } catch (_) {
+      } catch {
         return '';
       }
     },
@@ -1087,7 +1087,7 @@ ${
                 };
                 this.finishPipelineProgress('Blueprint generated');
               }
-            } catch (e) {
+            } catch {
               // Not JSON — skip
             }
           }
@@ -1224,7 +1224,7 @@ ${
                 };
                 this.finishPipelineProgress(critique ? 'Critique applied' : 'Prototype generated');
               }
-            } catch (e) {
+            } catch {
               // Not JSON — skip
             }
           }

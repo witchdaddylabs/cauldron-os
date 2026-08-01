@@ -9,7 +9,7 @@ const path = require('path');
 function registerWorkspacePreviewRoutes(app, deps) {
   const { workspace } = deps;
 
-  app.use('/workspace-preview', (req, res, next) => {
+  app.use('/workspace-preview', (req, res) => {
     const parts = req.path.split('/').filter(Boolean);
     const sessionId = parts[0] || '';
     const sanitized = sessionId.replace(/[^a-zA-Z0-9_-]/g, '');

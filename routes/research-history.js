@@ -3,7 +3,7 @@
  * Route handlers for research history.
  */
 
-const { normaliseLimitOffset, sendMarkdownDownload } = require('./_helpers');
+const { normaliseLimitOffset } = require('./_helpers');
 
 function registerResearchHistoryRoutes(app, deps) {
   const { db } = deps;

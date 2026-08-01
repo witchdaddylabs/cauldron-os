@@ -92,13 +92,8 @@ function createFakeOllamaServer() {
     stdio: ['ignore', 'pipe', 'pipe'],
   });
 
-  let output = '';
-  child.stdout.on('data', (d) => {
-    output += d.toString();
-  });
-  child.stderr.on('data', (d) => {
-    output += d.toString();
-  });
+  child.stdout.on('data', () => {});
+  child.stderr.on('data', () => {});
 
   try {
     await waitForHealth();

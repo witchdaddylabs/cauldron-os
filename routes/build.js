@@ -118,13 +118,12 @@ function registerBuildRoutes(app, deps) {
         if (!controller.signal.aborted) {
           try {
             res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
-          } catch (e) {}
+          } catch {}
         }
       };
 
       let finalFiles = [];
       let finalActions = [];
-      let finalMessages = [];
 
       if (isCloud) {
         if (!apiKey) {
@@ -143,7 +142,6 @@ function registerBuildRoutes(app, deps) {
         });
         finalFiles = result.files || [];
         finalActions = result.actions || [];
-        finalMessages = result.messages || [];
         for (const action of finalActions) {
           sendEvent('action', { tool: action.name, path: action.args?.path, status: 'start' });
           sendEvent('result', {
@@ -178,7 +176,7 @@ function registerBuildRoutes(app, deps) {
               output: result,
             });
           },
-          onFileChange: ({ action, path }) => {
+          onFileChange: ({ path }) => {
             sendEvent('filechange', { path });
           },
         });
@@ -187,7 +185,6 @@ function registerBuildRoutes(app, deps) {
           if (chunk.done) {
             finalFiles = chunk.files || [];
             finalActions = chunk.actions || [];
-            finalMessages = chunk.messages || [];
           }
         }
       }
@@ -290,13 +287,12 @@ function registerBuildRoutes(app, deps) {
         if (!controller.signal.aborted) {
           try {
             res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
-          } catch (e) {}
+          } catch {}
         }
       };
 
       let finalFiles = [];
       let finalActions = [];
-      let finalMessages = [];
 
       if (isCloud) {
         if (!apiKey) {
@@ -315,7 +311,6 @@ function registerBuildRoutes(app, deps) {
         });
         finalFiles = result.files || [];
         finalActions = result.actions || [];
-        finalMessages = result.messages || [];
         for (const action of finalActions) {
           sendEvent('action', { tool: action.name, path: action.args?.path, status: 'start' });
           sendEvent('result', {
@@ -350,7 +345,7 @@ function registerBuildRoutes(app, deps) {
               output: result,
             });
           },
-          onFileChange: ({ action, path }) => {
+          onFileChange: ({ path }) => {
             sendEvent('filechange', { path });
           },
         });
@@ -359,7 +354,6 @@ function registerBuildRoutes(app, deps) {
           if (chunk.done) {
             finalFiles = chunk.files || [];
             finalActions = chunk.actions || [];
-            finalMessages = chunk.messages || [];
           }
         }
       }

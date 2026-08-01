@@ -3,7 +3,7 @@
  * Route handlers for history.
  */
 
-const { normaliseLimitOffset, sendMarkdownDownload } = require('./_helpers');
+const { normaliseLimitOffset } = require('./_helpers');
 
 function registerHistoryRoutes(app, deps) {
   const { db } = deps;

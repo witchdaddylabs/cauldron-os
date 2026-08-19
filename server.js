@@ -31,6 +31,7 @@ const { scrapeURLFast, scrapeRenderedURL, formatResearchForPrompt } = require('.
 const { createDesignSystems, createDesignSystemService } = require('./lib/design-system-catalog');
 const registerAllRoutes = require('./routes');
 const { isInsideRoot } = require('./lib/path-safety');
+const { version: PACKAGE_VERSION } = require('./package.json');
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);

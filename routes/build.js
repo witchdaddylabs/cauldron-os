@@ -12,6 +12,25 @@
 
 const path = require('path');
 const { runVerification } = require('../lib/verification');
+const { isInsideRoot, parseSessionId } = require('../lib/path-safety');
+
+function errorStatus(err, fallback = 500) {
+  if (err.statusCode) return err.statusCode;
+  if (err.code === 'ESECURITY' || err.code === 'EINVAL_SESSION' || err.code === 'EINVAL_PATH') {
+    return 400;
+  }
+  return fallback;
+}
+
+function requireRequestSessionId(value) {
+  const sessionId = parseSessionId(value);
+  if (!sessionId) {
+    const err = new Error('Invalid sessionId');
+    err.statusCode = 400;
+    throw err;
+  }
+  return sessionId;
+}
 
 function registerBuildRoutes(app, deps) {
   const {
@@ -27,10 +46,7 @@ function registerBuildRoutes(app, deps) {
 
   function resolveVerificationTarget({ sessionId = '', projectPath = '' }) {
     if (sessionId) {
-      const sanitized = String(sessionId).replace(/[^a-zA-Z0-9_-]/g, '');
-      if (!sanitized) {
-        throw new Error('Invalid sessionId');
-      }
+      const sanitized = requireRequestSessionId(sessionId);
       return {
         targetDir: workspace.workspaceDir(sanitized),
         targetType: 'workspace',
@@ -41,7 +57,7 @@ function registerBuildRoutes(app, deps) {
     if (projectPath) {
       const root = path.resolve(getProjectsDir());
       const resolved = path.resolve(projectPath);
-      if (!resolved.startsWith(root)) {
+      if (!isInsideRoot(root, resolved)) {
         throw new Error('Invalid projectPath');
       }
       return {
@@ -57,7 +73,7 @@ function registerBuildRoutes(app, deps) {
   app.post('/api/build/start', async (req, res) => {
     try {
       const { prompt, model, sessionId, designReference, templateId, projectType } = req.body;
-      const sid = sessionId || db.generateSessionId();
+      const sid = sessionId ? requireRequestSessionId(sessionId) : db.generateSessionId();
       const wsDir = await workspace.ensureWorkspace(sid);
 
       buildSessions.set(sid, {
@@ -77,7 +93,7 @@ function registerBuildRoutes(app, deps) {
       res.json({ success: true, sessionId: sid, workspaceDir: wsDir });
     } catch (err) {
       console.error('[Build] Start error:', err);
-      res.status(500).json({ success: false, error: err.message });
+      res.status(err.statusCode || 500).json({ success: false, error: err.message });
     }
   });
 
@@ -92,10 +108,11 @@ function registerBuildRoutes(app, deps) {
       verify = false,
       templateId = '',
     } = req.body;
-    const sid = sessionId;
-
-    if (!sid) {
-      return res.status(400).json({ error: 'sessionId required' });
+    let sid;
+    try {
+      sid = requireRequestSessionId(sessionId);
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
     }
 
     res.writeHead(200, {
@@ -261,10 +278,11 @@ function registerBuildRoutes(app, deps) {
       verify = false,
       templateId = '',
     } = req.body;
-    const sid = sessionId;
-
-    if (!sid) {
-      return res.status(400).json({ error: 'sessionId required' });
+    let sid;
+    try {
+      sid = requireRequestSessionId(sessionId);
+    } catch (err) {
+      return res.status(400).json({ error: err.message });
     }
 
     res.writeHead(200, {
@@ -402,59 +420,54 @@ function registerBuildRoutes(app, deps) {
   app.post('/api/build/stop', (req, res) => {
     try {
       const { sessionId } = req.body;
-      if (!sessionId) {
-        return res.status(400).json({ success: false, error: 'sessionId required' });
-      }
-      const controller = activeBuildControllers.get(sessionId);
+      const sid = requireRequestSessionId(sessionId);
+      const controller = activeBuildControllers.get(sid);
       if (controller) {
         controller.abort();
-        activeBuildControllers.delete(sessionId);
+        activeBuildControllers.delete(sid);
       }
-      const session = buildSessions.get(sessionId);
+      const session = buildSessions.get(sid);
       if (session) session.status = 'stopped';
       res.json({ success: true });
     } catch (err) {
       console.error('[Build] Stop error:', err);
-      res.status(500).json({ success: false, error: err.message });
+      res.status(err.statusCode || 500).json({ success: false, error: err.message });
     }
   });
 
   app.get('/api/build/files/:sessionId', async (req, res) => {
     try {
-      const { sessionId } = req.params;
-      const sanitized = sessionId.replace(/[^a-zA-Z0-9_-]/g, '');
-      if (!sanitized) return res.status(400).json({ success: false, error: 'Invalid sessionId' });
+      const sanitized = requireRequestSessionId(req.params.sessionId);
       const files = await workspace.wsListFiles(sanitized);
       res.json({ success: true, files });
     } catch (err) {
       console.error('[Build] List files error:', err);
-      res.status(500).json({ success: false, error: err.message });
+      res.status(errorStatus(err)).json({
+        success: false,
+        error: err.message,
+      });
     }
   });
 
   app.get('/api/build/file/:sessionId', async (req, res) => {
     try {
-      const { sessionId } = req.params;
       const filePath = req.query.path;
       if (!filePath)
         return res.status(400).json({ success: false, error: 'path query parameter required' });
-      const sanitized = sessionId.replace(/[^a-zA-Z0-9_-]/g, '');
-      if (!sanitized) return res.status(400).json({ success: false, error: 'Invalid sessionId' });
+      const sanitized = requireRequestSessionId(req.params.sessionId);
       const content = await workspace.wsReadFile(sanitized, filePath);
       res.json({ success: true, content });
     } catch (err) {
       if (err.code === 'ENOENT')
         return res.status(404).json({ success: false, error: 'File not found' });
       console.error('[Build] Read file error:', err);
-      res.status(500).json({ success: false, error: err.message });
+      res.status(errorStatus(err)).json({ success: false, error: err.message });
     }
   });
 
   app.get('/api/build/status/:sessionId', async (req, res) => {
     try {
-      const { sessionId } = req.params;
-      const sanitized = sessionId.replace(/[^a-zA-Z0-9_-]/g, '');
-      if (!sanitized) return res.status(400).json({ success: false, error: 'Invalid sessionId' });
+      const sanitized = requireRequestSessionId(req.params.sessionId);
       const files = await workspace.wsListFiles(sanitized);
       const fileCount = files.filter((f) => f.type === 'file').length;
       const totalSize = files.filter((f) => f.type === 'file').reduce((sum, f) => sum + f.size, 0);
@@ -478,7 +491,7 @@ function registerBuildRoutes(app, deps) {
       });
     } catch (err) {
       console.error('[Build] Status error:', err);
-      res.status(500).json({ success: false, error: err.message });
+      res.status(errorStatus(err)).json({ success: false, error: err.message });
     }
   });
 
@@ -505,7 +518,7 @@ function registerBuildRoutes(app, deps) {
       res.json({ success: true, verification });
     } catch (err) {
       console.error('[Build] Verify error:', err);
-      res.status(500).json({ success: false, error: err.message });
+      res.status(errorStatus(err)).json({ success: false, error: err.message });
     }
   });
 }

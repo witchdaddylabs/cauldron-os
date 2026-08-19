@@ -87,9 +87,9 @@ async function request(pathname, options = {}) {
     assert.equal(r.res.status, 200, 'normal file should serve with 200');
     assert.match(r.text, /hello/);
     assert.equal(
-      r.res.headers.get('access-control-allow-origin'),
-      null,
-      'no CORS wildcard header on file response'
+      r.res.headers.get('content-security-policy'),
+      'sandbox allow-scripts allow-forms allow-modals',
+      'workspace preview HTML must be origin-isolated via CSP sandbox'
     );
     console.log('Normal file serve: OK');
 

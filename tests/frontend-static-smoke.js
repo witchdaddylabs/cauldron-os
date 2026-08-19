@@ -61,8 +61,8 @@ assert.match(html, /useCommunityTemplate\(template\)/, 'Community scaffold actio
 assert.match(html, /:srcdoc="prototypeHtml"/, 'Prototype preview iframe should be present');
 assert.equal(
   (html.match(/allow-same-origin/g) || []).length,
-  1,
-  'Only the workspace preview iframe should keep allow-same-origin; the prototype iframe must not'
+  0,
+  'Preview iframes must not use allow-same-origin; generated HTML must not share Cauldron origin'
 );
 
 const appJs = fs.readFileSync(path.resolve(__dirname, '..', 'public', 'scripts', 'app.js'), 'utf8');

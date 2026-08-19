@@ -40,8 +40,13 @@ function registerProxyRoutes(app, deps) {
           .json({ error: { message: `${provider} routing is not implemented yet` } });
       }
 
-      const targetUrl =
-        provider === 'gemini' ? GEMINI_BASE_URL : normaliseOpenAICompatibleChatUrl(baseUrl);
+      let targetUrl;
+      try {
+        targetUrl =
+          provider === 'gemini' ? GEMINI_BASE_URL : normaliseOpenAICompatibleChatUrl(baseUrl);
+      } catch (err) {
+        return res.status(400).json({ error: { message: err.message } });
+      }
       const upstream = await fetch(targetUrl, {
         method: 'POST',
         headers: {

@@ -53,6 +53,17 @@ Important state names:
 
 Frontend agents should preserve these names unless the branch explicitly migrates the contract and updates tests.
 
+## Security Constraints
+
+Cauldron is a localhost daemon. Default bind is `127.0.0.1`. Additional guards:
+
+- Mutating `/api/*` requests with a foreign `Origin` are rejected.
+- When bound to loopback, requests whose `Host` header is not `localhost`, `127.0.0.1`, or `::1` are rejected (DNS-rebinding hardening).
+- Build `sessionId` values must match `[a-zA-Z0-9_-]{1,128}`.
+- Workspace file APIs reject absolute paths, `..` traversal, and symlink escapes.
+- `POST /api/research-url` only fetches `http`/`https` URLs, re-validates redirects, and blocks link-local/metadata plus private networks. Loopback targets such as `http://127.0.0.1` remain allowed for local fixtures. Set `CAULDRON_ALLOW_PRIVATE_RESEARCH=1` to permit RFC1918 research targets. Link-local and metadata hosts stay blocked.
+- Workspace preview responses send `Content-Security-Policy: sandbox allow-scripts allow-forms allow-modals` so generated HTML does not share Cauldron's origin.
+
 ## Core API Routes
 
 ### Generation And Research

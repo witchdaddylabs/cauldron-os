@@ -20,6 +20,9 @@ function registerWorkspacePreviewRoutes(app, deps) {
     if (!fs.existsSync(wsDir)) {
       return res.status(404).send('Workspace not found');
     }
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('Content-Security-Policy', 'sandbox allow-scripts allow-forms allow-modals');
     const baseReal = fs.realpathSync(wsDir);
     const relPath = '/' + parts.slice(1).join('/');
     if (relPath === '/' || relPath === '') {

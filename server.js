@@ -30,7 +30,7 @@ const {
 const { scrapeURLFast, scrapeRenderedURL, formatResearchForPrompt } = require('./lib/research');
 const { createDesignSystems, createDesignSystemService } = require('./lib/design-system-catalog');
 const registerAllRoutes = require('./routes');
-const { version: PACKAGE_VERSION } = require('./package.json');
+const { isInsideRoot } = require('./lib/path-safety');
 
 const app = express();
 const PORT = Number(process.env.PORT || 3000);
@@ -516,6 +516,32 @@ function _extractBuildActions(text) {
 // ─── Middleware ─────────────────────────────────────────────────────────────
 app.use(express.json());
 
+function isLoopbackBind(host) {
+  const value = String(host || '').toLowerCase();
+  return value === '127.0.0.1' || value === 'localhost' || value === '::1';
+}
+
+function hostHeaderHostname(hostHeader) {
+  const raw = String(hostHeader || '');
+  if (!raw) return '';
+  if (raw.startsWith('[')) {
+    const end = raw.indexOf(']');
+    return end === -1 ? raw.toLowerCase() : raw.slice(1, end).toLowerCase();
+  }
+  return raw.split(':')[0].toLowerCase();
+}
+
+// When bound to loopback, reject DNS-rebinding Host headers.
+app.use((req, res, next) => {
+  if (!isLoopbackBind(HOST)) return next();
+  const hostname = hostHeaderHostname(req.headers.host);
+  const allowed = new Set(['localhost', '127.0.0.1', '::1']);
+  if (!hostname || !allowed.has(hostname)) {
+    return res.status(403).json({ error: 'Invalid host header' });
+  }
+  return next();
+});
+
 // Reject cross-origin mutating requests (CSRF/SSRF hardening for a localhost daemon).
 app.use((req, res, next) => {
   if (['GET', 'HEAD', 'OPTIONS'].includes(req.method)) return next();
@@ -555,7 +581,7 @@ function getProjectPath(name) {
   const safe = safeProjectName(name);
   const projectPath = path.join(getProjectsDir(), safe);
   const root = getProjectsDir();
-  if (!projectPath.startsWith(root)) throw new Error('Invalid project path');
+  if (!isInsideRoot(root, projectPath)) throw new Error('Invalid project path');
   if (!fs.existsSync(projectPath) || !fs.statSync(projectPath).isDirectory())
     throw new Error(`Project not found: ${safe}`);
   return { safe, projectPath };

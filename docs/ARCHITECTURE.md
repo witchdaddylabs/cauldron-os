@@ -391,8 +391,8 @@ Session metadata:
 
 - `GET /workspace-preview/:sessionId/` → serves `index.html` if present
 - `GET /workspace-preview/:sessionId/src/app.js` → serves nested files
-- CORS headers set for iframe embedding
-- Path traversal blocked
+- Preview responses are origin-isolated with `Content-Security-Policy: sandbox`
+- Path traversal and symlink escapes blocked
 
 ---
 
@@ -789,15 +789,19 @@ erDiagram
 
 ## 14. Security Considerations
 
-- **No authentication** — Cauldron is localhost-only. Exposing externally requires adding auth.
+- **No authentication** — Cauldron is localhost-only by default (`CAULDRON_HOST=127.0.0.1`). Exposing it on a LAN requires adding auth; binding `0.0.0.0` disables the loopback Host-header allowlist.
+- **Host-header allowlist** — In loopback bind mode, `Host` must be `localhost`, `127.0.0.1`, or `::1`. This blocks DNS-rebinding against the local daemon.
+- **Origin guard** — Cross-origin mutating requests are rejected. GET still requires a loopback Host header in default bind mode.
 - **API keys** — stored in browser localStorage. Sent to OpenAI/Gemini only from backend.
-- **Workspace sandbox** — `data/workspaces/<sessionId>/` with explicit path traversal blocking (`..` detection in `_resolvePath()`)
-- **Workspace preview** — path check `fullPath.startsWith(wsDir)` prevents directory escape
-- **URL research** — SSRF risk for internal IPs. Currently assumes single-user local context.
-- **OpenCode handoff** — runs with full filesystem access to `projects/{name}/`
-- **Build session IDs** — client-controlled. Sanitized to `a-zA-Z0-9_-` in file routes
+- **Workspace sandbox** — `data/workspaces/<sessionId>/`. Session IDs are `[a-zA-Z0-9_-]{1,128}`. File APIs resolve paths with `path.relative` confinement, reject absolute paths, and `realpath` existing files so symlinks cannot escape.
+- **Workspace preview** — served with `CSP: sandbox` (no `allow-same-origin`) so preview HTML cannot read Cauldron `localStorage` or call same-origin APIs. Symlink and `..` escapes return 403/400.
+- **URL research** — SSRF controls block non-http(s), credentials-in-URL, link-local/metadata IPs, and RFC1918/reserved ranges. Redirects are re-validated. Loopback is allowed for local prototypes. `CAULDRON_ALLOW_PRIVATE_RESEARCH=1` opts into private-network research; metadata/link-local stay blocked.
+- **Model base URLs** — custom OpenAI-compatible endpoints must be `http` or `https` (local LM Studio remains valid).
+- **OpenCode handoff** — runs with full filesystem access to `projects/{name}/`.
+- **Build session IDs** — client-controlled but strictly charset-validated on every build route.
 - **Project names** — sanitized via `safeProjectName()` (alphanumeric + hyphen/underscore only)
 - **Process detection** — `ps -axo` runs with 2s timeout, no injection vector
+- **`run_bash`** — the XML build agent executes shell commands in the workspace cwd with the user's privileges. That is an intentional local-agent capability, not a filesystem sandbox. Do not expose Cauldron on an untrusted network.
 
 ---
 
@@ -862,6 +866,8 @@ cauldron-os/
 | Variable                         | Default                  | Purpose                         |
 | -------------------------------- | ------------------------ | ------------------------------- |
 | `PORT`                           | `3000`                   | Server listen port              |
+| `CAULDRON_HOST`                  | `127.0.0.1`              | Server listen address           |
+| `CAULDRON_ALLOW_PRIVATE_RESEARCH`| unset                    | Allow RFC1918 research URLs     |
 | `OLLAMA_BASE_URL`                | `http://127.0.0.1:11434` | Ollama API base URL             |
 | `CAULDRON_DATA_DIR`              | `./data`                 | Runtime data directory          |
 | `CAULDRON_CLARIFY_NUM_PREDICT`   | `2048`                   | Max tokens for clarify output   |

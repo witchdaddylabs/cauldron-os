@@ -241,6 +241,7 @@ Copy [`.env.example`](.env.example) for the full list. Cauldron reads these stra
 | ---------------------------- | ------------------------ | ---------------------------------------------------- |
 | `PORT`                       | `3000`                   | Port the server listens on (`PORT=4000 npm start`)   |
 | `CAULDRON_HOST`              | `127.0.0.1`              | Network interface to bind — see below                |
+| `CAULDRON_ALLOW_PRIVATE_RESEARCH` | `0`                 | Set to `1` to allow RFC1918 URL research targets     |
 | `OLLAMA_BASE_URL`            | `http://127.0.0.1:11434` | Where Cauldron looks for your local Ollama           |
 | `CAULDRON_DATA_DIR`          | `./data`                 | Where drafts, the local DB, and research assets live |
 | `CAULDRON_COMMUNITY_OFFLINE` | `0`                      | Set to `1` to skip remote community-catalog fetches  |
@@ -253,7 +254,9 @@ Cauldron is local-first, so it binds to `127.0.0.1` (loopback) by default — it
 CAULDRON_HOST=0.0.0.0 npm start
 ```
 
-It also turns away cross-origin requests to its state-changing endpoints, so a random web page you happen to have open can't quietly poke your local instance.
+It also turns away cross-origin requests to its state-changing endpoints, so a random web page you happen to have open can't quietly poke your local instance. In the default loopback bind, Cauldron also rejects requests whose `Host` header is not `localhost` / `127.0.0.1` / `::1`, which blocks DNS rebinding.
+
+URL research (`POST /api/research-url`) will not fetch link-local, cloud-metadata, or private-network addresses. Loopback URLs such as a local prototype on `http://127.0.0.1:5173` still work. To research hosts on your LAN, start Cauldron with `CAULDRON_ALLOW_PRIVATE_RESEARCH=1`. Metadata and link-local targets stay blocked.
 
 ### Local data
 

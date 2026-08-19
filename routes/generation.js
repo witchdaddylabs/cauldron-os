@@ -79,7 +79,13 @@ function registerGenerationRoutes(app, deps) {
         return persistAndRespond(findings);
       } catch (err) {
         console.error('Deep research failed:', err);
-        return res.status(500).json({ error: `Deep research failed: ${err.message}` });
+        const status =
+          /not allowed|private or reserved|Invalid URL|Only http|credentials|loopback/i.test(
+            err.message || ''
+          )
+            ? 400
+            : 500;
+        return res.status(status).json({ error: `Deep research failed: ${err.message}` });
       }
     }
 
@@ -88,7 +94,13 @@ function registerGenerationRoutes(app, deps) {
       return persistAndRespond(findings);
     } catch (err) {
       console.error('Research failed:', err);
-      return res.status(500).json({ error: `Research failed: ${err.message}` });
+      const status =
+        /not allowed|private or reserved|Invalid URL|Only http|credentials|Too many redirects|size limit|loopback/i.test(
+          err.message || ''
+        )
+          ? 400
+          : 500;
+      return res.status(status).json({ error: `Research failed: ${err.message}` });
     }
   });
 

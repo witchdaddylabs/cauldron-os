@@ -14,6 +14,7 @@ const {
   assertSafeResearchUrl,
   assertHttpOrHttpsUrl,
   validateHttpUrl,
+  createPinnedLookup,
 } = require('../lib/url-safety');
 const { normaliseOpenAICompatibleChatUrl } = require('../lib/model-client');
 const workspace = require('../lib/workspace');
@@ -97,6 +98,22 @@ async function jsonRequest(pathname, options = {}) {
     await workspace.wsWriteFile(sid, 'nested/ok.txt', 'safe');
     const content = await workspace.wsReadFile(sid, 'nested/ok.txt');
     assert.equal(content, 'safe');
+    try {
+      const wsDir = workspace.workspaceDir(sid);
+      const targetPath = path.join(wsDir, 'nested', 'ok.txt');
+      const aliasPath = path.join(wsDir, 'alias.txt');
+      fs.symlinkSync(targetPath, aliasPath);
+      const deleted = await workspace.wsDeleteFile(sid, 'alias.txt');
+      assert.equal(deleted.success, true, 'symlink delete should succeed');
+      assert.equal(fs.existsSync(aliasPath), false, 'symlink should be removed');
+      assert.equal(fs.readFileSync(targetPath, 'utf8'), 'safe', 'symlink target must remain');
+    } catch (err) {
+      if (err.code === 'EPERM' || /symlink/i.test(err.message)) {
+        console.log(`  symlink delete test skipped: ${err.message}`);
+      } else {
+        throw err;
+      }
+    }
   } finally {
     await workspace.cleanupWorkspace(sid);
   }
@@ -118,6 +135,25 @@ async function jsonRequest(pathname, options = {}) {
   await assert.rejects(() => assertSafeResearchUrl('http://user:pass@example.com/'), /credentials/);
   const loopback = await assertSafeResearchUrl('http://127.0.0.1:9/fixture');
   assert.equal(loopback.hostname, '127.0.0.1');
+  assert.equal(loopback.address, '127.0.0.1');
+  assert.equal(loopback.family, 4);
+  const ipv6 = await assertSafeResearchUrl('http://[::1]:5173/fixture');
+  assert.equal(ipv6.hostname, '::1');
+  assert.equal(ipv6.address, '::1');
+  assert.equal(ipv6.family, 6);
+  const pinned = createPinnedLookup('203.0.113.8', 4);
+  await new Promise((resolve, reject) => {
+    pinned('evil.example', { all: true }, (err, records) => {
+      if (err) return reject(err);
+      try {
+        assert.equal(records[0].address, '203.0.113.8');
+        assert.equal(records[0].family, 4);
+        resolve();
+      } catch (assertErr) {
+        reject(assertErr);
+      }
+    });
+  });
   validateHttpUrl('https://example.com/');
   assert.equal(
     normaliseOpenAICompatibleChatUrl('https://api.openai.com/v1'),
